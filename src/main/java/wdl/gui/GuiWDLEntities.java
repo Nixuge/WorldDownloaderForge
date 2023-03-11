@@ -92,7 +92,7 @@ public class GuiWDLEntities extends WDLScreen {
 				WDLMessages.chatMessageTranslated(WDL.serverProps,
 						WDLMessageTypes.ERROR, "wdl.messages.generalError.failedToSetUpEntityUI", e);
 
-				Minecraft.getInstance().displayGuiScreen(null);
+				Minecraft.getMinecraft().displayGuiScreen(null);
 			}
 		}
 

@@ -16,6 +16,7 @@ package wdl;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import me.nixuge.worlddownloader.VersionConstants;
 import net.minecraft.block.Block;
 import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiIngameMenu;
@@ -99,6 +100,7 @@ enum SanityCheck {
 		 * https://github.com/MinecraftForge/MinecraftForge/issues/3924
 		 */
 		@Override
+		@SuppressWarnings("deprecation")
 		public void run() throws Exception {
 			int wireID = VersionedFunctions.getBlockId(Blocks.TRIPWIRE);
 			for (int meta = 0; meta <= 15; meta++) {

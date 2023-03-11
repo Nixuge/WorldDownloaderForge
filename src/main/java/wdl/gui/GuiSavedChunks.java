@@ -149,7 +149,7 @@ public class GuiSavedChunks extends WDLScreen {
 		// Chunks near the player
 		for (Chunk chunk : wdl.getChunkList()) {
 			if (chunk != null) {
-				drawChunk(chunk.getPos(), 0x3F0000FF);
+				drawChunk(chunk.getChunkCoordIntPair(), 0x3F0000FF);
 			}
 		}
 

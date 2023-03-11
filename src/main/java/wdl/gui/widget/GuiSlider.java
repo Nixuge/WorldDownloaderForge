@@ -79,7 +79,7 @@ public class GuiSlider extends ExtButton {
 
 	@Override
 	public void midDraw() {
-		Minecraft.getInstance().getTextureManager().bindTexture(BUTTON_TEXTURES);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(BUTTON_TEXTURES);
 		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
 
 		if (this.isEnabled()) {

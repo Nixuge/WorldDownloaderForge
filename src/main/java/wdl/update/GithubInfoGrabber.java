@@ -57,7 +57,7 @@ public class GithubInfoGrabber {
 	 */
 	@Nonnull
 	private static final File CACHED_RELEASES_FILE = new File(
-			Minecraft.getInstance().gameDir,
+			Minecraft.getMinecraft().gameDir,
 			"WorldDownloader_Update_Cache.json");
 
 	static {

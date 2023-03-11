@@ -18,6 +18,7 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
+import me.nixuge.worlddownloader.VersionConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;
@@ -65,7 +66,7 @@ public final class WDLHooks {
 		// All of these methods other than the crash one first bootstrap WDL,
 		// and then forward the event to the new listener (which should have changed)
 		private void bootstrap() {
-			WDL.bootstrap(Minecraft.getInstance());
+			WDL.bootstrap(Minecraft.getMinecraft());
 			if (listener == this) {
 				throw new AssertionError("WDL bootstrap failed to change WDLHooks listener from " + this);
 			}
@@ -145,9 +146,9 @@ public final class WDLHooks {
 				stSize = 0;
 			}
 			CrashReportCategory cat = report.makeCategoryDepth("World Downloader Mod - not bootstrapped yet", stSize);
-			cat.addDetail("WDL version", VersionConstants::getModVersion);
-			cat.addDetail("Targeted MC version", VersionConstants::getExpectedVersion);
-			cat.addDetail("Actual MC version", VersionConstants::getMinecraftVersion);
+			cat.setDetail("WDL version", VersionConstants::getModVersion);
+			cat.setDetail("Targeted MC version", VersionConstants::getExpectedVersion);
+			cat.setDetail("Actual MC version", VersionConstants::getMinecraftVersion);
 		}
 	}
 

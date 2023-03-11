@@ -75,7 +75,7 @@ import wdl.update.WDLUpdateChecker;
 import wdl.versioned.VersionedFunctions;
 
 /**
- * Handles all of the events for WDL.
+ * Handles all the events for WDL.
  *
  * These should be called regardless of whether downloading is
  * active; they handle that logic themselves.
@@ -106,7 +106,7 @@ public class WDLEvents {
 	 * optimize it out, as may be verified by javap.
 	 */
 	private static final boolean ENABLE_PROFILER = false;
-	private static final Profiler PROFILER = ENABLE_PROFILER ? Minecraft.getInstance().profiler : null;
+	private static final Profiler PROFILER = ENABLE_PROFILER ? Minecraft.getMinecraft().mcProfiler : null;
 
 	private final WDL wdl;
 
@@ -164,13 +164,13 @@ public class WDLEvents {
 			WDLMessages.chatMessageTranslated(
 					WDL.serverProps,
 					WDLMessageTypes.ON_CHUNK_NO_LONGER_NEEDED,
-					"wdl.messages.onChunkNoLongerNeeded.saved", unneededChunk.getPos().x, unneededChunk.getPos().z);
+					"wdl.messages.onChunkNoLongerNeeded.saved", unneededChunk.getChunkCoordIntPair().chunkXPos, unneededChunk.getChunkCoordIntPair().chunkZPos);
 			wdl.saveChunk(unneededChunk);
 		} else {
 			WDLMessages.chatMessageTranslated(
 					WDL.serverProps,
 					WDLMessageTypes.ON_CHUNK_NO_LONGER_NEEDED,
-					"wdl.messages.onChunkNoLongerNeeded.didNotSave", unneededChunk.getPos().x, unneededChunk.getPos().z);
+					"wdl.messages.onChunkNoLongerNeeded.didNotSave", unneededChunk.getChunkCoordIntPair().chunkXPos, unneededChunk.getChunkCoordIntPair().chunkZPos);
 		}
 	}
 
@@ -189,14 +189,14 @@ public class WDLEvents {
 			return;
 		}
 
-		switch (result.type) {
+		switch (result.typeOfHit) {
 		case ENTITY:
-			wdl.lastEntity = result.entity;
+			wdl.lastEntity = result.entityHit;
 			wdl.lastClickedBlock = null;
 			break;
 		case BLOCK:
 			wdl.lastEntity = null;
-			wdl.lastClickedBlock = result.getPos();
+			wdl.lastClickedBlock = result.getBlockPos();
 			break;
 		case MISS:
 			wdl.lastEntity = null;
@@ -308,6 +308,7 @@ public class WDLEvents {
 				BlockHandler.getHandler(te.getClass(), wdl.windowContainer.getClass());
 		if (handler != null) {
 			try {
+				// TODO: CHECK
 				ITextComponent msg = handler.handleCasting(wdl.lastClickedBlock, wdl.windowContainer,
 						te, wdl.worldClient, wdl::saveTileEntity);
 				WDLMessages.chatMessage(WDL.serverProps, WDLMessageTypes.ON_GUI_CLOSED_INFO, msg);
@@ -359,6 +360,7 @@ public class WDLEvents {
 				BlockActionHandler.getHandler(block.getClass(), blockEntity.getClass());
 		if (handler != null) {
 			try {
+				// TODO: CHECK
 				ITextComponent msg = handler.handleCasting(pos, block, blockEntity,
 						data1, data2, wdl.worldClient, wdl::saveTileEntity);
 				WDLMessages.chatMessage(WDL.serverProps, WDLMessageTypes.ON_GUI_CLOSED_INFO, msg);
@@ -508,7 +510,7 @@ public class WDLEvents {
 					if (ENABLE_PROFILER) PROFILER.startSection("inventoryCheck");
 					if (WDL.downloading && wdl.player != null) {
 						if (wdl.player.openContainer != wdl.windowContainer) {
-							if (wdl.player.openContainer == wdl.player.container) {
+							if (wdl.player.openContainer == wdl.player.inventoryContainer) {
 								boolean handled;
 
 								if (ENABLE_PROFILER) PROFILER.startSection("onItemGuiClosed");
@@ -607,7 +609,7 @@ public class WDLEvents {
 		public void onNHPCHandleChunkUnload(NetHandlerPlayClient sender,
 				WorldClient world, SPacketUnloadChunk packet) {
 			try {
-				if (!Minecraft.getInstance().isOnExecutionThread()) {
+				if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
 					return;
 				}
 
@@ -629,7 +631,7 @@ public class WDLEvents {
 		public void onNHPCHandleChat(NetHandlerPlayClient sender,
 				SPacketChat packet) {
 			try {
-				if (!Minecraft.getInstance().isOnExecutionThread()) {
+				if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
 					return;
 				}
 
@@ -637,7 +639,7 @@ public class WDLEvents {
 
 				if (ENABLE_PROFILER) PROFILER.startSection("wdl.onChatMessage");
 
-				String chatMessage = packet.getChatComponent().getString();
+				String chatMessage = packet.getChatComponent().getFormattedText();
 
 				if (ENABLE_PROFILER) PROFILER.startSection("Core");
 				wdlEvents.onChatMessage(chatMessage);
@@ -659,7 +661,7 @@ public class WDLEvents {
 		public void onNHPCHandleMaps(NetHandlerPlayClient sender,
 				SPacketMaps packet) {
 			try {
-				if (!Minecraft.getInstance().isOnExecutionThread()) {
+				if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
 					return;
 				}
 
@@ -686,7 +688,7 @@ public class WDLEvents {
 		public void onNHPCHandleCustomPayload(NetHandlerPlayClient sender,
 				SPacketCustomPayload packet) {
 			try {
-				if (!Minecraft.getInstance().isOnExecutionThread()) {
+				if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
 					return;
 				}
 				if (ENABLE_PROFILER) PROFILER.startSection("wdl.onPluginMessage");
@@ -744,7 +746,7 @@ public class WDLEvents {
 		public void onNHPCHandleBlockAction(NetHandlerPlayClient sender,
 				SPacketBlockAction packet) {
 			try {
-				if (!Minecraft.getInstance().isOnExecutionThread()) {
+				if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
 					return;
 				}
 
@@ -780,7 +782,7 @@ public class WDLEvents {
 			if (WDL.downloading) {
 				// This is likely to be called from an unexpected thread, so queue a task
 				// if on a different thread (execute will run it immediately if on the right thread)
-				Minecraft.getInstance().execute(wdl::stopDownload);
+				Minecraft.getMinecraft().addScheduledTask(wdl::stopDownload);
 
 				// This code was present on older versions of WDL which weren't missing
 				// the onDisconnect handler before.
@@ -935,8 +937,8 @@ public class WDLEvents {
 					continue;
 				}
 				GuiButton btn = (GuiButton)o;
-				if (btn.y >= insertAtYPos) {
-					btn.y += 24;
+				if (btn.yPosition >= insertAtYPos) {
+					btn.yPosition += 24;
 				}
 			}
 
@@ -955,7 +957,10 @@ public class WDLEvents {
 			if (button.id == 1) { // "Disconnect", from vanilla
 				wdl.stopDownload();
 				// Disable the button to prevent double-clicks
-				button.active = false;
+				//TODO: 
+				// button.active previously
+				// check if needed to be changed to button.enabled or button.visible
+				button.enabled = false;
 			}
 		}
 	}

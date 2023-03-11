@@ -294,7 +294,7 @@ public class WDL {
 			throw new AssertionError("Minecraft instance is null at WDL bootstrap!");
 		}
 		if (INSTANCE == null) {
-			INSTANCE = new WDL(Minecraft.getInstance());
+			INSTANCE = new WDL(Minecraft.getMinecraft());
 		}
 	}
 	private WDL(Minecraft minecraft) {
@@ -1174,7 +1174,7 @@ public class WDL {
 	 * Saves the global properties, which are used for all servers.
 	 */
 	public static void saveGlobalProps() {
-		File globalPropsFile = new File(Minecraft.getInstance().gameDir, "WorldDownloader.txt");
+		File globalPropsFile = new File(Minecraft.getMinecraft().gameDir, "WorldDownloader.txt");
 		try {
 			globalProps.store(globalPropsFile, I18n.format("wdl.props.global.title"));
 		} catch (Exception e) {

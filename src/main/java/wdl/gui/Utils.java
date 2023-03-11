@@ -22,7 +22,7 @@ import net.minecraft.client.gui.Gui;
 import wdl.versioned.VersionedFunctions;
 
 public class Utils {
-	private static final Minecraft mc = Minecraft.getInstance();
+	private static final Minecraft mc = Minecraft.getMinecraft();
 
 	/**
 	 * Draws a semitransparent description box.

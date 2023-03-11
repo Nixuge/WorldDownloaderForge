@@ -19,9 +19,11 @@ import java.lang.reflect.Method;
 import java.util.List;
 import java.util.Map;
 
+import net.minecraft.world.MinecraftException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import me.nixuge.worlddownloader.VersionConstants;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
@@ -30,14 +32,12 @@ import net.minecraft.util.math.ChunkPos;
 import net.minecraft.world.NextTickListEntry;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.ChunkSection;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraft.world.chunk.NibbleArray;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
-import net.minecraft.world.dimension.Dimension;
-import net.minecraft.world.dimension.EndDimension;
-import net.minecraft.world.dimension.NetherDimension;
+import net.minecraft.world.DimensionType;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.storage.SaveHandler;
-import net.minecraft.world.storage.SessionLockException;
 import wdl.config.settings.MiscSettings;
 import wdl.versioned.VersionedFunctions;
 
@@ -56,7 +56,7 @@ abstract class WDLChunkLoaderBase extends AnvilChunkLoader {
 	 * dimension names if forge is present.
 	 */
 	protected static File getWorldSaveFolder(SaveHandler handler,
-			Dimension dimension) {
+			WorldProvider dimension) {
 		File baseFolder = handler.getWorldDirectory();
 
 		if (WDL.serverProps.getValue(MiscSettings.FORCE_DIMENSION_TO_OVERWORLD)) {
@@ -82,12 +82,12 @@ abstract class WDLChunkLoaderBase extends AnvilChunkLoader {
 		} catch (Exception e) {
 			// Not a forge setup - emulate the vanilla method in
 			// AnvilSaveHandler.getChunkLoader.
-
-			if (dimension instanceof NetherDimension) {
+			// TODO: not sure if this is right
+			if (dimension.getDimensionType().equals(DimensionType.NETHER)) {
 				File file = new File(baseFolder, "DIM-1");
 				file.mkdirs();
 				return file;
-			} else if (dimension instanceof EndDimension) {
+			} else if (dimension.getDimensionType().equals(DimensionType.THE_END)) {
 				File file = new File(baseFolder, "DIM1");
 				file.mkdirs();
 				return file;
@@ -124,18 +124,18 @@ abstract class WDLChunkLoaderBase extends AnvilChunkLoader {
 	 * version does not.
 	 */
 	@Override
-	public void saveChunk(World world, Chunk chunk) throws SessionLockException, IOException {
+	public void saveChunk(World world, Chunk chunk) throws IOException, MinecraftException {
 		wdl.saveHandler.checkSessionLock();
 
 		NBTTagCompound levelTag = writeChunkToNBT(chunk, world);
 
 		NBTTagCompound rootTag = new NBTTagCompound();
-		rootTag.put("Level", levelTag);
-		rootTag.putInt("DataVersion", VersionConstants.getDataVersion());
+		rootTag.setTag("Level", levelTag);
+		rootTag.setInteger("DataVersion", VersionConstants.getDataVersion());
 
-		addChunkToPending(chunk.getPos(), rootTag);
+		addChunkToPending(chunk.getChunkCoordIntPair(), rootTag);
 
-		wdl.unloadChunk(chunk.getPos());
+		wdl.unloadChunk(chunk.getChunkCoordIntPair());
 	}
 
 	/**
@@ -156,90 +156,90 @@ abstract class WDLChunkLoaderBase extends AnvilChunkLoader {
 	private NBTTagCompound writeChunkToNBT(Chunk chunk, World world) {
 		NBTTagCompound compound = new NBTTagCompound();
 
-		compound.putInt("xPos", chunk.getPos().x);
-		compound.putInt("zPos", chunk.getPos().z);
-		compound.putLong("LastUpdate", world.getGameTime());
-		compound.putIntArray("HeightMap", chunk.getHeightMap());
-		compound.putBoolean("TerrainPopulated", true);  // We always want this
-		compound.putBoolean("LightPopulated", chunk.isLightPopulated());
-		compound.putLong("InhabitedTime", chunk.getInhabitedTime());
+		compound.setInteger("xPos", chunk.getChunkCoordIntPair().chunkXPos);
+		compound.setInteger("zPos", chunk.getChunkCoordIntPair().chunkZPos);
+		compound.setLong("LastUpdate", world.getWorldTime());
+		compound.setIntArray("HeightMap", chunk.getHeightMap());
+		compound.setBoolean("TerrainPopulated", true);  // We always want this
+		compound.setBoolean("LightPopulated", chunk.isLightPopulated());
+		compound.setLong("InhabitedTime", chunk.getInhabitedTime());
 
-		ChunkSection[] chunkSections = chunk.getSections();
+		ExtendedBlockStorage[] chunkSections = chunk.getBlockStorageArray();
 		NBTTagList chunkSectionList = new NBTTagList();
 		boolean hasSky = VersionedFunctions.hasSkyLight(world);
 
-		for (ChunkSection chunkSection : chunkSections) {
-			if (chunkSection != Chunk.EMPTY_SECTION) {
+		for (ExtendedBlockStorage chunkSection : chunkSections) {
+			if (!chunkSection.isEmpty()) {
 				NBTTagCompound sectionNBT = new NBTTagCompound();
-				sectionNBT.putByte("Y",
+				sectionNBT.setByte("Y",
 						(byte) (chunkSection.getYLocation() >> 4 & 255));
 				byte[] buffer = new byte[4096];
 				NibbleArray nibblearray = new NibbleArray();
 				NibbleArray nibblearray1 = chunkSection.getData()
 						.getDataForNBT(buffer, nibblearray);
-				sectionNBT.putByteArray("Blocks", buffer);
-				sectionNBT.putByteArray("Data", nibblearray.getData());
+				sectionNBT.setByteArray("Blocks", buffer);
+				sectionNBT.setByteArray("Data", nibblearray.getData());
 
 				if (nibblearray1 != null) {
-					sectionNBT.putByteArray("Add", nibblearray1.getData());
+					sectionNBT.setByteArray("Add", nibblearray1.getData());
 				}
 
-				NibbleArray blocklightArray = chunkSection.getBlockLight();
+				NibbleArray blocklightArray = chunkSection.getBlocklightArray();
 				int lightArrayLen = blocklightArray.getData().length;
-				sectionNBT.putByteArray("BlockLight", blocklightArray.getData());
+				sectionNBT.setByteArray("BlockLight", blocklightArray.getData());
 
 				if (hasSky) {
-					NibbleArray skylightArray = chunkSection.getSkyLight();
+					NibbleArray skylightArray = chunkSection.getSkylightArray();
 					if (skylightArray != null) {
-						sectionNBT.putByteArray("SkyLight", skylightArray.getData());
+						sectionNBT.setByteArray("SkyLight", skylightArray.getData());
 					} else {
 						// Shouldn't happen, but if it does, handle it smoothly.
 						LOGGER.error("[WDL] Skylight array for chunk at " +
-								chunk.getPos().x + ", " + chunk.getPos().z +
+								chunk.getChunkCoordIntPair().chunkXPos + ", " + chunk.getChunkCoordIntPair().chunkZPos +
 								" is null despite VersionedProperties " +
 								"saying it shouldn't be!");
-						sectionNBT.putByteArray("SkyLight", new byte[lightArrayLen]);
+						sectionNBT.setByteArray("SkyLight", new byte[lightArrayLen]);
 					}
 				} else {
-					sectionNBT.putByteArray("SkyLight", new byte[lightArrayLen]);
+					sectionNBT.setByteArray("SkyLight", new byte[lightArrayLen]);
 				}
 
-				chunkSectionList.add(sectionNBT);
+				chunkSectionList.appendTag(sectionNBT);
 			}
 		}
 
-		compound.put("Sections", chunkSectionList);
-		compound.putByteArray("Biomes", chunk.getBiomeArray());
+		compound.setTag("Sections", chunkSectionList);
+		compound.setByteArray("Biomes", chunk.getBiomeArray());
 
 		chunk.setHasEntities(false);
 		NBTTagList entityList = getEntityList(chunk);
-		compound.put("Entities", entityList);
+		compound.setTag("Entities", entityList);
 
 		NBTTagList tileEntityList = getTileEntityList(chunk);
-		compound.put("TileEntities", tileEntityList);
+		compound.setTag("TileEntities", tileEntityList);
 
 		List<NextTickListEntry> updateList = world.getPendingBlockUpdates(
 				chunk, false);
 		if (updateList != null) {
-			long worldTime = world.getGameTime();
+			long worldTime = world.getWorldTime();
 			NBTTagList entries = new NBTTagList();
 
 			for (NextTickListEntry entry : updateList) {
 				NBTTagCompound entryTag = new NBTTagCompound();
 				ResourceLocation location = Block.REGISTRY
-						.getKey(entry.getTarget());
-				entryTag.putString("i",
+						.getNameForObject(entry.getBlock());
+				entryTag.setString("i",
 						location == null ? "" : location.toString());
-				entryTag.putInt("x", entry.position.getX());
-				entryTag.putInt("y", entry.position.getY());
-				entryTag.putInt("z", entry.position.getZ());
-				entryTag.putInt("t",
+				entryTag.setInteger("x", entry.position.getX());
+				entryTag.setInteger("y", entry.position.getY());
+				entryTag.setInteger("z", entry.position.getZ());
+				entryTag.setInteger("t",
 						(int) (entry.scheduledTime - worldTime));
-				entryTag.putInt("p", entry.priority);
-				entries.add(entryTag);
+				entryTag.setInteger("p", entry.priority);
+				entries.appendTag(entryTag);
 			}
 
-			compound.put("TileTicks", entries);
+			compound.setTag("TileTicks", entries);
 		}
 
 		return compound;

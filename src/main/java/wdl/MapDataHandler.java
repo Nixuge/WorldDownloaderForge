@@ -32,7 +32,7 @@ import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.storage.MapData;
 import net.minecraft.world.storage.MapDecoration;
 import wdl.versioned.VersionedFunctions;
@@ -185,7 +185,7 @@ public final class MapDataHandler {
 	 */
 	private static int worldCoordToMapCenter(double coord, byte scale) {
 		int size = 128 * (1 << scale);
-		int pos = MathHelper.floor((coord + 64.0D) / (double)size);
+		int pos = MathHelper.floor_double((coord + 64.0D) / (double)size);
 		int center = pos * size + size / 2 - 64;
 		return center;
 	}
@@ -294,8 +294,9 @@ public final class MapDataHandler {
 		void fixDimension() {
 			if (confirmedOwner != null) {
 				assert confirmedOwner.world != null;
-				DimensionType dim = confirmedOwner.world.dimension.getType();
+				DimensionType dim = confirmedOwner.worldObj.provider.getDimensionType();
 				assert dim != null;
+				VersionedFunctions.setMapDimension(map, dim);
 				VersionedFunctions.setMapDimension(map, dim);
 				this.dim = dim;
 			} else if (VersionedFunctions.isMapDimensionNull(map)) {

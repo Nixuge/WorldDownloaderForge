@@ -39,7 +39,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraft.world.chunk.storage.RegionFile;
 import net.minecraft.world.chunk.storage.RegionFileCache;
-import net.minecraft.world.dimension.Dimension;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.storage.SaveHandler;
 import wdl.api.IEntityEditor;
 import wdl.api.ITileEntityEditor;
@@ -60,7 +60,7 @@ public class WDLChunkLoader extends WDLChunkLoaderBase {
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	public static WDLChunkLoader create(WDL wdl,
-			SaveHandler handler, Dimension dimension) {
+			SaveHandler handler, WorldProvider dimension) {
 		return new WDLChunkLoader(wdl, getWorldSaveFolder(handler, dimension));
 	}
 
@@ -88,20 +88,21 @@ public class WDLChunkLoader extends WDLChunkLoaderBase {
 			entities.addAll(map);
 		}
 		// Add the manually saved entities.
-		for (Entity e : wdl.newEntities.get(chunk.getPos())) {
-			assert chunk.getPos().equals(wdl.entityPositions.get(e.getUniqueID())) :
+		for (Entity e : wdl.newEntities.get(chunk.getChunkCoordIntPair())) {
+			assert chunk.getChunkCoordIntPair().equals(wdl.entityPositions.get(e.getUniqueID())) :
 					"Mismatch between position of " + e + " in "
-					+ chunk.getPos() + " and position recorded in entityPositions of "
+					+ chunk.getChunkCoordIntPair() + " and position recorded in entityPositions of "
 					+ wdl.entityPositions.get(e.getUniqueID());
 			// "Unkill" the entity, since it is killed when it is unloaded.
-			e.removed = false;
+			e.isDead = false;
+			// e.removed = false;
 			entities.add(e);
 		}
 
 		for (Entity entity : entities) {
 			if (entity == null) {
 				LOGGER.warn("[WDL] Null entity in chunk at "
-						+ chunk.getPos());
+						+ chunk.getChunkCoordIntPair());
 				continue;
 			}
 
@@ -119,7 +120,7 @@ public class WDLChunkLoader extends WDLChunkLoaderBase {
 				} catch (Exception ex) {
 					throw new RuntimeException("Failed to edit entity "
 							+ entity + " for chunk at "
-							+ chunk.getPos() + " with extension "
+							+ chunk.getChunkCoordIntPair() + " with extension "
 							+ info, ex);
 				}
 			}
@@ -127,15 +128,15 @@ public class WDLChunkLoader extends WDLChunkLoaderBase {
 			NBTTagCompound entityData = new NBTTagCompound();
 
 			try {
-				if (entity.writeUnlessPassenger(entityData)) {
+				if (entity.writeToNBTOptional(entityData)) {
 					chunk.setHasEntities(true);
-					entityList.add(entityData);
+					entityList.appendTag(entityData);
 				}
 			} catch (Exception e) {
 				WDLMessages.chatMessageTranslated(
 						WDL.serverProps,
 						WDLMessageTypes.ERROR,
-						"wdl.messages.generalError.failedToSaveEntity", entity, chunk.getPos().x, chunk.getPos().z, e);
+						"wdl.messages.generalError.failedToSaveEntity", entity, chunk.getChunkCoordIntPair().chunkXPos, chunk.getChunkCoordIntPair().chunkZPos, e);
 				LOGGER.warn("Compound: " + entityData);
 				LOGGER.warn("Entity metadata dump:");
 				try {
@@ -210,31 +211,31 @@ public class WDLChunkLoader extends WDLChunkLoaderBase {
 
 		Map<BlockPos, TileEntity> chunkTEMap = chunk.getTileEntityMap();
 		Map<BlockPos, NBTTagCompound> oldTEMap = getOldTileEntities(chunk);
-		Map<BlockPos, TileEntity> newTEMap = wdl.newTileEntities.get(chunk.getPos());
+		Map<BlockPos, TileEntity> newTEMap = wdl.newTileEntities.get(chunk.getChunkCoordIntPair());
 		if (newTEMap == null) {
 			newTEMap = new HashMap<>();
 		}
 
-		// All of the locations of tile entities in the chunk.
+		// All the locations of tile entities in the chunk.
 		Set<BlockPos> allTELocations = new HashSet<>();
 		allTELocations.addAll(chunkTEMap.keySet());
 		allTELocations.addAll(oldTEMap.keySet());
 		allTELocations.addAll(newTEMap.keySet());
 
 		for (BlockPos pos : allTELocations) {
-			// Now, add all of the tile entities, using the "best" map
+			// Now, add all the tile entities, using the "best" map
 			// if it's in multiple.
 			if (newTEMap.containsKey(pos)) {
 				NBTTagCompound compound = new NBTTagCompound();
 
 				TileEntity te = newTEMap.get(pos);
 				try {
-					te.write(compound);
+					te.writeToNBT(compound);
 				} catch (Exception e) {
 					WDLMessages.chatMessageTranslated(
 							WDL.serverProps,
 							WDLMessageTypes.ERROR,
-							"wdl.messages.generalError.failedToSaveTE", te, pos, chunk.getPos().x, chunk.getPos().z, e);
+							"wdl.messages.generalError.failedToSaveTE", te, pos, chunk.getChunkCoordIntPair().chunkXPos, chunk.getChunkCoordIntPair().chunkZPos, e);
 					LOGGER.warn("Compound: " + compound);
 					continue;
 				}
@@ -248,7 +249,7 @@ public class WDLChunkLoader extends WDLChunkLoaderBase {
 
 				editTileEntity(pos, compound, TileEntityCreationMode.NEW);
 
-				tileEntityList.add(compound);
+				tileEntityList.appendTag(compound);
 			} else if (oldTEMap.containsKey(pos)) {
 				NBTTagCompound compound = oldTEMap.get(pos);
 				String entityType = compound.getString("id");
@@ -259,26 +260,26 @@ public class WDLChunkLoader extends WDLChunkLoaderBase {
 
 				editTileEntity(pos, compound, TileEntityCreationMode.IMPORTED);
 
-				tileEntityList.add(compound);
+				tileEntityList.appendTag(compound);
 			} else if (chunkTEMap.containsKey(pos)) {
 				// TODO: Do we want a chat message for this?
 				// It seems unnecessary.
 				TileEntity te = chunkTEMap.get(pos);
 				NBTTagCompound compound = new NBTTagCompound();
 				try {
-					te.write(compound);
+					te.writeToNBT(compound);
 				} catch (Exception e) {
 					WDLMessages.chatMessageTranslated(
 							WDL.serverProps,
 							WDLMessageTypes.ERROR,
-							"wdl.messages.generalError.failedToSaveTE", te, pos, chunk.getPos().x, chunk.getPos().z, e);
+							"wdl.messages.generalError.failedToSaveTE", te, pos, chunk.getChunkCoordIntPair().chunkXPos, chunk.getChunkCoordIntPair().chunkZPos, e);
 					LOGGER.warn("Compound: " + compound);
 					continue;
 				}
 
 				editTileEntity(pos, compound, TileEntityCreationMode.EXISTING);
 
-				tileEntityList.add(compound);
+				tileEntityList.appendTag(compound);
 			}
 		}
 
@@ -307,10 +308,10 @@ public class WDLChunkLoader extends WDLChunkLoaderBase {
 			// chunksToSave can be accessed from multiple threads.  Note that this still
 			// doesn't handle the MC-119971-like case of the chunk being in chunksBeingSaved
 			// (but that should be rare, and this condition should not happen in the first place)
-			if ((chunkNBT = chunksToSave.get(chunk.getPos())) != null) {
-				LOGGER.warn("getOldTileEntities (and thus saveChunk) was called while a chunk was already in chunksToSave!  (location: {})", chunk.getPos(), new Exception());
+			if ((chunkNBT = chunksToSave.get(chunk.getChunkCoordIntPair())) != null) {
+				LOGGER.warn("getOldTileEntities (and thus saveChunk) was called while a chunk was already in chunksToSave!  (location: {})", chunk.getChunkCoordIntPair(), new Exception());
 			} else try (DataInputStream dis = RegionFileCache.getChunkInputStream(
-					chunkSaveLocation, chunk.getPos().x, chunk.getPos().z)) {
+					chunkSaveLocation, chunk.getChunkCoordIntPair().chunkXPos, chunk.getChunkCoordIntPair().chunkZPos)) {
 				if (dis == null) {
 					// This happens whenever the chunk hasn't been saved before.
 					// It's a normal case.
@@ -320,16 +321,16 @@ public class WDLChunkLoader extends WDLChunkLoaderBase {
 				chunkNBT = CompressedStreamTools.read(dis);
 			}
 
-			NBTTagCompound levelNBT = chunkNBT.getCompound("Level");
-			NBTTagList oldList = levelNBT.getList("TileEntities", 10);
+			NBTTagCompound levelNBT = chunkNBT.getCompoundTag("Level");
+			NBTTagList oldList = levelNBT.getTagList("TileEntities", 10);
 
 			if (oldList != null) {
-				for (int i = 0; i < oldList.size(); i++) {
-					NBTTagCompound oldNBT = oldList.getCompound(i);
+				for (int i = 0; i < oldList.tagCount(); i++) {
+					NBTTagCompound oldNBT = oldList.getCompoundTagAt(i);
 
 					String entityID = oldNBT.getString("id");
-					BlockPos pos = new BlockPos(oldNBT.getInt("x"),
-							oldNBT.getInt("y"), oldNBT.getInt("z"));
+					BlockPos pos = new BlockPos(oldNBT.getInteger("x"),
+							oldNBT.getInteger("y"), oldNBT.getInteger("z"));
 					Block block = chunk.getBlockState(pos).getBlock();
 
 					if (shouldImportBlockEntity(entityID, pos, block, oldNBT, chunk)) {
@@ -348,7 +349,7 @@ public class WDLChunkLoader extends WDLChunkLoaderBase {
 		} catch (Exception e) {
 			WDLMessages.chatMessageTranslated(WDL.serverProps,
 					WDLMessageTypes.ERROR,
-					"wdl.messages.generalError.failedToImportTE", chunk.getPos().x, chunk.getPos().z, e);
+					"wdl.messages.generalError.failedToImportTE", chunk.getChunkCoordIntPair().chunkXPos, chunk.getChunkCoordIntPair().chunkZPos, e);
 		}
 		return returned;
 	}

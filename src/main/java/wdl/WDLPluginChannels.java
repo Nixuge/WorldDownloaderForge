@@ -40,6 +40,7 @@ import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
 import com.google.gson.JsonObject;
 
+import me.nixuge.worlddownloader.VersionConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.NetworkManager;
@@ -229,8 +230,8 @@ public class WDLPluginChannels {
 
 		if (receivedPackets.contains(1)) {
 			if (!canCacheChunks && saveRadius >= 0) {
-				int distanceX = chunk.getPos().x - WDL.getInstance().player.chunkCoordX;
-				int distanceZ = chunk.getPos().z - WDL.getInstance().player.chunkCoordZ;
+				int distanceX = chunk.getChunkCoordIntPair().chunkXPos - WDL.getInstance().player.chunkCoordX;
+				int distanceZ = chunk.getChunkCoordIntPair().chunkZPos - WDL.getInstance().player.chunkCoordZ;
 
 				if (Math.abs(distanceX) > saveRadius ||
 						Math.abs(distanceZ) > saveRadius) {
@@ -463,7 +464,7 @@ public class WDLPluginChannels {
 			return false;
 		}
 
-		return isChunkOverridden(chunk.getPos().x, chunk.getPos().z);
+		return isChunkOverridden(chunk.getChunkCoordIntPair().chunkXPos, chunk.getChunkCoordIntPair().chunkZPos);
 	}
 	/**
 	 * Is the given chunk location part of a chunk override?
@@ -604,7 +605,7 @@ public class WDLPluginChannels {
 			range.writeToOutput(output);
 		}
 
-		NetHandlerPlayClient nhpc = Minecraft.getInstance().getConnection();
+		NetHandlerPlayClient nhpc = Minecraft.getMinecraft().getConnection();
 		final String channel;
 		if (isRegistered(nhpc, REQUEST_CHANNEL_NEW)) {
 			channel = REQUEST_CHANNEL_NEW;
@@ -667,7 +668,7 @@ public class WDLPluginChannels {
 	private static String deferredInitState = null;
 
 	public static void sendInitPacket(String state) {
-		sendInitPacket(Minecraft.getInstance().getConnection(), state);
+		sendInitPacket(Minecraft.getMinecraft().getConnection(), state);
 	}
 	private static void sendInitPacket(NetHandlerPlayClient nhpc, String state) {
 		assert nhpc != null : "Unexpected null nhpc: state=" + state + ", chans=" + REGISTERED_CHANNELS;
@@ -707,7 +708,7 @@ public class WDLPluginChannels {
 	 * correct ones.
 	 */
 	static void onWorldLoad() {
-		Minecraft minecraft = Minecraft.getInstance();
+		Minecraft minecraft = Minecraft.getMinecraft();
 
 		receivedPackets = new HashSet<>();
 		requests = new HashMap<>();

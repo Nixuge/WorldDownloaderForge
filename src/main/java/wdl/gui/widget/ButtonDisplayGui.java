@@ -62,6 +62,6 @@ public class ButtonDisplayGui extends WDLButton {
 
 	@Override
 	public void performAction() {
-		Minecraft.getInstance().displayGuiScreen(this.screenSupplier.get());
+		Minecraft.getMinecraft().displayGuiScreen(this.screenSupplier.get());
 	}
 }
