@@ -43,6 +43,7 @@ import wdl.ducks.IBaseChangesApplied;
 public abstract class MixinNetHandlerPlayClient implements INetHandlerPlayClient, IBaseChangesApplied {
 	@Inject(method="<init>", at=@At("RETURN"))
 	private void init(Minecraft mcIn, GuiScreen p_i46300_2_, NetworkManager networkManagerIn, GameProfile profileIn, CallbackInfo ci) {
+		System.out.println("BAD PACKET INCOMING!!");
 		if (networkManagerIn == null) return; // Happens during unit tests
 
 		// Litemod-only: work around forge issue
@@ -60,15 +61,13 @@ public abstract class MixinNetHandlerPlayClient implements INetHandlerPlayClient
 		}
 	}
 
-	// Automatic remapping sometimes fails; see
-	// https://github.com/Pokechu22/WorldDownloader/issues/175
-	@Shadow(remap = false, aliases = { "g", "field_147300_g" })
-	private WorldClient world;
+	@Shadow
+	private WorldClient clientWorldController;
 
 	@Inject(method="processChunkUnload", at=@At("HEAD"))
 	private void onProcessChunkUnload(SPacketUnloadChunk packetIn, CallbackInfo ci) {
 		/* WDL >>> */
-		wdl.WDLHooks.onNHPCHandleChunkUnload((NetHandlerPlayClient)(Object)this, this.world, packetIn);
+		wdl.WDLHooks.onNHPCHandleChunkUnload((NetHandlerPlayClient)(Object)this, this.clientWorldController, packetIn);
 		/* <<< WDL */
 		//more down here
 	}

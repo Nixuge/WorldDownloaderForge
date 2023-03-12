@@ -125,7 +125,7 @@ abstract class WDLChunkLoaderBase extends AnvilChunkLoader {
 	@Override
 	public void saveChunk(World world, Chunk chunk) throws IOException, MinecraftException {
 		wdl.saveHandler.checkSessionLock();
-
+		
 		NBTTagCompound levelTag = writeChunkToNBT(chunk, world);
 
 		NBTTagCompound rootTag = new NBTTagCompound();
@@ -154,7 +154,7 @@ abstract class WDLChunkLoaderBase extends AnvilChunkLoader {
 	 */
 	private NBTTagCompound writeChunkToNBT(Chunk chunk, World world) {
 		NBTTagCompound compound = new NBTTagCompound();
-
+		
 		compound.setInteger("xPos", chunk.getChunkCoordIntPair().chunkXPos);
 		compound.setInteger("zPos", chunk.getChunkCoordIntPair().chunkZPos);
 		compound.setLong("LastUpdate", world.getWorldTime());
@@ -162,13 +162,13 @@ abstract class WDLChunkLoaderBase extends AnvilChunkLoader {
 		compound.setBoolean("TerrainPopulated", true);  // We always want this
 		compound.setBoolean("LightPopulated", chunk.isLightPopulated());
 		compound.setLong("InhabitedTime", chunk.getInhabitedTime());
-
+		
 		ExtendedBlockStorage[] chunkSections = chunk.getBlockStorageArray();
 		NBTTagList chunkSectionList = new NBTTagList();
 		boolean hasSky = VersionedFunctions.hasSkyLight(world);
-
+		
 		for (ExtendedBlockStorage chunkSection : chunkSections) {
-			if (!chunkSection.isEmpty()) {
+			if (chunkSection != null && !chunkSection.isEmpty()) {
 				NBTTagCompound sectionNBT = new NBTTagCompound();
 				sectionNBT.setByte("Y",
 						(byte) (chunkSection.getYLocation() >> 4 & 255));
@@ -178,15 +178,15 @@ abstract class WDLChunkLoaderBase extends AnvilChunkLoader {
 						.getDataForNBT(buffer, nibblearray);
 				sectionNBT.setByteArray("Blocks", buffer);
 				sectionNBT.setByteArray("Data", nibblearray.getData());
-
+				
 				if (nibblearray1 != null) {
 					sectionNBT.setByteArray("Add", nibblearray1.getData());
 				}
-
+				
 				NibbleArray blocklightArray = chunkSection.getBlocklightArray();
 				int lightArrayLen = blocklightArray.getData().length;
 				sectionNBT.setByteArray("BlockLight", blocklightArray.getData());
-
+				
 				if (hasSky) {
 					NibbleArray skylightArray = chunkSection.getSkylightArray();
 					if (skylightArray != null) {
