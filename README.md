@@ -14,6 +14,7 @@ However, this is already done and I've put some effort into it, and I didn't rem
 - (optional) switch to the branch you need (1.8.9 by default)
 - `./gradlew check`
 - `./gradlew build`
+
 Done, your mod should be in the `builds/libs/` folder
 
 # Editing (tested on intellij & vscode)
@@ -23,6 +24,7 @@ Done, your mod should be in the `builds/libs/` folder
 - `./gradlew check`
 - `./gradlew setupDecompWorkspace`
 - `./gradlew genIntellijRuns`
+
 Done, now you can edit the mod however you like and run `./gradlew runClient` to view your changes
 
 # Important note: code quality
