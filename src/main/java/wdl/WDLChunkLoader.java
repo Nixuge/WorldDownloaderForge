@@ -31,7 +31,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.datasync.EntityDataManager;
+import net.minecraft.network.datasync.EntityDataManager; // maybe entity.DataWatcher ?
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ClassInheritanceMultiMap;
 import net.minecraft.util.BlockPos;

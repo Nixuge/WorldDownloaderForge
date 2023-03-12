@@ -27,9 +27,7 @@ import net.minecraft.client.gui.GuiCreateWorld;
 import net.minecraft.client.gui.GuiCustomizeWorldScreen;
 import net.minecraft.client.gui.GuiFlatPresets;
 import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.init.Biomes;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.world.biome.Biome;
 import wdl.config.settings.GeneratorSettings.Generator;
 
 final class GeneratorFunctions {
@@ -95,16 +93,18 @@ final class GeneratorFunctions {
 		/**
 		 * Gets the current flat preset.
 		 */
+		// func_146384_e() -> getPreset()
 		@Override
-		public String getPreset() {
+		public String func_146384_e() {
 			return generatorConfig;
 		}
 
 		/**
 		 * Sets the current flat preset.
 		 */
+		// func_146383_a() -> setPreset()
 		@Override
-		public void setPreset(@Nullable String preset) {
+		public void func_146383_a(@Nullable String preset) {
 			callback.accept(preset == null ? "" : preset);
 		}
 	}
@@ -167,9 +167,10 @@ final class GeneratorFunctions {
 	static {
 		// Make sure that the void biome exists
 		// (this check partially exists so that this class will not compile in versions without it)
-		if (Biome.getIdForBiome(Biomes.VOID) != 127) {
-			LOGGER.warn("[WDL] Mismatched ID for void biome: " + Biomes.VOID + " = " + Biome.getIdForBiome(Biomes.VOID));
-		}
+		// REMOVED AS THERE DOESNT SEEM TO BE AN ENUM WITH VOID
+		// if (Biome.getIdForBiome(Biomes.VOID) != 127) {
+		// 	LOGGER.warn("[WDL] Mismatched ID for void biome: " + Biomes.VOID + " = " + Biome.getIdForBiome(Biomes.VOID));
+		// }
 	}
 
 	/* (non-javadoc)

@@ -14,7 +14,7 @@
 
 package wdl;
 
-import static net.minecraft.util.text.EnumChatFormatting.*;
+import static net.minecraft.util.EnumChatFormatting.*;
 import static wdl.MessageTypeCategory.*;
 
 import net.minecraft.util.IChatComponent;

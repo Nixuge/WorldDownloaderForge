@@ -145,9 +145,9 @@ public final class WDLHooks {
 				stSize = 0;
 			}
 			CrashReportCategory cat = report.makeCategoryDepth("World Downloader Mod - not bootstrapped yet", stSize);
-			cat.setDetail("WDL version", VersionConstants::getModVersion);
-			cat.setDetail("Targeted MC version", VersionConstants::getExpectedVersion);
-			cat.setDetail("Actual MC version", VersionConstants::getMinecraftVersion);
+			cat.addCrashSectionCallable("WDL version", VersionConstants::getModVersion);
+			cat.addCrashSectionCallable("Targeted MC version", VersionConstants::getExpectedVersion);
+			cat.addCrashSectionCallable("Actual MC version", VersionConstants::getMinecraftVersion);
 		}
 	}
 

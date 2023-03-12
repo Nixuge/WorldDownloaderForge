@@ -191,31 +191,31 @@ public class WDLUpdateChecker extends Thread {
 						"wdl.intro.success");
 				ChatComponentTranslation mcfThread = new ChatComponentTranslation(
 						"wdl.intro.forumsLink");
-				mcfThread.setStyle(VersionedFunctions.createLinkFormatting(FORUMS_THREAD_USAGE_LINK));
+				mcfThread.setChatStyle(VersionedFunctions.createLinkFormatting(FORUMS_THREAD_USAGE_LINK));
 				ChatComponentTranslation wikiLink = new ChatComponentTranslation(
 						"wdl.intro.wikiLink");
-				wikiLink.setStyle(VersionedFunctions.createLinkFormatting(WIKI_LINK));
+				wikiLink.setChatStyle(VersionedFunctions.createLinkFormatting(WIKI_LINK));
 				ChatComponentTranslation usage = new ChatComponentTranslation(
 						"wdl.intro.usage", mcfThread, wikiLink);
 				ChatComponentTranslation githubRepo = new ChatComponentTranslation(
 						"wdl.intro.githubRepo");
-				githubRepo.setStyle(VersionedFunctions.createLinkFormatting(GITHUB_LINK));
+				githubRepo.setChatStyle(VersionedFunctions.createLinkFormatting(GITHUB_LINK));
 				ChatComponentTranslation contribute = new ChatComponentTranslation(
 						"wdl.intro.contribute", githubRepo);
 				ChatComponentTranslation redistributionList = new ChatComponentTranslation(
 						"wdl.intro.redistributionList");
-				redistributionList.setStyle(VersionedFunctions.createLinkFormatting(REDISTRIBUTION_LINK));
+				redistributionList.setChatStyle(VersionedFunctions.createLinkFormatting(REDISTRIBUTION_LINK));
 				ChatComponentTranslation warning = new ChatComponentTranslation(
 						"wdl.intro.warning");
-				warning.getStyle().setColor(EnumChatFormatting.DARK_RED).setBold(true);
+				warning.getChatStyle().setColor(EnumChatFormatting.DARK_RED).setBold(true);
 				ChatComponentTranslation illegally = new ChatComponentTranslation(
 						"wdl.intro.illegally");
-				illegally.getStyle().setColor(EnumChatFormatting.DARK_RED).setBold(true);
+				illegally.getChatStyle().setColor(EnumChatFormatting.DARK_RED).setBold(true);
 				ChatComponentTranslation stolen = new ChatComponentTranslation(
 						"wdl.intro.stolen", warning, redistributionList, illegally);
 				ChatComponentTranslation smr = new ChatComponentTranslation(
 						"wdl.intro.stopModReposts");
-				smr.setStyle(VersionedFunctions.createLinkFormatting(SMR_LINK));
+				smr.setChatStyle(VersionedFunctions.createLinkFormatting(SMR_LINK));
 				ChatComponentTranslation stolenBeware = new ChatComponentTranslation(
 						"wdl.intro.stolenBeware", smr);
 
@@ -269,7 +269,7 @@ public class WDLUpdateChecker extends Thread {
 
 				ChatComponentTranslation updateLink = new ChatComponentTranslation(
 						"wdl.messages.updates.newRelease.updateLink");
-				updateLink.setStyle(VersionedFunctions.createLinkFormatting(recomendedRelease.URL));
+				updateLink.setChatStyle(VersionedFunctions.createLinkFormatting(recomendedRelease.URL));
 
 				// Show the new version available message, and give a link.
 				WDLMessages.chatMessageTranslated(WDL.serverProps,
@@ -281,7 +281,7 @@ public class WDLUpdateChecker extends Thread {
 			if (VersionConstants.isUntestedVersion()) {
 				ChatComponentTranslation githubIssues = new ChatComponentTranslation(
 						"wdl.intro.githubRepo");
-				githubIssues.setStyle(VersionedFunctions.createLinkFormatting(GITHUB_ISSUES_LINK));
+				githubIssues.setChatStyle(VersionedFunctions.createLinkFormatting(GITHUB_ISSUES_LINK));
 				WDLMessages.chatMessageTranslated(WDL.serverProps,
 						WDLMessageTypes.UPDATES, "wdl.messages.updates.untestedVersion",
 						VersionConstants.getMinecraftVersion(), githubIssues);
@@ -335,7 +335,7 @@ public class WDLUpdateChecker extends Thread {
 			if (failed.size() > 0) {
 				ChatComponentTranslation mcfThread = new ChatComponentTranslation(
 						"wdl.intro.forumsLink");
-				mcfThread.setStyle(VersionedFunctions.createLinkFormatting(FORUMS_THREAD_USAGE_LINK));
+				mcfThread.setChatStyle(VersionedFunctions.createLinkFormatting(FORUMS_THREAD_USAGE_LINK));
 				WDLMessages.chatMessageTranslated(WDL.serverProps,
 						WDLMessageTypes.UPDATES, "wdl.messages.updates.badHashesFound", mcfThread);
 			}

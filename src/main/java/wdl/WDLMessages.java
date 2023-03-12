@@ -34,8 +34,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ChatComponentText;
 import net.minecraft.util.ChatComponentTranslation;
-import net.minecraft.util.text.event.HoverEvent;
-import net.minecraft.util.text.event.HoverEvent.Action;
+import net.minecraft.event.HoverEvent;
+import net.minecraft.event.HoverEvent.Action;
 import wdl.api.IWDLMessageType;
 import wdl.config.CyclableSetting;
 import wdl.config.IConfiguration;
@@ -217,7 +217,7 @@ public class WDLMessages {
 		for (int i = 0; i < args.length; i++) {
 			if (args[i] == null) {
 				ChatComponentText text = new ChatComponentText("null");
-				text.getStyle().setHoverEvent(new HoverEvent(Action.SHOW_TEXT, new ChatComponentText("~~null~~")));
+				text.getChatStyle().setChatHoverEvent(new HoverEvent(Action.SHOW_TEXT, new ChatComponentText("~~null~~")));
 				args[i] = text;
 			} else if (args[i] instanceof Entity) {
 				Entity e = (Entity)args[i];
@@ -289,14 +289,14 @@ public class WDLMessages {
 		IChatComponent text = new ChatComponentText("");
 
 		IChatComponent header = new ChatComponentText("[WorldDL]");
-		header.getStyle().setColor(type.getTitleColor());
-		header.getStyle().setHoverEvent(
+		header.getChatStyle().setColor(type.getTitleColor());
+		header.getChatStyle().setChatHoverEvent(
 				new HoverEvent(Action.SHOW_TEXT, tooltip));
 
 		// If the message has its own style, it'll use that instead.
 		// TODO: Better way?
 		ChatComponentText messageFormat = new ChatComponentText(" ");
-		messageFormat.getStyle().setColor(type.getTextColor());
+		messageFormat.getChatStyle().setColor(type.getTextColor());
 
 		messageFormat.appendSibling(message);
 		text.appendSibling(header);
@@ -331,7 +331,7 @@ public class WDLMessages {
 				hoverText.appendText("\n");
 				hoverText.appendSibling(new ChatComponentTranslation("wdl.messages.entityData.group", displayGroup, group));
 
-				wdlName.getStyle().setHoverEvent(new HoverEvent(Action.SHOW_TEXT, hoverText));
+				wdlName.getChatStyle().setChatHoverEvent(new HoverEvent(Action.SHOW_TEXT, hoverText));
 			}
 		} catch (Exception ex) {
 			LOGGER.warn("[WDL] Exception in entity name!", ex);
@@ -362,7 +362,7 @@ public class WDLMessages {
 		HoverEvent event = new HoverEvent(Action.SHOW_TEXT,
 				new ChatComponentText(exceptionAsString));
 
-		component.getStyle().setHoverEvent(event);
+		component.getChatStyle().setChatHoverEvent(event);
 
 		return component;
 	}

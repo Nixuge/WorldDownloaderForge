@@ -66,7 +66,7 @@ final class HandlerFunctions {
 	 */
 	static boolean hasSkyLight(World world) {
 		// 1.10-: use isNether (hasNoSky)
-		return !world.provider.getWorldProvider().equals(WorldProvider.NETHER);
+		return !(world.provider.getDimensionId() == -1);
 	}
 
 	/* (non-javadoc)

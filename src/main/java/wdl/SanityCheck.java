@@ -21,7 +21,6 @@ import net.minecraft.block.state.IBlockState;
 import net.minecraft.client.gui.GuiIngameMenu;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.client.resources.I18n;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.init.Blocks;
 import net.minecraft.inventory.InventoryBasic;
@@ -101,7 +100,7 @@ enum SanityCheck {
 		@Override
 		@SuppressWarnings("deprecation")
 		public void run() throws Exception {
-			int wireID = VersionedFunctions.getBlockId(Blocks.TRIPWIRE);
+			int wireID = VersionedFunctions.getBlockId(Blocks.tripwire);
 			for (int meta = 0; meta <= 15; meta++) {
 				int id = wireID << 4 | meta;
 				// Note: Deprecated but supported under forge, and this is
@@ -117,7 +116,7 @@ enum SanityCheck {
 				if (state == null) {
 					throw new Exception("Unexpected null state for meta " + meta + " (" + id + ")");
 				}
-				if (block != Blocks.TRIPWIRE) {
+				if (block != Blocks.tripwire) {
 					throw new Exception("Unexpected block for meta " + meta + " (" + id + "): " + state);
 				}
 			}

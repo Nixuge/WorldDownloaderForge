@@ -35,7 +35,6 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraft.world.chunk.NibbleArray;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraft.world.WorldProvider;
-import net.minecraft.world.WorldProvider;
 import net.minecraft.world.storage.SaveHandler;
 import wdl.config.settings.MiscSettings;
 import wdl.versioned.VersionedFunctions;
@@ -82,11 +81,11 @@ abstract class WDLChunkLoaderBase extends AnvilChunkLoader {
 			// Not a forge setup - emulate the vanilla method in
 			// AnvilSaveHandler.getChunkLoader.
 			// TODO: not sure if this is right
-			if (dimension.getWorldProvider().equals(WorldProvider.NETHER)) {
+			if (dimension.getDimensionId() == -1) { // Nether
 				File file = new File(baseFolder, "DIM-1");
 				file.mkdirs();
 				return file;
-			} else if (dimension.getWorldProvider().equals(WorldProvider.THE_END)) {
+			} else if (dimension.getDimensionId() == 1) { // The end
 				File file = new File(baseFolder, "DIM1");
 				file.mkdirs();
 				return file;
@@ -107,7 +106,7 @@ abstract class WDLChunkLoaderBase extends AnvilChunkLoader {
 	protected final File chunkSaveLocation;
 
 	protected WDLChunkLoaderBase(WDL wdl, File file) {
-		super(file, null);
+		super(file);
 		this.wdl = wdl;
 		@SuppressWarnings("unchecked")
 		Map<ChunkCoordIntPair, NBTTagCompound> chunksToSave =

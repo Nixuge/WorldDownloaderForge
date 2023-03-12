@@ -26,9 +26,7 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableSet;
 
-import net.minecraft.client.resources.I18n;
 import net.minecraft.entity.Entity;
-import net.minecraft.entity.EntityAreaEffectCloud;
 import net.minecraft.entity.EntityCreature;
 import net.minecraft.entity.EntityHanging;
 import net.minecraft.entity.EntityList;
@@ -61,7 +59,6 @@ import net.minecraft.entity.projectile.EntityEgg;
 import net.minecraft.entity.projectile.EntityFireball;
 import net.minecraft.entity.projectile.EntityFishHook;
 import net.minecraft.entity.projectile.EntityPotion;
-import net.minecraft.entity.projectile.EntityShulkerBullet;
 import net.minecraft.entity.projectile.EntitySmallFireball;
 import net.minecraft.entity.projectile.EntitySnowball;
 import wdl.EntityUtils.ISpigotEntityManager;
@@ -233,8 +230,6 @@ class StandardEntityManagers {
 				return 64;
 			} else if (EntityWither.class.isAssignableFrom(c)) {
 				return 80;
-			} else if (EntityShulkerBullet.class.isAssignableFrom(c)) {
-				return 80;
 			} else if (EntityBat.class.isAssignableFrom(c)) {
 				return 80;
 			} else if (EntityDragon.class.isAssignableFrom(c)) {
@@ -250,8 +245,6 @@ class StandardEntityManagers {
 			} else if (EntityArmorStand.class.isAssignableFrom(c)) {
 				return 160;
 			} else if (EntityXPOrb.class.isAssignableFrom(c)) {
-				return 160;
-			} else if (EntityAreaEffectCloud.class.isAssignableFrom(c)) {
 				return 160;
 			} else if (EntityEnderCrystal.class.isAssignableFrom(c)) {
 				return 256;

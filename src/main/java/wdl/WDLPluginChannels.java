@@ -604,7 +604,8 @@ public class WDLPluginChannels {
 			range.writeToOutput(output);
 		}
 
-		NetHandlerPlayClient nhpc = Minecraft.getMinecraft().getConnection();
+		NetHandlerPlayClient nhpc = Minecraft.getMinecraft().getNetHandler();
+		NetworkManager nmgr = nhpc.getNetworkManager();
 		final String channel;
 		if (isRegistered(nhpc, REQUEST_CHANNEL_NEW)) {
 			channel = REQUEST_CHANNEL_NEW;
@@ -614,7 +615,7 @@ public class WDLPluginChannels {
 			throw new RuntimeException("No request channel has been registered :("); // XXX
 		}
 		C17PacketCustomPayload requestPacket = VersionedFunctions.makePluginMessagePacket(channel, output.toByteArray());
-		nhpc.sendPacket(requestPacket);
+		nmgr.sendPacket(requestPacket);
 	}
 
 	/**
@@ -667,11 +668,11 @@ public class WDLPluginChannels {
 	private static String deferredInitState = null;
 
 	public static void sendInitPacket(String state) {
-		sendInitPacket(Minecraft.getMinecraft().getConnection(), state);
+		sendInitPacket(Minecraft.getMinecraft().getNetHandler(), state);
 	}
 	private static void sendInitPacket(NetHandlerPlayClient nhpc, String state) {
 		assert nhpc != null : "Unexpected null nhpc: state=" + state + ", chans=" + REGISTERED_CHANNELS;
-
+		NetworkManager nmgr = nhpc.getNetworkManager();
 		final String channel;
 		if (isRegistered(nhpc, INIT_CHANNEL_NEW)) {
 			channel = INIT_CHANNEL_NEW;
@@ -696,7 +697,7 @@ public class WDLPluginChannels {
 
 		C17PacketCustomPayload initPacket = VersionedFunctions.makePluginMessagePacket(channel, bytes);
 
-		nhpc.sendPacket(initPacket);
+		nmgr.sendPacket(initPacket);
 
 		deferredInitState = null;
 	}
@@ -723,7 +724,7 @@ public class WDLPluginChannels {
 		byte[] registerBytes = String.join("\0", WDL_CHANNELS).getBytes();
 
 		C17PacketCustomPayload registerPacket = VersionedFunctions.makePluginMessagePacket(VersionedFunctions.getRegisterChannel(), registerBytes);
-		minecraft.getConnection().sendPacket(registerPacket);
+		minecraft.getNetHandler().getNetworkManager().sendPacket(registerPacket);
 
 		// Send the init message.
 		sendInitPacket("Init?");

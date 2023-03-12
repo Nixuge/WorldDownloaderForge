@@ -67,7 +67,7 @@ final class MapFunctions {
 	static void setMapDimension(MapData map, WorldProvider dim) {
 		if (!useForgeMethod) {
 			try {
-				setMapDimensionVanilla(map, dim.getId());
+				setMapDimensionVanilla(map, dim.getDimensionId());
 			} catch (NoSuchFieldError e) {
 				// Forge changes the type of this field from a byte to an int: https://git.io/fpReX
 				// While this change is nice, it does make things messy and we need to set the right field
@@ -76,7 +76,7 @@ final class MapFunctions {
 				// (See soccerguy's comment on issue 106)
 				LOGGER.info("[WDL] Failed to set map dimension using vanilla field; switching to forge field...", e);
 				try {
-					setMapDimensionForge(map, dim.getId());
+					setMapDimensionForge(map, dim.getDimensionId());
 					useForgeMethod = true;
 					LOGGER.info("[WDL] The forge field worked; it will be used for future attempts at setting the dimension.");
 				} catch (Exception e2) {
@@ -89,7 +89,7 @@ final class MapFunctions {
 		} else {
 			// The forge version worked once before; use that in the future.
 			try {
-				setMapDimensionForge(map, dim.getId());
+				setMapDimensionForge(map, dim.getDimensionId());
 			} catch (Exception ex) {
 				LOGGER.fatal("[WDL] Failed to set map dimension using both forge field, but it worked before?", ex);
 				throw new RuntimeException("Failed to set map dimension with forge", ex);

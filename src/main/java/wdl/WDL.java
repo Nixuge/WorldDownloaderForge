@@ -53,6 +53,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiScreenRealmsProxy;
 import net.minecraft.client.multiplayer.ChunkProviderClient;
 import net.minecraft.client.multiplayer.WorldClient;
+import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.resources.I18n;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
@@ -530,8 +531,8 @@ public class WDL {
 		player = minecraft.thePlayer;
 		windowContainer = player.openContainer;
 		overrideLastModifiedCheck = false;
-
-		NetworkManager newNM = player.connection.getNetworkManager();
+		
+		NetworkManager newNM = player.sendQueue.getNetworkManager();
 
 		// Handle checking if the server changes here so that
 		// messages are loaded FIRST.
@@ -551,17 +552,19 @@ public class WDL {
 
 			networkManager = newNM;
 
-			if (isSpigot()) {
+			// if (isSpigot()) {
 				WDLMessages.chatMessageTranslated(
 						WDL.serverProps,
 						WDLMessageTypes.ON_WORLD_LOAD,
-						"wdl.messages.onWorldLoad.spigot", player.getServerBrand());
-			} else {
+						"wdl.messages.onWorldLoad.spigot", "<ServerBrand>");
+			// } else {
 				WDLMessages.chatMessageTranslated(
 						WDL.serverProps,
 						WDLMessageTypes.ON_WORLD_LOAD,
-						"wdl.messages.onWorldLoad.vanilla", player.getServerBrand());
-			}
+						"wdl.messages.onWorldLoad.vanilla", "<ServerBrand>");
+			// }
+			WDLMessages.chatMessage(WDL.serverProps,WDLMessageTypes.ON_WORLD_LOAD, "We unfortunately cannot easily get the server brand in 1.8.9, so just printing both vanilla & spigot");
+	
 
 			startOnChange = false;
 
@@ -571,17 +574,19 @@ public class WDL {
 			WDLMessages.chatMessageTranslated(WDL.serverProps,
 					WDLMessageTypes.ON_WORLD_LOAD, "wdl.messages.onWorldLoad.sameServer");
 
-			if (isSpigot()) {
+			// if (isSpigot()) {
 				WDLMessages.chatMessageTranslated(
 						WDL.serverProps,
 						WDLMessageTypes.ON_WORLD_LOAD,
-						"wdl.messages.onWorldLoad.spigot", player.getServerBrand());
-			} else {
+						"wdl.messages.onWorldLoad.spigot", "<ServerBrand>");
+			// } else {
 				WDLMessages.chatMessageTranslated(
 						WDL.serverProps,
 						WDLMessageTypes.ON_WORLD_LOAD,
-						"wdl.messages.onWorldLoad.vanilla", player.getServerBrand());
-			}
+						"wdl.messages.onWorldLoad.vanilla", "<ServerBrand>");
+			// }
+			WDLMessages.chatMessage(WDL.serverProps,WDLMessageTypes.ON_WORLD_LOAD, "We unfortunately cannot easily get the server brand in 1.8.9, so just printing both vanilla & spigot");
+	
 
 			if (startOnChange) {
 				startDownload();
@@ -1266,7 +1271,10 @@ public class WDL {
 		if (gametypeOption == WorldSettings.GameMode.KEEP) {
 			// XXX Do we want this?  Or should it just use the actual mode without overriding?
 
-			if (player.isCreative()) { // capabilities
+			NetworkPlayerInfo networkplayerinfo = Minecraft.getMinecraft().getNetHandler().getPlayerInfo(player.getGameProfile().getId());
+			boolean isCreative = (networkplayerinfo != null && networkplayerinfo.getGameType() == net.minecraft.world.WorldSettings.GameType.SPECTATOR);
+			
+			if (isCreative) { // capabilities
 				worldInfoNBT.setInteger("GameType", 1); // Creative
 			} else {
 				worldInfoNBT.setInteger("GameType", 0); // Survival
@@ -1489,14 +1497,16 @@ public class WDL {
 				}
 
 				return name;
-			} else if (minecraft.isConnectedToRealms()) {
-				String realmName = getRealmName();
-				if (realmName != null) {
-					return realmName;
-				} else {
-					LOGGER.warn("getServerName: getRealmName returned null!");
-				}
-			} else {
+			} 
+			// else if (minecraft.isConnectedToRealms()) {
+			// 	String realmName = getRealmName();
+			// 	if (realmName != null) {
+			// 		return realmName;
+			// 	} else {
+			// 		LOGGER.warn("getServerName: getRealmName returned null!");
+			// 	}
+			// } 
+			else {
 				LOGGER.warn("getServerName: Not connected to either a real server or realms!");
 			}
 		} catch (Exception e) {
@@ -1511,63 +1521,63 @@ public class WDL {
 	 *
 	 * @return The name of the connected realm, or null.
 	 */
-	@Nullable
-	private String getRealmName() {
-		if (!minecraft.isConnectedToRealms()) {
-			LOGGER.warn("getRealmName: Not currently connected to realms!");
-		}
-		// Is this the only way to get the name of the Realms server? Really Mojang?
-		// If this function turns out to be a pain to update, just remove Realms support completely.
-		// I doubt anyone will need this anyway since Realms support downloading the world out of the box.
+	// @Nullable
+	// private String getRealmName() {
+	// 	if (!minecraft.isConnectedToRealms()) {
+	// 		LOGGER.warn("getRealmName: Not currently connected to realms!");
+	// 	}
+	// 	// Is this the only way to get the name of the Realms server? Really Mojang?
+	// 	// If this function turns out to be a pain to update, just remove Realms support completely.
+	// 	// I doubt anyone will need this anyway since Realms support downloading the world out of the box.
 
-		// Try to get the value of NetHandlerPlayClient.guiScreenServer:
-		GuiScreen screen = ReflectionUtils.findAndGetPrivateField(minecraft.getConnection(), GuiScreen.class);
+	// 	// Try to get the value of NetHandlerPlayClient.guiScreenServer:
+	// 	GuiScreen screen = ReflectionUtils.findAndGetPrivateField(minecraft.getConnection(), GuiScreen.class);
 
-		// If it is not a GuiScreenRealmsProxy we are not using a Realms server
-		if (!(screen instanceof GuiScreenRealmsProxy)) {
-			LOGGER.warn("getRealmName: screen {} is not an instance of GuiScreenRealmsProxy", screen);
-			return null;
-		}
+	// 	// If it is not a GuiScreenRealmsProxy we are not using a Realms server
+	// 	if (!(screen instanceof GuiScreenRealmsProxy)) {
+	// 		LOGGER.warn("getRealmName: screen {} is not an instance of GuiScreenRealmsProxy", screen);
+	// 		return null;
+	// 	}
 
-		// Get the proxy's RealmsScreen object
-		GuiScreenRealmsProxy screenProxy = (GuiScreenRealmsProxy) screen;
-		RealmsScreen rs = screenProxy.getProxy();
+	// 	// Get the proxy's RealmsScreen object
+	// 	GuiScreenRealmsProxy screenProxy = (GuiScreenRealmsProxy) screen;
+	// 	RealmsScreen rs = screenProxy.getProxy();
 
-		// It needs to be of type RealmsMainScreen (this should always be the case)
-		if (!(rs instanceof RealmsMainScreen)) {
-			LOGGER.warn("getRealmName: realms screen {} (instance of {}) not an instance of RealmsMainScreen!", rs, (rs != null ? rs.getClass() : null));
-			return null;
-		}
+	// 	// It needs to be of type RealmsMainScreen (this should always be the case)
+	// 	if (!(rs instanceof RealmsMainScreen)) {
+	// 		LOGGER.warn("getRealmName: realms screen {} (instance of {}) not an instance of RealmsMainScreen!", rs, (rs != null ? rs.getClass() : null));
+	// 		return null;
+	// 	}
 
-		RealmsMainScreen rms = (RealmsMainScreen) rs;
-		RealmsServer mcos = null;
-		try {
-			// Find the ID of the selected Realms server. Fortunately unobfuscated names!
-			Field selectedServerId = rms.getClass().getDeclaredField("selectedServerId");
-			selectedServerId.setAccessible(true);
-			if (!selectedServerId.getType().equals(long.class)) {
-				LOGGER.warn("getRealmName: RealmsMainScreen selectedServerId field ({}) is not of type `long` ({})!", selectedServerId, selectedServerId.getType());
-				return null;
-			}
-			long id = selectedServerId.getLong(rms);
+	// 	RealmsMainScreen rms = (RealmsMainScreen) rs;
+	// 	RealmsServer mcos = null;
+	// 	try {
+	// 		// Find the ID of the selected Realms server. Fortunately unobfuscated names!
+	// 		Field selectedServerId = rms.getClass().getDeclaredField("selectedServerId");
+	// 		selectedServerId.setAccessible(true);
+	// 		if (!selectedServerId.getType().equals(long.class)) {
+	// 			LOGGER.warn("getRealmName: RealmsMainScreen selectedServerId field ({}) is not of type `long` ({})!", selectedServerId, selectedServerId.getType());
+	// 			return null;
+	// 		}
+	// 		long id = selectedServerId.getLong(rms);
 
-			// Get the McoServer instance that was selected
-			Method findServer = rms.getClass().getDeclaredMethod("findServer", long.class);
-			findServer.setAccessible(true);
-			Object obj = findServer.invoke(rms, id);
-			if (!(obj instanceof RealmsServer)) {
-				LOGGER.warn("getRealmName: RealmsMainScreen findServer method ({}) returned something other than a RealmsServer! ({})", findServer, obj);
-				return null;
-			}
-			mcos = (RealmsServer) obj;
-		} catch (Exception e) {
-			LOGGER.warn("getRealmName: Unexpected exception!", e);
-			return null;
-		}
+	// 		// Get the McoServer instance that was selected
+	// 		Method findServer = rms.getClass().getDeclaredMethod("findServer", long.class);
+	// 		findServer.setAccessible(true);
+	// 		Object obj = findServer.invoke(rms, id);
+	// 		if (!(obj instanceof RealmsServer)) {
+	// 			LOGGER.warn("getRealmName: RealmsMainScreen findServer method ({}) returned something other than a RealmsServer! ({})", findServer, obj);
+	// 			return null;
+	// 		}
+	// 		mcos = (RealmsServer) obj;
+	// 	} catch (Exception e) {
+	// 		LOGGER.warn("getRealmName: Unexpected exception!", e);
+	// 		return null;
+	// 	}
 
-		// Return its name. Not sure if this is the best naming scheme...
-		return mcos.name;
-	}
+	// 	// Return its name. Not sure if this is the best naming scheme...
+	// 	return mcos.name;
+	// }
 
 
 
@@ -1679,13 +1689,13 @@ public class WDL {
 	 *
 	 * This is detected based off of the server brand.
 	 */
-	public boolean isSpigot() {
-		if (player != null && player.getServerBrand() != null) {
-			String brand = player.getServerBrand().toLowerCase();
-			return brand.contains("spigot") || brand.contains("paper");
-		}
-		return false;
-	}
+	// public boolean isSpigot() {
+	// 	if (player != null && player.getServerBrand() != null) {
+	// 		String brand = player.getServerBrand().toLowerCase();
+	// 		return brand.contains("spigot") || brand.contains("paper");
+	// 	}
+	// 	return false;
+	// }
 
 	/**
 	 * Gets the current setup information.

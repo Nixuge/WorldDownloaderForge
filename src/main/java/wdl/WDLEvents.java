@@ -219,7 +219,7 @@ public class WDLEvents {
 			return true;
 		}
 
-		Entity ridingEntity = wdl.player.getRidingEntity();
+		Entity ridingEntity = wdl.player.ridingEntity;
 		if (ridingEntity != null) {
 			// Check for ridden entities.  See EntityHandler.checkRiding for
 			// more info about why this is useful.

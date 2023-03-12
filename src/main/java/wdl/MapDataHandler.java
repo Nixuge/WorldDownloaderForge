@@ -29,7 +29,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.S34PacketMaps;
 import net.minecraft.util.BlockPos;
 import net.minecraft.util.MathHelper;
-import net.minecraft.util.math.Vec4b;
+import net.minecraft.util.Vec4b;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
@@ -94,7 +94,7 @@ public final class MapDataHandler {
 		if (result == null) result = checkFrameHasMap(mapID, mapData, player.worldObj);
 		if (result == null) result = new MapDataResult(mapData, null, null);
 
-		result.fixDimension();
+		// result.fixDimension();
 		result.fixCenter();
 
 		return result;
@@ -105,7 +105,7 @@ public final class MapDataHandler {
 		// If there's only one decoration, and our player has the map in their inventory,
 		// assume that the icon is our player (which might not be the case all the time)
 		List<Vec4b> playerDecorations = mapData.mapDecorations.values().stream()
-				.filter(dec -> dec.getType() == DECORATION_PLAYER)
+				.filter(dec -> dec.func_176110_a() == DECORATION_PLAYER)
 				.collect(Collectors.toList());
 
 		if (playerDecorations.size() != 1) {
@@ -122,7 +122,6 @@ public final class MapDataHandler {
 				break;
 			}
 		}
-		if (!mapInInventory) mapInInventory = isMapWithID(player.getHeldItemOffhand(), mapID);
 
 		if (mapInInventory) {
 			return new MapDataResult(mapData, player, playerDecoration);
@@ -134,7 +133,7 @@ public final class MapDataHandler {
 	@Nullable
 	private static MapDataResult checkFrameHasMap(int mapID, MapData mapData, World world) {
 		List<Vec4b> frameDecorations = mapData.mapDecorations.values().stream()
-				.filter(dec -> dec.getType() == DECORATION_ITEM_FRAME)
+				.filter(dec -> dec.func_176110_a() == DECORATION_ITEM_FRAME)
 				.collect(Collectors.toList());
 		if (frameDecorations.isEmpty()) {
 			// No frames on the map?  No reason to look for any frames in the world.
@@ -167,7 +166,7 @@ public final class MapDataHandler {
 			// Could be ambiguous...  There could also be multiple possibilities...
 			// Probably should check whether other icons still make sense in this case.
 			for (Vec4b decoration : frameDecorations) {
-				if (decoration.getX() == iconX && decoration.getY() == iconZ) {
+				if (decoration.func_176112_b() == iconX && decoration.func_176113_c() == iconZ) {
 					return new MapDataResult(mapData, frame, decoration);
 				}
 			}
@@ -291,28 +290,28 @@ public final class MapDataHandler {
 		 * Sets the dimension of the map, assuming that it's known. The game crashes if
 		 * this isn't set in 1.13.1 or 1.13.2.
 		 */
-		void fixDimension() {
-			if (confirmedOwner != null) {
-				assert confirmedOwner.worldObj != null;
-				WorldProvider dim = confirmedOwner.worldObj.provider.getWorldProvider();
-				assert dim != null;
-				VersionedFunctions.setMapDimension(map, dim);
-				VersionedFunctions.setMapDimension(map, dim);
-				this.dim = dim;
-			} else if (VersionedFunctions.isMapDimensionNull(map)) {
-				// Ensure that some dimension is set, so that the game doesn't crash.
-				VersionedFunctions.setMapDimension(map, WorldProvider.OVERWORLD);
-				// The dimension wasn't confirmed, so don't notify this in chat
-			}
-		}
+		// void fixDimension() {
+		// 	if (confirmedOwner != null) {
+		// 		assert confirmedOwner.worldObj != null;
+		// 		WorldProvider dim = confirmedOwner.worldObj.provider;
+		// 		assert dim != null;
+		// 		VersionedFunctions.setMapDimension(map, dim);
+		// 		VersionedFunctions.setMapDimension(map, dim);
+		// 		this.dim = dim;
+		// 	} else if (VersionedFunctions.isMapDimensionNull(map)) {
+		// 		// Ensure that some dimension is set, so that the game doesn't crash.
+		// 		VersionedFunctions.setMapDimension(map, WorldProvider.OVERWORLD);
+		// 		// The dimension wasn't confirmed, so don't notify this in chat
+		// 	}
+		// }
 
 		void fixCenter() {
 			if (confirmedOwner != null && decoration != null) {
 				// Maps have 128 pixels but the icon unit is a byte (256 values)
 				// 0: 128 blocks -> .5 blocks/icon unit, 1/pixel
 				// 4: 2048 blocks -> 8 blocks/icon unit, 16/pixel
-				byte iconX = decoration.getX();
-				byte iconZ = decoration.getY();
+				byte iconX = decoration.func_176112_b();
+				byte iconZ = decoration.func_176113_c();
 				if (iconX == -128 || iconX == 127 || iconZ == -128 || iconZ == 127) {
 					// Boundary case; if they're right on the edge we can't be completely sure
 					return;
