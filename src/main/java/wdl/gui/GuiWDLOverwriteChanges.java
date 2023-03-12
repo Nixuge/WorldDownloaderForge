@@ -60,7 +60,7 @@ public class GuiWDLOverwriteChanges extends GuiTurningCameraBase implements IBac
 			} finally {
 				backingUp = false;
 
-				minecraft.execute(() -> {
+				mc.addScheduledTask(() -> {
 					callback.run();
 				});
 			}
@@ -121,7 +121,7 @@ public class GuiWDLOverwriteChanges extends GuiTurningCameraBase implements IBac
 	private String backingUpTitle;
 
 	@Override
-	public void init() {
+	public void initGui() {
 		backingUp = false;
 
 		if (lastSaved != -1) {
@@ -138,7 +138,7 @@ public class GuiWDLOverwriteChanges extends GuiTurningCameraBase implements IBac
 
 		// TODO: Figure out the widest between captionTitle, captionSubtitle,
 		// overwriteWarning1, and overwriteWarning2.
-		infoBoxWidth = font.getStringWidth(overwriteWarning1);
+		infoBoxWidth = fontRendererObj.getStringWidth(overwriteWarning1);
 		infoBoxHeight = 22 * 6;
 
 		// Ensure that the infobox is wide enough for the buttons.
@@ -186,7 +186,7 @@ public class GuiWDLOverwriteChanges extends GuiTurningCameraBase implements IBac
 			}
 		});
 
-		super.init();
+		super.initGui();
 	}
 
 	@Override
@@ -197,52 +197,52 @@ public class GuiWDLOverwriteChanges extends GuiTurningCameraBase implements IBac
 
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground();
+		this.drawDefaultBackground();
 
 		if (this.backingUp) {
-			renderDirtBackground(0);
+			drawBackground(0);
 
-			drawCenteredString(font, backingUpTitle,
+			drawCenteredString(fontRendererObj, backingUpTitle,
 					width / 2, height / 4 - 40, 0xFFFFFF);
-			drawCenteredString(font, backupData,
+			drawCenteredString(fontRendererObj, backupData,
 					width / 2, height / 4 - 10, 0xFFFFFF);
 			if (backupFile != null) {
 				String text = I18n.format(
 						"wdl.gui.overwriteChanges.backingUp.progress",
 						backupCurrent, backupCount, backupFile);
-				drawCenteredString(font, text, width / 2,
+				drawCenteredString(fontRendererObj, text, width / 2,
 						height / 4 + 10, 0xFFFFFF);
 			}
 		} else {
-			renderBackground();
+			drawDefaultBackground();
 			Utils.drawBorder(32, 22, 0, 0, height, width);
 
-			drawCenteredString(font, footer, width / 2, height - 8
-					- font.FONT_HEIGHT, 0xFFFFFF);
+			drawCenteredString(fontRendererObj, footer, width / 2, height - 8
+					- fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
 
-			fill(infoBoxX - 5, infoBoxY - 5, infoBoxX + infoBoxWidth + 5,
+			drawRect(infoBoxX - 5, infoBoxY - 5, infoBoxX + infoBoxWidth + 5,
 					infoBoxY + infoBoxHeight + 5, 0xB0000000);
 
-			drawCenteredString(font, captionTitle, width / 2,
+			drawCenteredString(fontRendererObj, captionTitle, width / 2,
 					infoBoxY, 0xFFFFFF);
-			drawCenteredString(font, captionSubtitle, width / 2,
-					infoBoxY + font.FONT_HEIGHT, 0xFFFFFF);
+			drawCenteredString(fontRendererObj, captionSubtitle, width / 2,
+					infoBoxY + fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
 
-			drawCenteredString(font, overwriteWarning1, width / 2,
+			drawCenteredString(fontRendererObj, overwriteWarning1, width / 2,
 					infoBoxY + 115, 0xFFFFFF);
-			drawCenteredString(font, overwriteWarning2, width / 2,
-					infoBoxY + 115 + font.FONT_HEIGHT, 0xFFFFFF);
+			drawCenteredString(fontRendererObj, overwriteWarning2, width / 2,
+					infoBoxY + 115 + fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
 
 			super.render(mouseX, mouseY, partialTicks);
 
 			String tooltip = null;
-			if (backupAsZipButton.isHovered()) {
+			if (backupAsZipButton.isMouseOver()) {
 				tooltip = I18n.format("wdl.gui.overwriteChanges.asZip.description");
-			} else if (backupAsFolderButton.isHovered()) {
+			} else if (backupAsFolderButton.isMouseOver()) {
 				tooltip = I18n.format("wdl.gui.overwriteChanges.asFolder.description");
-			} else if (downloadNowButton.isHovered()) {
+			} else if (downloadNowButton.isMouseOver()) {
 				tooltip = I18n.format("wdl.gui.overwriteChanges.startNow.description");
-			} else if (cancelButton.isHovered()) {
+			} else if (cancelButton.isMouseOver()) {
 				tooltip = I18n.format("wdl.gui.overwriteChanges.cancel.description");
 			}
 

@@ -78,14 +78,15 @@ abstract class ExtGuiList<T extends ExtGuiListEntry<T>> extends GuiListExtended 
 				boolean isSelected) {
 			this.drawEntry(x, y, listWidth, slotHeight, mouseX, mouseY);
 			for (ButtonWrapper button : this.buttonList) {
-				button.button.x = button.x + x + (listWidth / 2);
-				button.button.y = button.y + y;
+				button.button.xPosition = button.x + x + (listWidth / 2);
+				button.button.yPosition = button.y + y;
 				button.button.drawButton(Minecraft.getMinecraft(), mouseX, mouseY);
 			}
 			for (TextFieldWrapper field : this.fieldList) {
-				field.field.x = field.x + x + (listWidth / 2);
-				field.field.y = field.y + y;
-				field.field.render();
+				field.field.xPosition = field.x + x + (listWidth / 2);
+				field.field.yPosition = field.y + y;
+				// field.field.render();
+				field.field.drawTextBox();
 			}
 		}
 
@@ -96,7 +97,8 @@ abstract class ExtGuiList<T extends ExtGuiListEntry<T>> extends GuiListExtended 
 			for (ButtonWrapper button : this.buttonList) {
 				if (button.button.mousePressed(Minecraft.getMinecraft(), mouseX, mouseY)) {
 					this.activeButton = button;
-					button.button.playDownSound(Minecraft.getMinecraft().getSoundHandler());
+					// button.button.playDownSound(Minecraft.getMinecraft().getSoundHandler());
+					button.button.playPressSound(Minecraft.getMinecraft().getSoundHandler());
 					result = true;
 				}
 			}
@@ -135,7 +137,8 @@ abstract class ExtGuiList<T extends ExtGuiListEntry<T>> extends GuiListExtended 
 
 		final void tick() {
 			for (TextFieldWrapper field : this.fieldList) {
-				field.field.tick();
+				// field.field.tick();
+				field.field.updateCursorCounter();
 			}
 		}
 	}
@@ -163,17 +166,17 @@ abstract class ExtGuiList<T extends ExtGuiListEntry<T>> extends GuiListExtended 
 	}
 
 	@Override
-	protected final boolean isSelectedItem(int slotIndex) {
+	protected final boolean isSelected(int slotIndex) {
 		return entries.get(slotIndex).isSelected();
 	}
 
 	@Override
-	public final IGuiListEntry getEntry(int index) {
+	public final IGuiListEntry getListEntry(int index) {
 		return entries.get(index);
 	}
 
 	@Override
-	protected final int getItemCount() {
+	protected final int getSize() {
 		return entries.size();
 	}
 
@@ -196,12 +199,14 @@ abstract class ExtGuiList<T extends ExtGuiListEntry<T>> extends GuiListExtended 
 	}
 
 	@Override
-	public final int getRowWidth() {
+	public final int getListWidth() {
 		return this.getEntryWidth();
 	}
 
+	// Note:
+	// visibility changed & "final" removed for GuiList's last function
 	@Override
-	protected final int getScrollbarPosition() {
+	public int getScrollBarX() {
 		return this.getScrollBarX();
 	}
 
@@ -213,7 +218,7 @@ abstract class ExtGuiList<T extends ExtGuiListEntry<T>> extends GuiListExtended 
 	// Hacks for y offsetting
 	@Override
 	public final boolean mouseClicked(int mouseX, int mouseY, int mouseEvent) {
-		if (mouseY - y >= y0 && mouseY - y <= y1) {
+		if (mouseY - y >= top && mouseY - y <= bottom) {
 			return super.mouseClicked(mouseX, mouseY - y, mouseEvent);
 		} else {
 			return false;
@@ -233,25 +238,27 @@ abstract class ExtGuiList<T extends ExtGuiListEntry<T>> extends GuiListExtended 
 	@Override
 	@OverridingMethodsMustInvokeSuper
 	public void render(int mouseXIn, int mouseYIn, float partialTicks) {
-		GlStateManager.translatef(0, y, 0);
-		super.render(mouseXIn, mouseYIn - y, partialTicks);
-		GlStateManager.translatef(0, -y, 0);
+		GlStateManager.translate(0, y, 0);
+		super.drawScreen(mouseXIn, mouseYIn - y, partialTicks);
+		GlStateManager.translate(0, -y, 0);
 	}
 
 	// Make the dirt background use visual positions that match the screen
 	// so that dragging looks less weird
+	// was renderHoleBackground before
 	@Override
-	protected final void renderHoleBackground(int y1, int y2,
+	protected final void overlayBackground(int y1, int y2,
 			int alpha1, int alpha2) {
 		if (y1 == 0) {
-			super.renderHoleBackground(y1, y2, alpha1, alpha2);
+			super.overlayBackground(y1, y2, alpha1, alpha2);
 			return;
 		} else {
-			GlStateManager.translatef(0, -y, 0);
+			GlStateManager.translate(0, -y, 0);
+			
+			// super.renderHoleBackground(y1 + y, y2 + y, alpha1, alpha2);
+			super.overlayBackground(y1 + y, y2 + y, alpha1, alpha2);
 
-			super.renderHoleBackground(y1 + y, y2 + y, alpha1, alpha2);
-
-			GlStateManager.translatef(0, y, 0);
+			GlStateManager.translate(0, y, 0);
 		}
 	}
 }

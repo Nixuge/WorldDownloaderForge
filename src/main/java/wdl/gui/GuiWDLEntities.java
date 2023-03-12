@@ -61,7 +61,7 @@ public class GuiWDLEntities extends WDLScreen {
 				Multimap<String, String> entities = EntityUtils
 						.getEntitiesByGroup();
 				largestWidth = entities.values().stream()
-						.mapToInt(font::getStringWidth)
+						.mapToInt(fontRendererObj::getStringWidth)
 						.max().orElse(0);
 				totalWidth = largestWidth + 255;
 
@@ -115,7 +115,7 @@ public class GuiWDLEntities extends WDLScreen {
 
 			public CategoryEntry(String group) {
 				this.displayGroup = EntityUtils.getDisplayGroup(group);
-				this.labelWidth = minecraft.fontRenderer.getStringWidth(displayGroup);
+				this.labelWidth = mc.fontRendererObj.getStringWidth(displayGroup);
 
 				this.groupEnabled = config.isEntityGroupEnabled(group);
 
@@ -133,9 +133,9 @@ public class GuiWDLEntities extends WDLScreen {
 			public void drawEntry(int x, int y, int width, int height, int mouseX, int mouseY) {
 				this.enableGroupButton.setMessage(getButtonText());
 				super.drawEntry(x, y, width, height, mouseX, mouseY);
-				drawString(font, this.displayGroup, (x + 110 / 2)
-						- (this.labelWidth / 2), y + itemHeight
-						- minecraft.fontRenderer.FONT_HEIGHT - 1, 0xFFFFFF);
+				drawString(fontRendererObj, this.displayGroup, (x + 110 / 2)
+						- (this.labelWidth / 2), y + slotHeight
+						- mc.fontRendererObj.FONT_HEIGHT - 1, 0xFFFFFF);
 			}
 
 			boolean isGroupEnabled() {
@@ -219,8 +219,8 @@ public class GuiWDLEntities extends WDLScreen {
 
 				super.drawEntry(x, y, width, height, mouseX, mouseY);
 
-				drawString(font, this.displayEntity,
-						x, y + height / 2 - minecraft.fontRenderer.FONT_HEIGHT / 2, 0xFFFFFF);
+				drawString(fontRendererObj, this.displayEntity,
+						x, y + height / 2 - mc.fontRendererObj.FONT_HEIGHT / 2, 0xFFFFFF);
 			}
 
 			@Override
@@ -246,7 +246,7 @@ public class GuiWDLEntities extends WDLScreen {
 		}
 
 		public GuiEntityList() {
-			super(GuiWDLEntities.this.minecraft, GuiWDLEntities.this.width,
+			super(GuiWDLEntities.this.mc, GuiWDLEntities.this.width,
 					GuiWDLEntities.this.height, 39,
 					GuiWDLEntities.this.height - 32, 20);
 		}
@@ -273,7 +273,7 @@ public class GuiWDLEntities extends WDLScreen {
 	}
 
 	@Override
-	public void init() {
+	public void initGui() {
 		this.addButton(new ButtonDisplayGui(this.width / 2 - 100, this.height - 29,
 				200, 20, this.parent));
 
@@ -295,17 +295,17 @@ public class GuiWDLEntities extends WDLScreen {
 	}
 
 	@Override
-	public void removed() {
+	public void onGuiClosed() {
 		wdl.saveProps();
 	}
 
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground();
+		this.drawDefaultBackground();
 
 		super.render(mouseX, mouseY, partialTicks);
 
-		if (this.rangeModeButton.isHovered()) {
+		if (this.rangeModeButton.isMouseOver()) {
 			Utils.drawGuiInfoBox(this.rangeModeButton.getTooltip(), width, height, 48);
 		}
 	}

@@ -46,7 +46,7 @@ public class GuiWDLMultiworld extends WDLScreen {
 	 * Adds the buttons (and other controls) to the screen in question.
 	 */
 	@Override
-	public void init() {
+	public void initGui() {
 		String multiworldMessage = I18n
 				.format("wdl.gui.multiworld.descirption.requiredWhen")
 				+ "\n\n"
@@ -54,7 +54,7 @@ public class GuiWDLMultiworld extends WDLScreen {
 
 		infoBoxWidth = 320;
 		infoBoxLines = Utils.wordWrap(multiworldMessage, infoBoxWidth - 20);
-		infoBoxHeight = (font.FONT_HEIGHT * (infoBoxLines.size() + 1)) + 40;
+		infoBoxHeight = (fontRendererObj.FONT_HEIGHT * (infoBoxLines.size() + 1)) + 40;
 
 		infoBoxX = this.width / 2 - infoBoxWidth / 2;
 		infoBoxY = this.height / 2 - infoBoxHeight / 2;
@@ -87,26 +87,26 @@ public class GuiWDLMultiworld extends WDLScreen {
 	 */
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground();
+		this.drawDefaultBackground();
 		Utils.drawBorder(32, 32, 0, 0, height, width);
 
-		fill(infoBoxX, infoBoxY, infoBoxX + infoBoxWidth, infoBoxY
+		drawRect(infoBoxX, infoBoxY, infoBoxX + infoBoxWidth, infoBoxY
 				+ infoBoxHeight, 0xB0000000);
 
 		int x = infoBoxX + 10;
 		int y = infoBoxY + 10;
 
 		for (String s : infoBoxLines) {
-			this.drawString(font, s, x, y, 0xFFFFFF);
-			y += font.FONT_HEIGHT;
+			this.drawString(fontRendererObj, s, x, y, 0xFFFFFF);
+			y += fontRendererObj.FONT_HEIGHT;
 		}
 
 		//Red box around "multiworld support" button.
-		fill(multiworldEnabledBtn.x - 2,
-				multiworldEnabledBtn.y - 2,
-				multiworldEnabledBtn.x
-				+ multiworldEnabledBtn.getWidth() + 2,
-				multiworldEnabledBtn.y + 20 + 2, 0xFFFF0000);
+		drawRect(multiworldEnabledBtn.xPosition - 2,
+				multiworldEnabledBtn.yPosition - 2,
+				multiworldEnabledBtn.xPosition
+				+ multiworldEnabledBtn.getButtonWidth() + 2,
+				multiworldEnabledBtn.yPosition + 20 + 2, 0xFFFF0000);
 
 		super.render(mouseX, mouseY, partialTicks);
 	}

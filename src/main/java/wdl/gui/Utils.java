@@ -67,14 +67,14 @@ public class Utils {
 		int infoY = guiHeight - bottomPadding - infoBoxHeight;
 		int y = infoY + 5;
 
-		Gui.fill(infoX, infoY, infoX + infoBoxWidth, infoY
+		Gui.drawRect(infoX, infoY, infoX + infoBoxWidth, infoY
 				+ infoBoxHeight, 0x7F000000);
 
 		List<String> lines = wordWrap(text, infoBoxWidth - 10);
 
 		for (String s : lines) {
-			mc.fontRenderer.drawString(s, infoX + 5, y, 0xFFFFFF);
-			y += mc.fontRenderer.FONT_HEIGHT;
+			mc.fontRendererObj.drawString(s, infoX + 5, y, 0xFFFFFF);
+			y += mc.fontRendererObj.FONT_HEIGHT;
 		}
 	}
 
@@ -89,7 +89,7 @@ public class Utils {
 	public static List<String> wordWrap(String s, int width) {
 		s = s.replace("\\n", "\n");
 
-		List<String> lines = mc.fontRenderer.listFormattedStringToWidth(s, width);
+		List<String> lines = mc.fontRendererObj.listFormattedStringToWidth(s, width);
 
 		return lines;
 	}

@@ -33,7 +33,7 @@ public class GuiNumericTextField extends WDLTextField {
 	private String lastSafeText = "0";
 
 	@Override
-	public void tick() {
+	public void updateCursorCounter() {
 		// Save last safe text.
 		try {
 			Integer.parseInt("0" + getText());
@@ -41,7 +41,7 @@ public class GuiNumericTextField extends WDLTextField {
 		} catch (NumberFormatException e) {
 			setText(lastSafeText);
 		}
-		super.tick();
+		super.updateCursorCounter();
 	}
 
 	/**

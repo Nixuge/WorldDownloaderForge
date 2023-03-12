@@ -45,6 +45,6 @@ public class TextEntry extends GuiListEntry<TextEntry> {
 		if (y < 0) {
 			return;
 		}
-		mc.fontRenderer.drawStringWithShadow(text, x, y + 1, color);
+		mc.fontRendererObj.drawStringWithShadow(text, x, y + 1, color);
 	}
 }

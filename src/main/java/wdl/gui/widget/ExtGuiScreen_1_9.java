@@ -48,15 +48,15 @@ abstract class ExtGuiScreen extends GuiScreen implements IExtGuiScreen {
 	}
 
 	@Override
-	public final void init(Minecraft mc, int width, int height) {
+	public final void setWorldAndResolution(Minecraft mc, int width, int height) {
 		this.listList.clear();
 		this.textFieldList.clear();
-		super.init(mc, width, height);
+		super.setWorldAndResolution(mc, width, height);
 	}
 
 	@Override
 	public final <T extends GuiButton> T addButton(T buttonIn) {
-		super.buttons.add(buttonIn);
+		super.buttonList.add(buttonIn);
 		return buttonIn;
 	}
 
@@ -145,36 +145,45 @@ abstract class ExtGuiScreen extends GuiScreen implements IExtGuiScreen {
 	@Deprecated
 	protected final void actionPerformed(GuiButton button) { }
 
+	// bridge func
+	public void tick() {
+		updateScreen();
+	}
+
 	@Override
 	@OverridingMethodsMustInvokeSuper
-	public void tick() {
-		super.tick();
+	public void updateScreen() {
+		super.updateScreen();
 		for (GuiList<?> list : this.listList) {
 			list.tick();
 		}
 		for (GuiTextField field : this.textFieldList) {
-			field.tick();
+			// field.tick();
+			field.updateCursorCounter();
+			// may be field.updateCursorCounter();? idk
 		}
 	}
 
+	// honestly not sure of what I need to replace for this one
 	@Override
 	@OverridingMethodsMustInvokeSuper
 	public void render(int mouseX, int mouseY, float partialTicks) {
 		for (GuiList<?> list : this.listList) {
 			list.render(mouseX, mouseY, partialTicks);
 		}
-		super.render(mouseX, mouseY, partialTicks);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 		for (GuiTextField field : this.textFieldList) {
 			if (field instanceof ExtTextField) {
 				((ExtTextField) field).render(mouseX, mouseY, partialTicks);
 			} else {
-				field.render();
+				// field.render();
+				field.drawTextBox();
 			}
 		}
 		this.renderTitle(mouseX, mouseY, partialTicks);
 	}
 
 	protected void renderTitle(int mouseX, int mouseY, float partialTicks) {
-		this.drawCenteredString(this.font, this.title.getFormattedText(), this.width / 2, 8, 0xFFFFFF);
+		this.drawCenteredString(this.fontRendererObj, this.title.getFormattedText(), this.width / 2, 8, 0xFFFFFF);
 	}
 }

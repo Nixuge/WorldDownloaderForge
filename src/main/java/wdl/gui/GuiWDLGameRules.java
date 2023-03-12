@@ -52,7 +52,7 @@ public class GuiWDLGameRules extends WDLScreen {
 		private RuleEntry lastClickedEntry = null;
 
 		public GuiGameRuleList() {
-			super(GuiWDLGameRules.this.minecraft, GuiWDLGameRules.this.width,
+			super(GuiWDLGameRules.this.mc, GuiWDLGameRules.this.width,
 					GuiWDLGameRules.this.height, 39,
 					GuiWDLGameRules.this.height - 32, 24);
 			List<RuleEntry> entries = this.getEntries();
@@ -91,7 +91,7 @@ public class GuiWDLGameRules extends WDLScreen {
 
 				super.drawEntry(x, y, width, height, mouseX, mouseY);
 
-				drawString(font, this.ruleName, x, y + 6, 0xFFFFFFFF);
+				drawString(fontRendererObj, this.ruleName, x, y + 6, 0xFFFFFFFF);
 
 				if (this.isControlHovered()) {
 					String key = "wdl.gui.gamerules.rules." + ruleName;
@@ -126,7 +126,7 @@ public class GuiWDLGameRules extends WDLScreen {
 			public IntRuleEntry(String ruleName) {
 				super(ruleName);
 				field = this.addTextField(new GuiNumericTextField(
-						font, 0, 0, 100, 20,
+						fontRendererObj, 0, 0, 100, 20,
 						new TextComponentTranslation("wdl.gui.gamerules.ruleValue", ruleName)),
 						0, 0);
 				field.setText(getRule(ruleName));
@@ -136,7 +136,8 @@ public class GuiWDLGameRules extends WDLScreen {
 			public void drawEntry(int x, int y, int width, int height, int mouseX, int mouseY) {
 				super.drawEntry(x, y, width, height, mouseX, mouseY);
 				if (!this.isSelected()) {
-					field.setFocused2(false);
+					// field.setFocused2(false);
+					field.setFocused(false);
 				}
 				if (isRuleNonDefault(this.ruleName)) {
 					field.setTextColor(SET_TEXT_FIELD);
@@ -154,7 +155,7 @@ public class GuiWDLGameRules extends WDLScreen {
 
 			@Override
 			protected boolean isControlHovered() {
-				return field.isHovered();
+				return field.isMouseOver();
 			}
 
 			@Override
@@ -185,7 +186,7 @@ public class GuiWDLGameRules extends WDLScreen {
 
 			@Override
 			protected boolean isControlHovered() {
-				return button.isHovered();
+				return button.isMouseOver();
 			}
 		}
 
@@ -265,7 +266,7 @@ public class GuiWDLGameRules extends WDLScreen {
 	}
 
 	@Override
-	public void init() {
+	public void initGui() {
 		this.addList(new GuiGameRuleList());
 
 		this.doneButton = this.addButton(new ButtonDisplayGui(this.width / 2 - 100,
@@ -278,7 +279,7 @@ public class GuiWDLGameRules extends WDLScreen {
 
 		super.render(mouseX, mouseY, partialTicks);
 
-		if (this.doneButton.isHovered()) {
+		if (this.doneButton.isMouseOver()) {
 			Utils.drawGuiInfoBox(I18n.format("wdl.gui.gamerules.doneInfo"),
 					width, height, 48);
 		} else if (hoveredToolTip != null) {
@@ -287,7 +288,7 @@ public class GuiWDLGameRules extends WDLScreen {
 	}
 
 	@Override
-	public void removed() {
+	public void onGuiClosed() {
 		// Can't save anywhere until the download actually occurs...
 	}
 }

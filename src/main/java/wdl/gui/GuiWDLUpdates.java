@@ -17,10 +17,9 @@ import java.util.List;
 
 import javax.annotation.Nullable;
 
-import net.minecraft.client.audio.SimpleSound;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.init.SoundEvents;
+// import net.minecraft.init.SoundEvents;
 import net.minecraft.util.text.TextComponentString;
 import wdl.VersionConstants;
 import wdl.WDL;
@@ -48,10 +47,10 @@ public class GuiWDLUpdates extends WDLScreen {
 
 	private class UpdateList extends GuiList<UpdateList.VersionEntry> {
 		public UpdateList() {
-			super(GuiWDLUpdates.this.minecraft, GuiWDLUpdates.this.width,
+			super(GuiWDLUpdates.this.mc, GuiWDLUpdates.this.width,
 					GuiWDLUpdates.this.height, TOP_MARGIN,
 					GuiWDLUpdates.this.height - BOTTOM_MARGIN,
-					(font.FONT_HEIGHT + 1) * 6 + 2);
+					(fontRendererObj.FONT_HEIGHT + 1) * 6 + 2);
 		}
 
 		private class VersionEntry extends GuiListEntry<VersionEntry> {
@@ -69,12 +68,11 @@ public class GuiWDLUpdates extends WDLScreen {
 
 			public VersionEntry(Release release) {
 				this.release = release;
-				this.fontHeight = font.FONT_HEIGHT + 1;
+				this.fontHeight = fontRendererObj.FONT_HEIGHT + 1;
 
 				this.title = buildReleaseTitle(release);
 				this.caption = buildVersionInfo(release);
-
-				List<String> body = Utils.wordWrap(release.textOnlyBody, getRowWidth());
+				List<String> body = Utils.wordWrap(release.textOnlyBody, getListWidth());
 
 				body1 = (body.size() >= 1 ? body.get(0) : "");
 				body2 = (body.size() >= 2 ? body.get(1) : "");
@@ -100,28 +98,28 @@ public class GuiWDLUpdates extends WDLScreen {
 					title = this.title;
 				}
 
-				drawString(font, title, x, y + fontHeight * 0, 0xFFFFFF);
-				drawString(font, caption, x, y + fontHeight * 1, 0x808080);
-				drawString(font, body1, x, y + fontHeight * 2, 0xFFFFFF);
-				drawString(font, body2, x, y + fontHeight * 3, 0xFFFFFF);
-				drawString(font, body3, x, y + fontHeight * 4, 0xFFFFFF);
-				drawString(font, time, x, y + fontHeight * 5, 0x808080);
+				drawString(fontRendererObj, title, x, y + fontHeight * 0, 0xFFFFFF);
+				drawString(fontRendererObj, caption, x, y + fontHeight * 1, 0x808080);
+				drawString(fontRendererObj, body1, x, y + fontHeight * 2, 0xFFFFFF);
+				drawString(fontRendererObj, body2, x, y + fontHeight * 3, 0xFFFFFF);
+				drawString(fontRendererObj, body3, x, y + fontHeight * 4, 0xFFFFFF);
+				drawString(fontRendererObj, time, x, y + fontHeight * 5, 0x808080);
 
 				if (mouseX > x && mouseX < x + entryWidth && mouseY > y
-						&& mouseY < y + itemHeight) {
-					fill(x - 2, y - 2, x + entryWidth - 3, y + itemHeight + 2,
+						&& mouseY < y + slotHeight) {
+					drawRect(x - 2, y - 2, x + entryWidth - 3, y + slotHeight + 2,
 							0x1FFFFFFF);
 				}
 			}
 
 			@Override
 			public boolean mouseDown(int x, int y, int mouseButton) {
-				if (y > this.y && y < this.y + itemHeight) {
-					minecraft.displayGuiScreen(new GuiWDLSingleUpdate(GuiWDLUpdates.this,
+				if (y > this.y && y < this.y + slotHeight) {
+					mc.displayGuiScreen(new GuiWDLSingleUpdate(GuiWDLUpdates.this,
 							this.release));
 
-					minecraft.getSoundHandler().play(SimpleSound.master(
-							SoundEvents.UI_BUTTON_CLICK, 1.0f));
+					// mc.getSoundHandler().play(SimpleSound.master(
+					// 		SoundEvents.UI_BUTTON_CLICK, 1.0f));
 					return true;
 				}
 				return false;
@@ -185,7 +183,7 @@ public class GuiWDLUpdates extends WDLScreen {
 	}
 
 	@Override
-	public void init() {
+	public void initGui() {
 		this.list = this.addList(new UpdateList());
 
 		this.addButton(new ButtonDisplayGui(this.width / 2 - 100, this.height - 29,
@@ -193,7 +191,7 @@ public class GuiWDLUpdates extends WDLScreen {
 	}
 
 	@Override
-	public void removed() {
+	public void onGuiClosed() {
 		WDL.saveGlobalProps();
 	}
 
@@ -204,17 +202,17 @@ public class GuiWDLUpdates extends WDLScreen {
 		super.render(mouseX, mouseY, partialTicks);
 
 		if (!WDLUpdateChecker.hasFinishedUpdateCheck()) {
-			drawCenteredString(font,
+			drawCenteredString(fontRendererObj,
 					I18n.format("wdl.gui.updates.pleaseWait"), width / 2,
 					height / 2, 0xFFFFFF);
 		} else if (WDLUpdateChecker.hasUpdateCheckFailed()) {
 			String reason = WDLUpdateChecker.getUpdateCheckFailReason();
 
-			drawCenteredString(font,
+			drawCenteredString(fontRendererObj,
 					I18n.format("wdl.gui.updates.checkFailed"), width / 2,
-					height / 2 - font.FONT_HEIGHT / 2, 0xFF5555);
-			drawCenteredString(font, I18n.format(reason), width / 2,
-					height / 2 + font.FONT_HEIGHT / 2, 0xFF5555);
+					height / 2 - fontRendererObj.FONT_HEIGHT / 2, 0xFF5555);
+			drawCenteredString(fontRendererObj, I18n.format(reason), width / 2,
+					height / 2 + fontRendererObj.FONT_HEIGHT / 2, 0xFF5555);
 		}
 	}
 
@@ -299,7 +297,7 @@ public class GuiWDLUpdates extends WDLScreen {
 		}
 
 		@Override
-		public void init() {
+		public void initGui() {
 			this.addButton(new WDLButton(
 					this.width / 2 - 155, 18, 150, 20,
 					I18n.format("wdl.gui.updates.update.viewOnline")) {
@@ -319,7 +317,7 @@ public class GuiWDLUpdates extends WDLScreen {
 			this.addButton(new ButtonDisplayGui(
 					this.width / 2 - 100, this.height - 29, 200, 20, this.parent));
 
-			TextList list = new TextList(minecraft, width, height, TOP_MARGIN, BOTTOM_MARGIN);
+			TextList list = new TextList(mc, width, height, TOP_MARGIN, BOTTOM_MARGIN);
 
 			list.addLine(buildReleaseTitle(release));
 			list.addLine(I18n.format("wdl.gui.updates.update.releaseDate", release.date));

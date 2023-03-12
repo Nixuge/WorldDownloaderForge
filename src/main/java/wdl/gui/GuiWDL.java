@@ -40,7 +40,7 @@ public class GuiWDL extends WDLScreen {
 
 	private class GuiWDLButtonList extends GuiList<GuiWDLButtonList.ButtonEntry> {
 		public GuiWDLButtonList() {
-			super(GuiWDL.this.minecraft, GuiWDL.this.width, GuiWDL.this.height, 39,
+			super(GuiWDL.this.mc, GuiWDL.this.width, GuiWDL.this.height, 39,
 					GuiWDL.this.height - 32, 20);
 		}
 
@@ -77,7 +77,7 @@ public class GuiWDL extends WDLScreen {
 			@Override
 			public void drawEntry(int x, int y, int width, int height, int mouseX, int mouseY) {
 				super.drawEntry(x, y, width, height, mouseX, mouseY);
-				if (button.isHovered()) {
+				if (button.isMouseOver()) {
 					displayedTooltip = tooltip;
 				}
 			}
@@ -123,8 +123,8 @@ public class GuiWDL extends WDLScreen {
 	 * Adds the buttons (and other controls) to the screen in question.
 	 */
 	@Override
-	public void init() {
-		this.worldname = this.addTextField(new WDLTextField(this.font,
+	public void initGui() {
+		this.worldname = this.addTextField(new WDLTextField(this.fontRendererObj,
 				this.width / 2 - 155, 19, 150, 18, new TextComponentTranslation("wdl.gui.wdl.worldname")));
 		this.worldname.setText(this.config.getValue(MiscSettings.SERVER_NAME));
 
@@ -135,7 +135,7 @@ public class GuiWDL extends WDLScreen {
 	}
 
 	@Override
-	public void removed() {
+	public void onGuiClosed() {
 		if (this.worldname != null) {
 			// Check to see if the server name matches the default, and clear the
 			// setting if so, such that changing the name of the server will be
@@ -153,15 +153,15 @@ public class GuiWDL extends WDLScreen {
 	 */
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground();
+		this.drawDefaultBackground();
 
 		displayedTooltip = null;
 
 		super.render(mouseX, mouseY, partialTicks);
 
 		String name = I18n.format("wdl.gui.wdl.worldname");
-		this.drawString(this.font, name, this.worldname.x
-				- this.font.getStringWidth(name + " "), 26, 0xFFFFFF);
+		this.drawString(this.fontRendererObj, name, this.worldname.xPosition
+				- this.fontRendererObj.getStringWidth(name + " "), 26, 0xFFFFFF);
 
 		Utils.drawGuiInfoBox(displayedTooltip, width, height, 48);
 	}

@@ -44,7 +44,7 @@ public class GuiWDLMessages extends WDLScreen {
 
 	private class GuiMessageTypeList extends GuiList<GuiMessageTypeList.Entry> {
 		public GuiMessageTypeList() {
-			super(GuiWDLMessages.this.minecraft, GuiWDLMessages.this.width,
+			super(GuiWDLMessages.this.mc, GuiWDLMessages.this.width,
 					GuiWDLMessages.this.height, 39,
 					GuiWDLMessages.this.height - 32, 20);
 		}
@@ -67,12 +67,11 @@ public class GuiWDLMessages extends WDLScreen {
 				button.setEnabled(config.getValue(MessageSettings.ENABLE_ALL_MESSAGES));
 
 				super.drawEntry(x, y, width, height, mouseX, mouseY);
+				drawCenteredString(fontRendererObj, category.getDisplayName().getFormattedText(),
+						GuiWDLMessages.this.width / 2 - 40, y + slotHeight
+						- mc.fontRendererObj.FONT_HEIGHT - 1, 0xFFFFFF);
 
-				drawCenteredString(font, category.getDisplayName().getFormattedText(),
-						GuiWDLMessages.this.width / 2 - 40, y + itemHeight
-						- minecraft.fontRenderer.FONT_HEIGHT - 1, 0xFFFFFF);
-
-				if (button.isHovered()) {
+				if (button.isMouseOver()) {
 					hoveredButtonTooltip = button.getTooltip();
 				}
 			}
@@ -94,7 +93,7 @@ public class GuiWDLMessages extends WDLScreen {
 
 				super.drawEntry(x, y, width, height, mouseX, mouseY);
 
-				if (button.isHovered()) {
+				if (button.isMouseOver()) {
 					hoveredButtonTooltip = button.getTooltip();
 				}
 			}
@@ -130,7 +129,7 @@ public class GuiWDLMessages extends WDLScreen {
 	private static final int ID_RESET_ALL = 101;
 
 	@Override
-	public void init() {
+	public void initGui() {
 		enableAllButton = this.addButton(new SettingButton(
 				MessageSettings.ENABLE_ALL_MESSAGES, this.config,
 				(this.width / 2) - 155, 18, 150, 20));
@@ -149,7 +148,7 @@ public class GuiWDLMessages extends WDLScreen {
 	}
 
 	@Override
-	public void confirmResult(boolean result, int id) {
+	public void confirmClicked(boolean result, int id) {
 		if (result) {
 			if (id == ID_RESET_ALL) {
 				ListMultimap<MessageTypeCategory, MessageRegistration> registrations = WDLMessages.getRegistrations();
@@ -164,11 +163,11 @@ public class GuiWDLMessages extends WDLScreen {
 			}
 		}
 
-		minecraft.displayGuiScreen(this);
+		mc.displayGuiScreen(this);
 	}
 
 	@Override
-	public void removed() {
+	public void onGuiClosed() {
 		wdl.saveProps();
 	}
 
@@ -176,15 +175,15 @@ public class GuiWDLMessages extends WDLScreen {
 	public void render(int mouseX, int mouseY, float partialTicks) {
 		hoveredButtonTooltip = null;
 
-		this.renderBackground();
+		this.drawDefaultBackground();
 		super.render(mouseX, mouseY, partialTicks);
 
 		String tooltip = null;
 		if (hoveredButtonTooltip != null) {
 			tooltip = hoveredButtonTooltip;
-		} else if (enableAllButton.isHovered()) {
+		} else if (enableAllButton.isMouseOver()) {
 			tooltip = enableAllButton.getTooltip();
-		} else if (resetButton.isHovered()) {
+		} else if (resetButton.isMouseOver()) {
 			tooltip = I18n.format("wdl.gui.messages.reset.description");
 		}
 

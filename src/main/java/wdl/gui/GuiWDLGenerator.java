@@ -52,12 +52,12 @@ public class GuiWDLGenerator extends WDLScreen {
 	 * Adds the buttons (and other controls) to the screen in question.
 	 */
 	@Override
-	public void init() {
+	public void initGui() {
 		this.seedText = I18n.format("wdl.gui.generator.seed");
-		int seedWidth = font.getStringWidth(seedText + " ");
+		int seedWidth = fontRendererObj.getStringWidth(seedText + " ");
 
 		int y = this.height / 4 - 15;
-		this.seedField = this.addTextField(new WDLTextField(this.font,
+		this.seedField = this.addTextField(new WDLTextField(this.fontRendererObj,
 				this.width / 2 - (100 - seedWidth), y, 200 - seedWidth, 18,
 				new TextComponentString(this.seedText)));
 		this.seedField.setText(config.getValue(GeneratorSettings.SEED));
@@ -97,7 +97,7 @@ public class GuiWDLGenerator extends WDLScreen {
 	}
 
 	@Override
-	public void removed() {
+	public void onGuiClosed() {
 		config.setValue(GeneratorSettings.SEED, this.seedField.getText());
 
 		wdl.saveProps();
@@ -110,18 +110,18 @@ public class GuiWDLGenerator extends WDLScreen {
 	public void render(int mouseX, int mouseY, float partialTicks) {
 		Utils.drawListBackground(23, 32, 0, 0, height, width);
 
-		this.drawString(this.font, seedText, this.width / 2 - 100,
+		this.drawString(this.fontRendererObj, seedText, this.width / 2 - 100,
 				this.height / 4 - 10, 0xFFFFFF);
 
 		super.render(mouseX, mouseY, partialTicks);
 
 		String tooltip = null;
 
-		if (seedField.isHovered()) {
+		if (seedField.isMouseOver()) {
 			tooltip = I18n.format("wdl.gui.generator.seed.description");
-		} else if (generatorBtn.isHovered()) {
+		} else if (generatorBtn.isMouseOver()) {
 			tooltip = generatorBtn.getTooltip();
-		} else if (generateStructuresBtn.isHovered()) {
+		} else if (generateStructuresBtn.isMouseOver()) {
 			tooltip = generateStructuresBtn.getTooltip();
 		}
 		Utils.drawGuiInfoBox(tooltip, width, height, 48);

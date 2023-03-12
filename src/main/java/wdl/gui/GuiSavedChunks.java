@@ -90,7 +90,7 @@ public class GuiSavedChunks extends WDLScreen {
 	}
 
 	@Override
-	public void init() {
+	public void initGui() {
 		this.addButton(new ButtonDisplayGui(width / 2 - 100, height - 29,
 				200, 20, this.parent));
 		dragActive = false;
@@ -129,10 +129,10 @@ public class GuiSavedChunks extends WDLScreen {
 		VersionedFunctions.drawDarkBackground(0, 0, height, width);
 
 		// Old chunks
-		int minX = MathHelper.floor(displayXToChunkX(0) / 32.0);
-		int maxX = MathHelper.floor(displayXToChunkX(width) / 32.0);
-		int minZ = MathHelper.floor(displayZToChunkZ(0) / 32.0);
-		int maxZ = MathHelper.floor(displayZToChunkZ(height) / 32.0);
+		int minX = MathHelper.floor_double(displayXToChunkX(0) / 32.0);
+		int maxX = MathHelper.floor_double(displayXToChunkX(width) / 32.0);
+		int minZ = MathHelper.floor_double(displayZToChunkZ(0) / 32.0);
+		int maxZ = MathHelper.floor_double(displayZToChunkZ(height) / 32.0);
 		for (int rx = minX; rx <= maxX; rx++) {
 			for (int rz = minZ; rz <= maxZ; rz++) {
 				RegionFile region = loadRegion(rx, rz);
@@ -157,9 +157,9 @@ public class GuiSavedChunks extends WDLScreen {
 		int playerPosX = (int)(((wdl.player.posX / 16.0D) - scrollX) * SCALE + (width / 2));
 		int playerPosZ = (int)(((wdl.player.posZ / 16.0D) - scrollZ) * SCALE + (height / 2));
 
-		hLine(playerPosX - 3, playerPosX + 3, playerPosZ, 0xFFFFFFFF);
+		drawHorizontalLine(playerPosX - 3, playerPosX + 3, playerPosZ, 0xFFFFFFFF);
 		// Vertical is 1px taller because it seems to be needed to make it proportional
-		vLine(playerPosX, playerPosZ - 4, playerPosZ + 4, 0xFFFFFFFF);
+		drawVerticalLine(playerPosX, playerPosZ - 4, playerPosZ + 4, 0xFFFFFFFF);
 
 		// Draw the main borders now so that positions are hidden behind it.
 		Utils.drawBorder(TOP_MARGIN, BOTTOM_MARGIN, 0, 0, height, width);
@@ -168,7 +168,7 @@ public class GuiSavedChunks extends WDLScreen {
 			int x = displayXToChunkX(mouseX);
 			int z = displayZToChunkZ(mouseY);
 			if (wdl.savedChunks.contains(new ChunkPos(x, z))) {
-				this.drawString(this.font,
+				this.drawString(this.fontRendererObj,
 						I18n.format("wdl.gui.savedChunks.savedNow", x, z),
 						12, 24, 0xFFFFFF);
 			} else {
@@ -179,15 +179,15 @@ public class GuiSavedChunks extends WDLScreen {
 					timestamp = timestamps.get(computeTimestampIndex(x, z));
 				}
 				if (timestamp > savedAfterLastDownloadTime) {
-					this.drawString(this.font,
+					this.drawString(this.fontRendererObj,
 							I18n.format("wdl.gui.savedChunks.savedAfterDownload", x, z, timestamp * 1000L),
 							12, 24, 0xFFFFFF);
 				} else if (timestamp != 0) {
-					this.drawString(this.font,
+					this.drawString(this.fontRendererObj,
 							I18n.format("wdl.gui.savedChunks.lastSaved", x, z, timestamp * 1000L),
 							12, 24, 0xFFFFFF);
 				} else {
-					this.drawString(this.font,
+					this.drawString(this.fontRendererObj,
 							I18n.format("wdl.gui.savedChunks.neverSaved", x, z),
 							12, 24, 0xFFFFFF);
 				}
@@ -196,8 +196,8 @@ public class GuiSavedChunks extends WDLScreen {
 
 		if (wdl.chunkLoader == null) {
 			// XXX Untranslated, temporary strings
-			this.drawCenteredString(font, "Start download to see information about saved chunks, from now and earlier.", width / 2, height / 2 - font.FONT_HEIGHT, 0xFFFFFF);
-			this.drawCenteredString(font, "In the future, this GUI will work even when downloading hasn't been started.", width / 2, height / 2, 0xFFFFFF);
+			this.drawCenteredString(fontRendererObj, "Start download to see information about saved chunks, from now and earlier.", width / 2, height / 2 - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
+			this.drawCenteredString(fontRendererObj, "In the future, this GUI will work even when downloading hasn't been started.", width / 2, height / 2, 0xFFFFFF);
 		}
 
 		super.render(mouseX, mouseY, partialTicks);
@@ -289,7 +289,7 @@ public class GuiSavedChunks extends WDLScreen {
 				if (wdl.savedChunks.contains(pos)) {
 					continue;
 				}
-				int saveTime = chunkTimestamps.get(computeTimestampIndex(pos.x, pos.z));
+				int saveTime = chunkTimestamps.get(computeTimestampIndex(pos.chunkXPos, pos.chunkZPos));
 				if (saveTime == 0) {
 					continue;
 				}
@@ -304,11 +304,11 @@ public class GuiSavedChunks extends WDLScreen {
 					// Make the color go from red -> yellow in ~1 day and then
 					// yellow -> red in ~1 month
 					if (age <= YELLOW_THRESHOLD) {
-						r = MathHelper.clamp(0xFF * age / YELLOW_THRESHOLD, 0, 0xFF);
+						r = MathHelper.clamp_int(0xFF * age / YELLOW_THRESHOLD, 0, 0xFF);
 						g = 0xFF;
 					} else {
 						r = 0xFF;
-						g = 0xFF - MathHelper.clamp((age - YELLOW_THRESHOLD) / RED_THRESHOLD, 0, 0xFF);
+						g = 0xFF - MathHelper.clamp_int((age - YELLOW_THRESHOLD) / RED_THRESHOLD, 0, 0xFF);
 					}
 					color = 0xFF000000 | r << 16 | g << 8;
 				}
@@ -318,19 +318,19 @@ public class GuiSavedChunks extends WDLScreen {
 	}
 
 	private void drawChunk(ChunkPos pos, int color) {
-		int x1 = chunkXToDisplayX(pos.x);
-		int z1 = chunkZToDisplayZ(pos.z);
+		int x1 = chunkXToDisplayX(pos.chunkXPos);
+		int z1 = chunkZToDisplayZ(pos.chunkZPos);
 		int x2 = x1 + SCALE - 1;
 		int z2 = z1 + SCALE - 1;
 
-		fill(x1, z1, x2, z2, color);
+		drawRect(x1, z1, x2, z2, color);
 
 		int colorDark = darken(color);
-
-		vLine(x1, z1, z2, colorDark);
-		vLine(x2, z1, z2, colorDark);
-		hLine(x1, x2, z1, colorDark);
-		hLine(x1, x2, z2, colorDark);
+		
+		drawVerticalLine(x1, z1, z2, colorDark);
+		drawVerticalLine(x2, z1, z2, colorDark);
+		drawHorizontalLine(x1, x2, z1, colorDark);
+		drawHorizontalLine(x1, x2, z2, colorDark);
 	}
 
 	/**
@@ -363,7 +363,7 @@ public class GuiSavedChunks extends WDLScreen {
 	 * @return The chunk position.
 	 */
 	private int displayXToChunkX(int displayX) {
-		return MathHelper.floor((displayX - (float)(width / 2)) / SCALE + scrollX);
+		return MathHelper.floor_double((displayX - (float)(width / 2)) / SCALE + scrollX);
 	}
 
 	/**
@@ -374,7 +374,7 @@ public class GuiSavedChunks extends WDLScreen {
 	 * @return The chunk position.
 	 */
 	private int displayZToChunkZ(int displayZ) {
-		return MathHelper.floor((displayZ - (float)(height / 2)) / SCALE + scrollZ);
+		return MathHelper.floor_double((displayZ - (float)(height / 2)) / SCALE + scrollZ);
 	}
 
 	/**

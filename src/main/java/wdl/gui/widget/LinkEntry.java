@@ -19,8 +19,8 @@ public class LinkEntry extends TextEntry {
 		super(mc, text, 0x5555FF);
 
 		this.link = link;
-		this.textWidth = mc.fontRenderer.getStringWidth(text);
-		this.linkWidth = mc.fontRenderer.getStringWidth(link);
+		this.textWidth = mc.fontRendererObj.getStringWidth(text);
+		this.linkWidth = mc.fontRendererObj.getStringWidth(link);
 	}
 
 	@Override
@@ -41,10 +41,10 @@ public class LinkEntry extends TextEntry {
 			if (drawX + linkWidth + 4 > width + x) {
 				drawX = width + x - (4 + linkWidth);
 			}
-			Gui.fill(drawX, mouseY - 2, drawX + linkWidth + 4,
-					mouseY + mc.fontRenderer.FONT_HEIGHT + 2, 0x80000000);
+			Gui.drawRect(drawX, mouseY - 2, drawX + linkWidth + 4,
+					mouseY + mc.fontRendererObj.FONT_HEIGHT + 2, 0x80000000);
 
-			mc.fontRenderer.drawStringWithShadow(link, drawX + 2, mouseY, 0xFFFFFF);
+			mc.fontRendererObj.drawStringWithShadow(link, drawX + 2, mouseY, 0xFFFFFF);
 		}
 	}
 

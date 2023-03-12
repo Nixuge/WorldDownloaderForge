@@ -83,7 +83,7 @@ public abstract class GuiTurningCameraBase extends WDLScreen {
 	 */
 	@Override
 	@OverridingMethodsMustInvokeSuper
-	public void init() {
+	public void initGui() {
 		if (!initializedCamera) {
 			this.cam = VersionedFunctions.makePlayer(wdl.minecraft, wdl.worldClient, wdl.player.connection, wdl.player);
 			this.cam.setLocationAndAngles(wdl.player.posX, wdl.player.posY,
@@ -113,7 +113,7 @@ public abstract class GuiTurningCameraBase extends WDLScreen {
 	 */
 	@Override
 	public void tick() {
-		if (minecraft.world != null && this.initializedCamera) {
+		if (mc.theWorld != null && this.initializedCamera) {
 			this.cam.prevRotationPitch = this.cam.rotationPitch = 0.0F;
 			this.cam.prevRotationYaw = this.yaw;
 			this.cam.lastTickPosY = this.cam.prevPosY = this.cam.posY;
@@ -147,9 +147,9 @@ public abstract class GuiTurningCameraBase extends WDLScreen {
 			this.cam.posX = wdl.player.posX - distance * x;
 			this.cam.posZ = wdl.player.posZ + distance * z;
 
-			this.cam.chunkCoordX = MathHelper.floor(this.cam.posX / 16.0D);
-			this.cam.chunkCoordY = MathHelper.floor(this.cam.posY / 16.0D);
-			this.cam.chunkCoordZ = MathHelper.floor(this.cam.posZ / 16.0D);
+			this.cam.chunkCoordX = MathHelper.floor_double(this.cam.posX / 16.0D);
+			this.cam.chunkCoordY = MathHelper.floor_double(this.cam.posY / 16.0D);
+			this.cam.chunkCoordZ = MathHelper.floor_double(this.cam.posZ / 16.0D);
 		}
 
 		this.deactivateRenderViewEntity();
@@ -166,7 +166,7 @@ public abstract class GuiTurningCameraBase extends WDLScreen {
 	 * @return A new distance, equal to or less than <code>currentDistance</code>.
 	 */
 	private double truncateDistanceIfBlockInWay(double camX, double camZ, double currentDistance) {
-		Vec3d playerPos = wdl.player.getPositionVector().add(0, wdl.player.getEyeHeight(), 0);
+		Vec3d playerPos = wdl.player.getPositionVector().addVector(0, wdl.player.getEyeHeight(), 0);
 		Vec3d offsetPos = new Vec3d(wdl.player.posX - currentDistance * camX, wdl.player.posY + wdl.player.getEyeHeight(), wdl.player.posZ + camZ);
 
 		// NOTE: Vec3.addVector and Vec3.add return new vectors and leave the
@@ -183,13 +183,13 @@ public abstract class GuiTurningCameraBase extends WDLScreen {
 				offsetZ = 0;
 			}
 
-			Vec3d from = playerPos.add(offsetX, offsetY, offsetZ);
-			Vec3d to = offsetPos.add(offsetX, offsetY, offsetZ);
+			Vec3d from = playerPos.addVector(offsetX, offsetY, offsetZ);
+			Vec3d to = offsetPos.addVector(offsetX, offsetY, offsetZ);
 
-			RayTraceResult pos = minecraft.world.rayTraceBlocks(from, to);
+			RayTraceResult pos = mc.theWorld.rayTraceBlocks(from, to);
 
 			if (pos != null) {
-				double distance = pos.hitResult.distanceTo(playerPos);
+				double distance = pos.hitVec.distanceTo(playerPos);
 				if (distance < currentDistance && distance > 0) {
 					currentDistance = distance;
 				}
@@ -200,8 +200,8 @@ public abstract class GuiTurningCameraBase extends WDLScreen {
 	}
 
 	@Override
-	public void removed() {
-		super.removed();
+	public void onGuiClosed() {
+		super.onGuiClosed();
 		this.deactivateRenderViewEntity();
 	}
 
@@ -211,9 +211,9 @@ public abstract class GuiTurningCameraBase extends WDLScreen {
 	 * graphical issues</a> when there is no world.
 	 */
 	@Override
-	public void renderBackground() {
-		if (minecraft.world == null) {
-			this.renderDirtBackground(0);
+	public void drawDefaultBackground() {
+		if (mc.theWorld == null) {
+			this.drawBackground(0);
 		}
 	}
 

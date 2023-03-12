@@ -31,8 +31,9 @@ public class TextList extends GuiList<TextEntry> {
 	public TextList(Minecraft mc, int width, int height, int topMargin,
 			int bottomMargin) {
 		super(mc, width, height, topMargin, height - bottomMargin,
-				mc.fontRenderer.FONT_HEIGHT + 1);
+				mc.fontRendererObj.FONT_HEIGHT + 1);
 	}
+
 
 	@Override
 	public int getScrollBarX() {
@@ -47,18 +48,18 @@ public class TextList extends GuiList<TextEntry> {
 	public void addLine(String text) {
 		List<String> lines = Utils.wordWrap(text, getEntryWidth());
 		lines.stream()
-				.map(line -> new TextEntry(minecraft, line, 0xFFFFFF))
+				.map(line -> new TextEntry(mc, line, 0xFFFFFF))
 				.forEach(getEntries()::add);
 	}
 
 	public void addBlankLine() {
-		getEntries().add(new TextEntry(minecraft, "", 0xFFFFFF));
+		getEntries().add(new TextEntry(mc, "", 0xFFFFFF));
 	}
 
 	public void addLinkLine(String text, String URL) {
 		List<String> lines = Utils.wordWrap(text, getEntryWidth());
 		lines.stream()
-				.map(line -> new LinkEntry(minecraft, line, URL))
+				.map(line -> new LinkEntry(mc, line, URL))
 				.forEach(getEntries()::add);
 	}
 

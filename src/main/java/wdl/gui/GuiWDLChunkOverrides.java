@@ -17,11 +17,11 @@ import javax.annotation.Nullable;
 
 import com.google.common.collect.Multimap;
 
-import net.minecraft.client.audio.SimpleSound;
+// import net.minecraft.client.audio.Sound;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.init.SoundEvents;
+// import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
 import net.minecraft.util.math.MathHelper;
 import net.minecraft.util.text.TextComponentString;
@@ -114,7 +114,7 @@ public class GuiWDLChunkOverrides extends WDLScreen {
 	}
 
 	@Override
-	public void init() {
+	public void initGui() {
 		this.addButton(new RequestModeButton(width / 2 - 155, 18, Mode.PANNING) {
 			public @Override void performAction() {
 				GuiWDLChunkOverrides.this.mode = Mode.PANNING;
@@ -194,18 +194,16 @@ public class GuiWDLChunkOverrides extends WDLScreen {
 					partiallyRequested = true;
 				}
 
-				minecraft.getSoundHandler().play(SimpleSound.master(
-								SoundEvents.UI_BUTTON_CLICK, 1.0F));
+				// mc.getSoundHandler().play(SimpleSound.master(
+				// 				SoundEvents.UI_BUTTON_CLICK, 1.0F));
 				break;
 			case ERASING:
-				// TODO
-				minecraft.getSoundHandler().play(SimpleSound.master(
-						SoundEvents.BLOCK_DISPENSER_FAIL, 1.0F));
+				// mc.getSoundHandler().play(SimpleSound.master(
+				// 		SoundEvents.BLOCK_DISPENSER_FAIL, 1.0F));
 				break;
 			case MOVING:
-				// TODO
-				minecraft.getSoundHandler().play(SimpleSound.master(
-						SoundEvents.BLOCK_DISPENSER_FAIL, 1.0F));
+				// mc.getSoundHandler().play(SimpleSound.master(
+				// 		SoundEvents.BLOCK_DISPENSER_FAIL, 1.0F));
 				break;
 			}
 		}
@@ -260,16 +258,16 @@ public class GuiWDLChunkOverrides extends WDLScreen {
 		int playerPosX = (int)(((wdl.player.posX / 16.0D) - scrollX) * SCALE + (width / 2));
 		int playerPosZ = (int)(((wdl.player.posZ / 16.0D) - scrollZ) * SCALE + (height / 2));
 
-		hLine(playerPosX - 3, playerPosX + 3, playerPosZ, 0xFFFFFFFF);
+		drawHorizontalLine(playerPosX - 3, playerPosX + 3, playerPosZ, 0xFFFFFFFF);
 		// Vertical is 1px taller because it seems to be needed to make it proportional
-		vLine(playerPosX, playerPosZ - 4, playerPosZ + 4, 0xFFFFFFFF);
+		drawVerticalLine(playerPosX, playerPosZ - 4, playerPosZ + 4, 0xFFFFFFFF);
 
 		// Draw the main borders now so that ranges are hidden behind it.
 		Utils.drawBorder(TOP_MARGIN, BOTTOM_MARGIN, 0, 0, height, width);
 
 		super.render(mouseX, mouseY, partialTicks);
 
-		this.drawCenteredString(this.font, "\u00A7c\u00A7lThis is a work in progress.",
+		this.drawCenteredString(this.fontRendererObj, "\u00A7c\u00A7lThis is a work in progress.",
 				this.width / 2, this.height / 2, 0xFFFFFF);
 	}
 
@@ -296,14 +294,14 @@ public class GuiWDLChunkOverrides extends WDLScreen {
 		int x2 = chunkXToDisplayX(range.x2) + SCALE - 1;
 		int z2 = chunkZToDisplayZ(range.z2) + SCALE - 1;
 
-		fill(x1, z1, x2, z2, color + (alpha << 24));
+		drawRect(x1, z1, x2, z2, color + (alpha << 24));
 
 		int colorDark = darken(color);
 
-		vLine(x1, z1, z2, colorDark + (alpha << 24));
-		vLine(x2, z1, z2, colorDark + (alpha << 24));
-		hLine(x1, x2, z1, colorDark + (alpha << 24));
-		hLine(x1, x2, z2, colorDark + (alpha << 24));
+		drawVerticalLine(x1, z1, z2, colorDark + (alpha << 24));
+		drawVerticalLine(x2, z1, z2, colorDark + (alpha << 24));
+		drawHorizontalLine(x1, x2, z1, colorDark + (alpha << 24));
+		drawHorizontalLine(x1, x2, z2, colorDark + (alpha << 24));
 	}
 
 	/**
@@ -336,7 +334,7 @@ public class GuiWDLChunkOverrides extends WDLScreen {
 	 * @return The chunk position.
 	 */
 	private int displayXToChunkX(int displayX) {
-		return MathHelper.floor((displayX - (float)(width / 2)) / SCALE + scrollX);
+		return MathHelper.floor_double((displayX - (float)(width / 2)) / SCALE + scrollX);
 	}
 
 	/**
@@ -347,7 +345,7 @@ public class GuiWDLChunkOverrides extends WDLScreen {
 	 * @return The chunk position.
 	 */
 	private int displayZToChunkZ(int displayZ) {
-		return MathHelper.floor((displayZ - (float)(height / 2)) / SCALE + scrollZ);
+		return MathHelper.floor_double((displayZ - (float)(height / 2)) / SCALE + scrollZ);
 	}
 
 	/**
@@ -390,8 +388,8 @@ public class GuiWDLChunkOverrides extends WDLScreen {
 		public void beforeDraw() {
 			if (GuiWDLChunkOverrides.this.mode == this.mode) {
 				// Mode is currently selected - draw a green outline.
-				fill(this.x - 2, this.y - 2,
-						this.x + width + 2, this.y + height + 2,
+				drawRect(this.xPosition - 2, this.yPosition - 2,
+						this.xPosition + width + 2, this.yPosition + height + 2,
 						0xFF007F00);
 			}
 		}
@@ -399,10 +397,10 @@ public class GuiWDLChunkOverrides extends WDLScreen {
 		@Override
 		public void afterDraw() {
 			// Reset the color, which gets set somewhere (probably when drawing text)
-			GlStateManager.color3f(1.0f, 1.0f, 1.0f);
-			minecraft.getTextureManager().bindTexture(WIDGET_TEXTURES);
+			GlStateManager.color(1.0f, 1.0f, 1.0f);
+			mc.getTextureManager().bindTexture(WIDGET_TEXTURES);
 
-			this.blit(this.x + 2, this.y + 2,
+			this.drawTexturedModalRect(this.xPosition + 2, this.yPosition + 2,
 					mode.overlayU, mode.overlayV, 16, 16);
 		}
 	}

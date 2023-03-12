@@ -28,7 +28,7 @@ abstract class ExtTextField extends GuiTextField {
 	 */
 	private final int width, height;
 	/**
-	 * Similarly, these coordinates are needed for {@link #isHovered()}.
+	 * Similarly, these coordinates are needed for {@link #isMouseOver()}.
 	 */
 	private int mouseX, mouseY;
 
@@ -41,25 +41,25 @@ abstract class ExtTextField extends GuiTextField {
 
 	@Override
 	@Deprecated
-	public void render() {
-		super.render();
+	public void drawTextBox() {
+		super.drawTextBox();
 	}
 
 	public void render(int mouseX, int mouseY, float partialTicks) {
 		this.mouseX = mouseX;
 		this.mouseY = mouseY;
-		super.render();
+		super.drawTextBox();
 	}
 
 	// This method is in ExtTextField since 1.14+ have it in Widget, so it doesn't
 	// need to be implemented in 1.14's WDLTextField.
-	public boolean isHovered() {
+	public boolean isMouseOver() {
 		if (!this.getVisible()) {
 			return false;
 		}
 
-		int scaledX = this.mouseX - this.x;
-		int scaledY = this.mouseY - this.y;
+		int scaledX = this.mouseX - this.xPosition;
+		int scaledY = this.mouseY - this.yPosition;
 
 		return scaledX >= 0 && scaledX < this.width && scaledY >= 0 && scaledY < this.height;
 	}

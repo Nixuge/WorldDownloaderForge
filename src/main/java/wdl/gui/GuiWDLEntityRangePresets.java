@@ -55,7 +55,7 @@ public class GuiWDLEntityRangePresets extends WDLScreen implements GuiYesNoCallb
 	}
 
 	@Override
-	public void init() {
+	public void initGui() {
 		int y = this.height / 4;
 
 		this.vanillaButton = this.addButton(new ButtonDisplayGui(
@@ -95,11 +95,11 @@ public class GuiWDLEntityRangePresets extends WDLScreen implements GuiYesNoCallb
 
 		String infoText = null;
 
-		if (vanillaButton.isHovered()) {
+		if (vanillaButton.isMouseOver()) {
 			infoText = I18n.format("wdl.gui.rangePresets.vanilla.description");
-		} else if (spigotButton.isHovered()) {
+		} else if (spigotButton.isMouseOver()) {
 			infoText = I18n.format("wdl.gui.rangePresets.spigot.description");
-		} else if (serverButton.isHovered()) {
+		} else if (serverButton.isMouseOver()) {
 			infoText = I18n.format("wdl.gui.rangePresets.server.description") + "\n\n";
 
 			if (serverButton.isEnabled()) {
@@ -107,7 +107,7 @@ public class GuiWDLEntityRangePresets extends WDLScreen implements GuiYesNoCallb
 			} else {
 				infoText += I18n.format("wdl.gui.rangePresets.server.notInstalled");
 			}
-		} else if (cancelButton.isHovered()) {
+		} else if (cancelButton.isMouseOver()) {
 			infoText = I18n.format("wdl.gui.rangePresets.cancel.description");
 		}
 
@@ -119,7 +119,7 @@ public class GuiWDLEntityRangePresets extends WDLScreen implements GuiYesNoCallb
 	}
 
 	@Override
-	public void confirmResult(boolean result, int id) {
+	public void confirmClicked(boolean result, int id) {
 		if (result) {
 			Set<String> entities = EntityUtils.getEntityTypes();
 
@@ -143,11 +143,11 @@ public class GuiWDLEntityRangePresets extends WDLScreen implements GuiYesNoCallb
 			}
 		}
 
-		minecraft.displayGuiScreen(parent);
+		mc.displayGuiScreen(parent);
 	}
 
 	@Override
-	public void removed() {
+	public void onGuiClosed() {
 		wdl.saveProps();
 	}
 }

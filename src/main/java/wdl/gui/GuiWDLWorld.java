@@ -73,9 +73,9 @@ public class GuiWDLWorld extends WDLScreen {
 		@Override
 		public void afterDraw() {
 			int textureX = config.getValue((BooleanSetting)this.setting) ? 0 : 20; 
-			int textureY = this.isHovered() ? 166 : 146;
-			minecraft.getTextureManager().bindTexture(GuiButton.BUTTON_TEXTURES);
-			blit(this.x, this.y, textureX, textureY, this.width, this.height);
+			int textureY = this.isMouseOver() ? 166 : 146;
+			mc.getTextureManager().bindTexture(GuiButton.BUTTON_TEXTURES);
+			drawTexturedModalRect(this.xPosition, this.yPosition, textureX, textureY, this.width, this.height);
 		}
 	}
 
@@ -90,7 +90,7 @@ public class GuiWDLWorld extends WDLScreen {
 	 * Adds the buttons (and other controls) to the screen in question.
 	 */
 	@Override
-	public void init() {
+	public void initGui() {
 		int y = this.height / 4 - 15;
 
 		this.gamemodeBtn = this.addButton(new SettingButton(
@@ -119,13 +119,13 @@ public class GuiWDLWorld extends WDLScreen {
 		});
 		y += 22;
 		this.spawnTextY = y + 4;
-		this.spawnX = this.addTextField(new GuiNumericTextField(this.font,
+		this.spawnX = this.addTextField(new GuiNumericTextField(this.fontRendererObj,
 				this.width / 2 - 87, y, 50, 16,
 				new TextComponentTranslation("wdl.gui.world.spawn.coord", "X")));
-		this.spawnY = this.addTextField(new GuiNumericTextField(this.font,
+		this.spawnY = this.addTextField(new GuiNumericTextField(this.fontRendererObj,
 				this.width / 2 - 19, y, 50, 16,
 				new TextComponentTranslation("wdl.gui.world.spawn.coord", "Y")));
-		this.spawnZ = this.addTextField(new GuiNumericTextField(this.font,
+		this.spawnZ = this.addTextField(new GuiNumericTextField(this.fontRendererObj,
 				this.width / 2 + 48, y, 50, 16,
 				new TextComponentTranslation("wdl.gui.world.spawn.coord", "Z")));
 		spawnX.setValue(config.getValue(WorldSettings.SPAWN_X));
@@ -149,7 +149,7 @@ public class GuiWDLWorld extends WDLScreen {
 	}
 
 	@Override
-	public void removed() {
+	public void onGuiClosed() {
 		if (this.showSpawnFields) {
 			this.config.setValue(WorldSettings.SPAWN_X, spawnX.getValue());
 			this.config.setValue(WorldSettings.SPAWN_Y, spawnY.getValue());
@@ -167,11 +167,11 @@ public class GuiWDLWorld extends WDLScreen {
 		Utils.drawListBackground(23, 32, 0, 0, height, width);
 
 		if (this.showSpawnFields) {
-			this.drawString(this.font, "X:", this.width / 2 - 99,
+			this.drawString(this.fontRendererObj, "X:", this.width / 2 - 99,
 					this.spawnTextY, 0xFFFFFF);
-			this.drawString(this.font, "Y:", this.width / 2 - 31,
+			this.drawString(this.fontRendererObj, "Y:", this.width / 2 - 31,
 					this.spawnTextY, 0xFFFFFF);
-			this.drawString(this.font, "Z:", this.width / 2 + 37,
+			this.drawString(this.fontRendererObj, "Z:", this.width / 2 + 37,
 					this.spawnTextY, 0xFFFFFF);
 		}
 
@@ -179,28 +179,28 @@ public class GuiWDLWorld extends WDLScreen {
 
 		String tooltip = null;
 
-		if (allowCheatsBtn.isHovered()) {
+		if (allowCheatsBtn.isMouseOver()) {
 			tooltip = allowCheatsBtn.getTooltip();
-		} else if (gamemodeBtn.isHovered()) {
+		} else if (gamemodeBtn.isMouseOver()) {
 			tooltip = gamemodeBtn.getTooltip();
-		} else if (timeBtn.isHovered()) {
+		} else if (timeBtn.isMouseOver()) {
 			tooltip = timeBtn.getTooltip();
-		} else if (weatherBtn.isHovered()) {
+		} else if (weatherBtn.isMouseOver()) {
 			tooltip = weatherBtn.getTooltip();
-		} else if (this.difficultyBtn.isHovered()) {
+		} else if (this.difficultyBtn.isMouseOver()) {
 			tooltip = difficultyBtn.getTooltip();
-		} else if (this.lockDifficultyBtn.isHovered()) {
+		} else if (this.lockDifficultyBtn.isMouseOver()) {
 			tooltip = lockDifficultyBtn.getTooltip();
-		} else if (spawnBtn.isHovered()) {
+		} else if (spawnBtn.isMouseOver()) {
 			tooltip = spawnBtn.getTooltip();
-		} else if (pickSpawnBtn.isHovered()) {
+		} else if (pickSpawnBtn.isMouseOver()) {
 			tooltip = I18n.format("wdl.gui.world.setSpawnToCurrentPosition.description");
 		} else if (showSpawnFields) {
-			if (spawnX.isHovered()) {
+			if (spawnX.isMouseOver()) {
 				tooltip = I18n.format("wdl.gui.world.spawnPos.description", "X");
-			} else if (spawnY.isHovered()) {
+			} else if (spawnY.isMouseOver()) {
 				tooltip = I18n.format("wdl.gui.world.spawnPos.description", "Y");
-			} else if (spawnZ.isHovered()) {
+			} else if (spawnZ.isMouseOver()) {
 				tooltip = I18n.format("wdl.gui.world.spawnPos.description", "Z");
 			}
 		}

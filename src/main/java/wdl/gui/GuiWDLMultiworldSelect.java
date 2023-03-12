@@ -52,8 +52,8 @@ public class GuiWDLMultiworldSelect extends GuiTurningCameraBase {
 			}
 
 			if (info != null && info == selectedMultiWorld) {
-				fill(this.x - 2, this.y - 2,
-						this.x + width + 2, this.y + height + 2,
+				drawRect(this.xPosition - 2, this.yPosition - 2,
+						this.xPosition + width + 2, this.yPosition + height + 2,
 						0xFF007F00);
 			}
 		}
@@ -108,7 +108,7 @@ public class GuiWDLMultiworldSelect extends GuiTurningCameraBase {
 				// TODO: More info than just dimensions - EG if the
 				// chunk the player is in is added, etc.
 				description.add("Defined dimensions:");
-				File savesFolder = new File(wdl.minecraft.gameDir, "saves");
+				File savesFolder = new File(wdl.minecraft.mcDataDir, "saves");
 				File world = new File(savesFolder, WDL.getWorldFolderName(folderName));
 				File[] subfolders = world.listFiles();
 
@@ -254,8 +254,8 @@ public class GuiWDLMultiworldSelect extends GuiTurningCameraBase {
 	}
 
 	@Override
-	public void init() {
-		super.init();
+	public void initGui() {
+		super.initGui();
 
 		numWorldButtons = (this.width - 50) / 155;
 
@@ -309,11 +309,11 @@ public class GuiWDLMultiworldSelect extends GuiTurningCameraBase {
 			}
 		});
 
-		this.newNameField = this.addTextField(new WDLTextField(this.font,
+		this.newNameField = this.addTextField(new WDLTextField(this.fontRendererObj,
 				this.width / 2 - 155, 29, 150, 20,
 				new TextComponentTranslation("wdl.gui.multiworldSelect.newName")));
 
-		this.searchField = this.addTextField(new WDLTextField(this.font,
+		this.searchField = this.addTextField(new WDLTextField(this.fontRendererObj,
 				this.width / 2 + 5, 29, 150, 20,
 				new TextComponentTranslation("wdl.gui.multiworldSelect.search")));
 		this.searchField.setText(searchText);
@@ -352,7 +352,7 @@ public class GuiWDLMultiworldSelect extends GuiTurningCameraBase {
 	 */
 	@Override
 	public void render(int mouseX, int mouseY, float partialTicks) {
-		this.renderBackground();
+		this.drawDefaultBackground();
 
 		if (index >= linkedWorlds.size() - numWorldButtons) {
 			index = linkedWorlds.size() - numWorldButtons;
@@ -369,7 +369,7 @@ public class GuiWDLMultiworldSelect extends GuiTurningCameraBase {
 
 		Utils.drawBorder(53, 53, 0, 0, height, width);
 
-		this.drawCenteredString(this.font,
+		this.drawCenteredString(this.fontRendererObj,
 				I18n.format("wdl.gui.multiworldSelect.subtitle"),
 				this.width / 2, 18, 0xFF0000);
 
@@ -380,9 +380,9 @@ public class GuiWDLMultiworldSelect extends GuiTurningCameraBase {
 
 		//Hint as to what the text box does
 		if (this.searchField.getText().isEmpty() && !this.searchField.isFocused()) {
-			drawString(font,
+			drawString(fontRendererObj,
 					I18n.format("wdl.gui.multiworldSelect.search"),
-					searchField.x + 4, searchField.y + 6,
+					searchField.xPosition + 4, searchField.yPosition + 6,
 					0x909090);
 		}
 
@@ -442,22 +442,22 @@ public class GuiWDLMultiworldSelect extends GuiTurningCameraBase {
 				+ selectedMultiWorld.displayName;
 		List<String> description = selectedMultiWorld.getDescription();
 
-		int maxWidth = font.getStringWidth(title);
+		int maxWidth = fontRendererObj.getStringWidth(title);
 		for (String line : description) {
-			int width = font.getStringWidth(line);
+			int width = fontRendererObj.getStringWidth(line);
 			if (width > maxWidth) {
 				maxWidth = width;
 			}
 		}
 
-		fill(2, 61, 5 + maxWidth + 3, height - 61, 0x80000000);
+		drawRect(2, 61, 5 + maxWidth + 3, height - 61, 0x80000000);
 
-		drawString(font, title, 5, 64, 0xFFFFFF);
+		drawString(fontRendererObj, title, 5, 64, 0xFFFFFF);
 
-		int y = 64 + font.FONT_HEIGHT;
+		int y = 64 + fontRendererObj.FONT_HEIGHT;
 		for (String s : description) {
-			drawString(font, s, 5, y, 0xFFFFFF);
-			y += font.FONT_HEIGHT;
+			drawString(fontRendererObj, s, 5, y, 0xFFFFFF);
+			y += fontRendererObj.FONT_HEIGHT;
 		}
 	}
 }

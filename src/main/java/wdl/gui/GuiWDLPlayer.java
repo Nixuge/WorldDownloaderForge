@@ -53,7 +53,7 @@ public class GuiWDLPlayer extends WDLScreen {
 	 * Adds the buttons (and other controls) to the screen in question.
 	 */
 	@Override
-	public void init() {
+	public void initGui() {
 		int y = this.height / 4 - 15;
 		this.healthBtn = this.addButton(new SettingButton(
 				PlayerSettings.HEALTH, this.config, this.width / 2 - 100, y));
@@ -70,13 +70,13 @@ public class GuiWDLPlayer extends WDLScreen {
 		});
 		y += 22;
 		this.posTextY = y + 4;
-		this.posX = this.addTextField(new GuiNumericTextField(this.font,
+		this.posX = this.addTextField(new GuiNumericTextField(this.fontRendererObj,
 				this.width / 2 - 87, y, 50, 16,
 				new TextComponentTranslation("wdl.gui.player.position.coord", "X")));
-		this.posY = this.addTextField(new GuiNumericTextField(this.font,
+		this.posY = this.addTextField(new GuiNumericTextField(this.fontRendererObj,
 				this.width / 2 - 19, y, 50, 16,
 				new TextComponentTranslation("wdl.gui.player.position.coord", "Y")));
-		this.posZ = this.addTextField(new GuiNumericTextField(this.font,
+		this.posZ = this.addTextField(new GuiNumericTextField(this.fontRendererObj,
 				this.width / 2 + 48, y, 50, 16,
 				new TextComponentTranslation("wdl.gui.player.position.coord", "Z")));
 		this.posX.setValue(config.getValue(PlayerSettings.PLAYER_X));
@@ -101,7 +101,7 @@ public class GuiWDLPlayer extends WDLScreen {
 	}
 
 	@Override
-	public void removed() {
+	public void onGuiClosed() {
 		if (this.showPosFields) {
 			this.config.setValue(PlayerSettings.PLAYER_X, posX.getValue());
 			this.config.setValue(PlayerSettings.PLAYER_Y, posY.getValue());
@@ -121,33 +121,33 @@ public class GuiWDLPlayer extends WDLScreen {
 		String tooltip = null;
 
 		if (this.showPosFields) {
-			this.drawString(this.font, "X:", this.width / 2 - 99,
+			this.drawString(this.fontRendererObj, "X:", this.width / 2 - 99,
 					this.posTextY, 0xFFFFFF);
-			this.drawString(this.font, "Y:", this.width / 2 - 31,
+			this.drawString(this.fontRendererObj, "Y:", this.width / 2 - 31,
 					this.posTextY, 0xFFFFFF);
-			this.drawString(this.font, "Z:", this.width / 2 + 37,
+			this.drawString(this.fontRendererObj, "Z:", this.width / 2 + 37,
 					this.posTextY, 0xFFFFFF);
 
-			if (posX.isHovered()) {
+			if (posX.isMouseOver()) {
 				tooltip = I18n.format("wdl.gui.player.positionTextBox.description", "X");
-			} else if (posY.isHovered()) {
+			} else if (posY.isMouseOver()) {
 				tooltip = I18n.format("wdl.gui.player.positionTextBox.description", "Y");
-			} else if (posZ.isHovered()) {
+			} else if (posZ.isMouseOver()) {
 				tooltip = I18n.format("wdl.gui.player.positionTextBox.description", "Z");
 			}
 
-			if (pickPosBtn.isHovered()) {
+			if (pickPosBtn.isMouseOver()) {
 				tooltip = I18n.format("wdl.gui.player.setPositionToCurrentPosition.description");
 			}
 		}
 
-		if (healthBtn.isHovered()) {
+		if (healthBtn.isMouseOver()) {
 			tooltip = healthBtn.getTooltip();
 		}
-		if (hungerBtn.isHovered()) {
+		if (hungerBtn.isMouseOver()) {
 			tooltip = hungerBtn.getTooltip();
 		}
-		if (playerPosBtn.isHovered()) {
+		if (playerPosBtn.isMouseOver()) {
 			tooltip = playerPosBtn.getTooltip();
 		}
 
