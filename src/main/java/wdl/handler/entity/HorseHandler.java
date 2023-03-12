@@ -13,8 +13,8 @@
  */
 package wdl.handler.entity;
 
-import net.minecraft.entity.passive.EquineEntity;
-import net.minecraft.inventory.ContainerHorseChest;
+import net.minecraft.entity.passive.EntityHorse;
+import net.minecraft.inventory.AnimalChest;
 import net.minecraft.inventory.ContainerHorseInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.text.ITextComponent;
@@ -22,7 +22,7 @@ import net.minecraft.util.text.TextComponentTranslation;
 import wdl.ReflectionUtils;
 import wdl.handler.HandlerException;
 
-public class HorseHandler extends EntityHandler<EquineEntity, ContainerHorseInventory> {
+public class HorseHandler extends EntityHandler<EntityHorse, ContainerHorseInventory> {
 	/**
 	 * The number of slots used for the player inventory, so that the size
 	 * of the horse's inventory can be computed.
@@ -30,21 +30,21 @@ public class HorseHandler extends EntityHandler<EquineEntity, ContainerHorseInve
 	private static final int PLAYER_INVENTORY_SLOTS = 4 * 9;
 
 	public HorseHandler() {
-		super(EquineEntity.class, ContainerHorseInventory.class);
+		super(EntityHorse.class, ContainerHorseInventory.class);
 	}
 
 	@Override
-	public boolean checkRiding(ContainerHorseInventory container, EquineEntity riddenHorse) {
-		EquineEntity horseInContainer = ReflectionUtils
-				.findAndGetPrivateField(container, EquineEntity.class);
+	public boolean checkRiding(ContainerHorseInventory container, EntityHorse riddenHorse) {
+		EntityHorse horseInContainer = ReflectionUtils
+				.findAndGetPrivateField(container, EntityHorse.class);
 
 		// Intentional reference equals
 		return horseInContainer == riddenHorse;
 	}
 
 	@Override
-	public ITextComponent copyData(ContainerHorseInventory container, EquineEntity horse, boolean riding) throws HandlerException {
-		ContainerHorseChest horseInventory = new ContainerHorseChest(
+	public ITextComponent copyData(ContainerHorseInventory container, EntityHorse horse, boolean riding) throws HandlerException {
+		AnimalChest horseInventory = new AnimalChest(
 				horse.getName(), // This was hardcoded to "HorseChest" in 1.12, but the name in 1.13.  The actual value is unused.
 				container.inventorySlots.size() - PLAYER_INVENTORY_SLOTS);
 
@@ -55,7 +55,7 @@ public class HorseHandler extends EntityHandler<EquineEntity, ContainerHorseInve
 			}
 		}
 
-		ReflectionUtils.findAndSetPrivateField(horse, EquineEntity.class, ContainerHorseChest.class, horseInventory);
+		ReflectionUtils.findAndSetPrivateField(horse, EntityHorse.class, AnimalChest.class, horseInventory);
 
 		if (riding) {
 			return new TextComponentTranslation("wdl.messages.onGuiClosedInfo.savedRiddenEntity.horse");

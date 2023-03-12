@@ -24,7 +24,7 @@ import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IBlockAccess;
 import wdl.handler.HandlerException;
 
 /**
@@ -37,7 +37,7 @@ public class BaseChestHandler<B extends TileEntityChest> extends BaseLargeChestH
 
 	@Override
 	public ITextComponent handle(BlockPos clickedPos, ContainerChest container,
-			B blockEntity, IBlockReader world,
+			B blockEntity, IBlockAccess world,
 			BiConsumer<BlockPos, B> saveMethod) throws HandlerException {
 		String title = getCustomDisplayName(container.getLowerChestInventory());
 
@@ -61,7 +61,7 @@ public class BaseChestHandler<B extends TileEntityChest> extends BaseLargeChestH
 	 * @throws HandlerException As per {@link #handle}
 	 */
 	private void saveSingleChest(BlockPos clickedPos, ContainerChest container,
-			B blockEntity, IBlockReader world,
+			B blockEntity, IBlockAccess world,
 			BiConsumer<BlockPos, B> saveMethod,
 			@Nullable String displayName) throws HandlerException {
 		saveContainerItems(container, blockEntity, 0);

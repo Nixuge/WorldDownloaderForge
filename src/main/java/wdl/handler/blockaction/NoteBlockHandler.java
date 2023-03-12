@@ -20,7 +20,7 @@ import net.minecraft.tileentity.TileEntityNote;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IBlockAccess;
 import wdl.handler.HandlerException;
 
 /**
@@ -40,7 +40,7 @@ public class NoteBlockHandler extends BlockActionHandler<BlockNote, TileEntityNo
 
 	@Override
 	public ITextComponent handle(BlockPos pos, BlockNote block, TileEntityNote blockEntity, int data1, int data2,
-			IBlockReader world, BiConsumer<BlockPos, TileEntityNote> saveMethod) throws HandlerException {
+			IBlockAccess world, BiConsumer<BlockPos, TileEntityNote> saveMethod) throws HandlerException {
 		blockEntity.note = (byte)(data2 % 25);
 		saveMethod.accept(pos, blockEntity);
 		return new TextComponentTranslation("wdl.messages.onBlockEvent.noteblock", pos, data2, blockEntity);

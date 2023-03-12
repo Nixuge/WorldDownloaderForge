@@ -116,15 +116,15 @@ public final class WorldSettings {
 		PLAYER("player") {
 			@Override
 			public int getX(Entity player, IConfiguration config) {
-				return MathHelper.floor(player.posX);
+				return MathHelper.floor_double(player.posX);
 			}
 			@Override
 			public int getY(Entity player, IConfiguration config) {
-				return MathHelper.floor(player.posY);
+				return MathHelper.floor_double(player.posY);
 			}
 			@Override
 			public int getZ(Entity player, IConfiguration config) {
-				return MathHelper.floor(player.posZ);
+				return MathHelper.floor_double(player.posZ);
 			}
 		},
 		XYZ("xyz") {

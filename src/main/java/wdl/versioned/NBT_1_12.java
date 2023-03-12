@@ -15,7 +15,7 @@ package wdl.versioned;
 
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagFloat;
-import net.minecraft.nbt.INBTBase;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagShort;
 import net.minecraft.nbt.NBTTagString;
@@ -30,7 +30,7 @@ class NBTFunctions {
 	/* (non-javadoc)
 	 * @see VersionedFunctions#nbtString
 	 */
-	static String nbtString(INBTBase tag) {
+	static String nbtString(NBTBase tag) {
 		// No equivalent of toFormattedComponent or similar, so just try to make a
 		// decent multi-line string
 		String result = tag.toString();
@@ -45,7 +45,7 @@ class NBTFunctions {
 	static NBTTagList createFloatListTag(float... values) {
 		NBTTagList result = new NBTTagList();
 		for (float value : values) {
-			result.add(new NBTTagFloat(value));
+			result.appendTag(new NBTTagFloat(value));
 		}
 		return result;
 	}
@@ -56,7 +56,7 @@ class NBTFunctions {
 	static NBTTagList createDoubleListTag(double... values) {
 		NBTTagList result = new NBTTagList();
 		for (double value : values) {
-			result.add(new NBTTagDouble(value));
+			result.appendTag(new NBTTagDouble(value));
 		}
 		return result;
 	}
@@ -67,7 +67,7 @@ class NBTFunctions {
 	static NBTTagList createShortListTag(short... values) {
 		NBTTagList result = new NBTTagList();
 		for (short value : values) {
-			result.add(new NBTTagShort(value));
+			result.appendTag(new NBTTagShort(value));
 		}
 		return result;
 	}

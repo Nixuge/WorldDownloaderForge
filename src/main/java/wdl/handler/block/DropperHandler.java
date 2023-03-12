@@ -23,7 +23,7 @@ import net.minecraft.tileentity.TileEntityDropper;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IBlockAccess;
 import wdl.ReflectionUtils;
 import wdl.handler.HandlerException;
 
@@ -34,7 +34,7 @@ public class DropperHandler extends BlockHandler<TileEntityDropper, ContainerDis
 
 	@Override
 	public ITextComponent handle(BlockPos clickedPos, ContainerDispenser container,
-			TileEntityDropper blockEntity, IBlockReader world,
+			TileEntityDropper blockEntity, IBlockAccess world,
 			BiConsumer<BlockPos, TileEntityDropper> saveMethod) throws HandlerException {
 		IInventory dropperInventory = ReflectionUtils.findAndGetPrivateField(
 				container, IInventory.class);

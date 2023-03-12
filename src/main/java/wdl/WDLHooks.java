@@ -18,7 +18,6 @@ import java.util.function.Consumer;
 
 import javax.annotation.Nonnull;
 
-import me.nixuge.worlddownloader.VersionConstants;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiIngameMenu;

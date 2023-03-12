@@ -616,7 +616,7 @@ public class WDLEvents {
 				if (!WDL.downloading) { return; }
 
 				if (ENABLE_PROFILER) PROFILER.startSection("wdl.onChunkNoLongerNeeded");
-				Chunk chunk = world.getChunk(packet.getX(), packet.getZ());
+				Chunk chunk = world.getChunkFromChunkCoords(packet.getX(), packet.getZ());
 
 				if (ENABLE_PROFILER) PROFILER.startSection("Core");
 				wdlEvents.onChunkNoLongerNeeded(chunk);
@@ -810,7 +810,6 @@ public class WDLEvents {
 		private static final int WDLo = ('W' << 24) | ('D' << 16) | ('L' << 8) | ('o');
 
 		private class StartDownloadButton extends WDLButton {
-			@SuppressWarnings("deprecation")
 			public StartDownloadButton(GuiScreen menu, int x, int y, int width, int height) {
 				super(x, y, width, height, null);
 				this.menu = menu;
@@ -891,7 +890,6 @@ public class WDLEvents {
 		}
 
 		private class SettingsButton extends WDLButton {
-			@SuppressWarnings("deprecation")
 			public SettingsButton(GuiScreen menu, int x, int y, int width, int height, String displayString) {
 				super(x, y, width, height, displayString);
 				this.menu = menu;
@@ -914,7 +912,6 @@ public class WDLEvents {
 			}
 		}
 
-		@SuppressWarnings("deprecation")
 		@Override
 		public void injectWDLButtons(GuiIngameMenu gui, Collection<GuiButton> buttonList,
 				Consumer<GuiButton> addButton) {
@@ -926,7 +923,7 @@ public class WDLEvents {
 				}
 				GuiButton btn = (GuiButton)o;
 				if (btn.id == 5) { // Button "Achievements"
-					insertAtYPos = btn.y + 24;
+					insertAtYPos = btn.yPosition + 24;
 					break;
 				}
 			}
@@ -951,7 +948,6 @@ public class WDLEvents {
 					I18n.format("wdl.gui.ingameMenu.settings")));
 		}
 
-		@SuppressWarnings("deprecation")
 		@Override
 		public void handleWDLButtonClick(GuiIngameMenu gui, GuiButton button) {
 			if (button.id == 1) { // "Disconnect", from vanilla

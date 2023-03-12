@@ -28,12 +28,12 @@ final class RegistryFunctions {
 	 * @see VersionedFunctions#getBlockId
 	 */
 	static final int getBlockId(Block block) {
-		return Block.REGISTRY.getId(block);
+		return Block.REGISTRY.getIDForObject(block);
 	}
 	/* (non-javadoc)
 	 * @see VersionedFunctions#getBiomeId
 	 */
 	static final int getBiomeId(Biome biome) {
-		return Biome.REGISTRY.getId(biome);
+		return Biome.REGISTRY.getIDForObject(biome);
 	}
 }

@@ -21,7 +21,7 @@ import net.minecraft.tileentity.TileEntityBeacon;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IBlockAccess;
 import wdl.handler.HandlerException;
 
 public class BeaconHandler extends BlockHandler<TileEntityBeacon, ContainerBeacon> {
@@ -31,10 +31,10 @@ public class BeaconHandler extends BlockHandler<TileEntityBeacon, ContainerBeaco
 
 	@Override
 	public ITextComponent handle(BlockPos clickedPos, ContainerBeacon container,
-			TileEntityBeacon blockEntity, IBlockReader world,
+			TileEntityBeacon blockEntity, IBlockAccess world,
 			BiConsumer<BlockPos, TileEntityBeacon> saveMethod) throws HandlerException {
 		// NOTE: beacons do not have custom names, see https://bugs.mojang.com/browse/MC-124395
-		IInventory beaconInventory = container.getBeaconInventory();
+		IInventory beaconInventory = container.getTileEntity();
 		saveContainerItems(container, blockEntity, 0);
 		saveInventoryFields(beaconInventory, blockEntity);
 		saveMethod.accept(clickedPos, blockEntity);

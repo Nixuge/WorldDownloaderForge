@@ -23,7 +23,7 @@ import net.minecraft.tileentity.TileEntityBrewingStand;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IBlockAccess;
 import wdl.ReflectionUtils;
 import wdl.handler.HandlerException;
 
@@ -34,7 +34,7 @@ public class BrewingStandHandler extends BlockHandler<TileEntityBrewingStand, Co
 
 	@Override
 	public ITextComponent handle(BlockPos clickedPos, ContainerBrewingStand container,
-			TileEntityBrewingStand blockEntity, IBlockReader world,
+			TileEntityBrewingStand blockEntity, IBlockAccess world,
 			BiConsumer<BlockPos, TileEntityBrewingStand> saveMethod) throws HandlerException {
 		IInventory brewingInventory = ReflectionUtils.findAndGetPrivateField(
 				container, IInventory.class);
@@ -42,7 +42,7 @@ public class BrewingStandHandler extends BlockHandler<TileEntityBrewingStand, Co
 		saveContainerItems(container, blockEntity, 0);
 		saveInventoryFields(brewingInventory, blockEntity);
 		if (title != null) {
-			blockEntity.setCustomName(customName(title));
+			blockEntity.setName(customName(title));
 		}
 		saveMethod.accept(clickedPos, blockEntity);
 		return new TextComponentTranslation("wdl.messages.onGuiClosedInfo.savedTileEntity.brewingStand");

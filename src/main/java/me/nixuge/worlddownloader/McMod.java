@@ -1,6 +1,7 @@
 package me.nixuge.worlddownloader;
 
 import net.minecraftforge.fml.common.Mod;
+import wdl.VersionConstants;
 
 import java.io.File;
 

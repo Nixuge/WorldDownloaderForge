@@ -11,7 +11,7 @@
  *
  * Do not redistribute (in modified or unmodified form) without prior permission.
  */
-package me.nixuge.worlddownloader;
+package wdl;
 
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.Minecraft;

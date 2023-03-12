@@ -23,7 +23,7 @@ import net.minecraft.tileentity.TileEntityFurnace;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IBlockAccess;
 import wdl.ReflectionUtils;
 import wdl.handler.HandlerException;
 
@@ -34,7 +34,7 @@ public class FurnaceHandler extends BlockHandler<TileEntityFurnace, ContainerFur
 
 	@Override
 	public ITextComponent handle(BlockPos clickedPos, ContainerFurnace container,
-			TileEntityFurnace blockEntity, IBlockReader world,
+			TileEntityFurnace blockEntity, IBlockAccess world,
 			BiConsumer<BlockPos, TileEntityFurnace> saveMethod) throws HandlerException {
 		IInventory furnaceInventory = ReflectionUtils.findAndGetPrivateField(
 				container, IInventory.class);
@@ -42,7 +42,7 @@ public class FurnaceHandler extends BlockHandler<TileEntityFurnace, ContainerFur
 		saveContainerItems(container, blockEntity, 0);
 		saveInventoryFields(furnaceInventory, blockEntity);
 		if (title != null) {
-			blockEntity.setCustomName(customName(title));
+			blockEntity.setCustomInventoryName(customName(title));
 		}
 		saveMethod.accept(clickedPos, blockEntity);
 		return new TextComponentTranslation("wdl.messages.onGuiClosedInfo.savedTileEntity.furnace");

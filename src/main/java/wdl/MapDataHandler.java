@@ -29,12 +29,12 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.network.play.server.SPacketMaps;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.math.Vec4b;
 import net.minecraft.util.text.ITextComponent;
 import net.minecraft.util.text.TextComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.DimensionType;
 import net.minecraft.world.storage.MapData;
-import net.minecraft.world.storage.MapDecoration;
 import wdl.versioned.VersionedFunctions;
 
 /**
@@ -66,7 +66,7 @@ public final class MapDataHandler {
 	/**
 	 * Various map decoration values.
 	 *
-	 * Note that we can't use the enum in MapDecoration because it didn't exist
+	 * Note that we can't use the enum in Vec4b because it didn't exist
 	 * in 1.9.
 	 */
 	@VisibleForTesting
@@ -91,7 +91,7 @@ public final class MapDataHandler {
 	 */
 	public static MapDataResult repairMapData(int mapID, @Nonnull MapData mapData, @Nonnull EntityPlayer player) {
 		MapDataResult result = checkPlayerHasMap(mapID, mapData, player);
-		if (result == null) result = checkFrameHasMap(mapID, mapData, player.world);
+		if (result == null) result = checkFrameHasMap(mapID, mapData, player.worldObj);
 		if (result == null) result = new MapDataResult(mapData, null, null);
 
 		result.fixDimension();
@@ -104,14 +104,14 @@ public final class MapDataHandler {
 	private static MapDataResult checkPlayerHasMap(int mapID, MapData mapData, EntityPlayer player) {
 		// If there's only one decoration, and our player has the map in their inventory,
 		// assume that the icon is our player (which might not be the case all the time)
-		List<MapDecoration> playerDecorations = mapData.mapDecorations.values().stream()
-				.filter(dec -> dec.getImage() == DECORATION_PLAYER)
+		List<Vec4b> playerDecorations = mapData.mapDecorations.values().stream()
+				.filter(dec -> dec.getType() == DECORATION_PLAYER)
 				.collect(Collectors.toList());
 
 		if (playerDecorations.size() != 1) {
 			return null;
 		}
-		MapDecoration playerDecoration = playerDecorations.get(0);
+		Vec4b playerDecoration = playerDecorations.get(0);
 
 		boolean mapInInventory = false;
 		// Note: mainInventory does NOT contain the offhand or armor
@@ -133,8 +133,8 @@ public final class MapDataHandler {
 
 	@Nullable
 	private static MapDataResult checkFrameHasMap(int mapID, MapData mapData, World world) {
-		List<MapDecoration> frameDecorations = mapData.mapDecorations.values().stream()
-				.filter(dec -> dec.getImage() == DECORATION_ITEM_FRAME)
+		List<Vec4b> frameDecorations = mapData.mapDecorations.values().stream()
+				.filter(dec -> dec.getType() == DECORATION_ITEM_FRAME)
 				.collect(Collectors.toList());
 		if (frameDecorations.isEmpty()) {
 			// No frames on the map?  No reason to look for any frames in the world.
@@ -166,7 +166,7 @@ public final class MapDataHandler {
 			// Now we'd check if there's a frame icon at that position.
 			// Could be ambiguous...  There could also be multiple possibilities...
 			// Probably should check whether other icons still make sense in this case.
-			for (MapDecoration decoration : frameDecorations) {
+			for (Vec4b decoration : frameDecorations) {
 				if (decoration.getX() == iconX && decoration.getY() == iconZ) {
 					return new MapDataResult(mapData, frame, decoration);
 				}
@@ -250,7 +250,7 @@ public final class MapDataHandler {
 	}
 
 	public static class MapDataResult {
-		MapDataResult(MapData map, @Nullable Entity confirmedOwner, @Nullable MapDecoration decoration) {
+		MapDataResult(MapData map, @Nullable Entity confirmedOwner, @Nullable Vec4b decoration) {
 			this.map = map;
 			this.confirmedOwner = confirmedOwner;
 			this.decoration = decoration;
@@ -268,7 +268,7 @@ public final class MapDataHandler {
 		 * The decoration associated with the owner.
 		 */
 		@Nullable
-		public final MapDecoration decoration;
+		public final Vec4b decoration;
 		/**
 		 * True if the x and z center values were successfully computed.
 		 */
@@ -293,7 +293,7 @@ public final class MapDataHandler {
 		 */
 		void fixDimension() {
 			if (confirmedOwner != null) {
-				assert confirmedOwner.world != null;
+				assert confirmedOwner.worldObj != null;
 				DimensionType dim = confirmedOwner.worldObj.provider.getDimensionType();
 				assert dim != null;
 				VersionedFunctions.setMapDimension(map, dim);

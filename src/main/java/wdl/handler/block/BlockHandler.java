@@ -25,7 +25,7 @@ import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IBlockAccess;
 import wdl.ducks.INetworkNameable;
 import wdl.handler.BaseHandler;
 import wdl.handler.HandlerException;
@@ -92,7 +92,7 @@ public abstract class BlockHandler<B extends TileEntity, C extends Container> ex
 	 *             If container or blockEntity are not instances of the handled class.
 	 */
 	public final ITextComponent handleCasting(BlockPos clickedPos, Container container,
-			TileEntity blockEntity, IBlockReader world,
+			TileEntity blockEntity, IBlockAccess world,
 			BiConsumer<BlockPos, B> saveMethod) throws HandlerException, ClassCastException {
 		B b = blockEntityClass.cast(blockEntity);
 		C c = containerClass.cast(container);
@@ -118,7 +118,7 @@ public abstract class BlockHandler<B extends TileEntity, C extends Container> ex
 	 *             When something is handled wrong.
 	 */
 	public abstract ITextComponent handle(BlockPos clickedPos, C container,
-			B blockEntity, IBlockReader world,
+			B blockEntity, IBlockAccess world,
 			BiConsumer<BlockPos, B> saveMethod) throws HandlerException;
 
 	/**
@@ -157,7 +157,7 @@ public abstract class BlockHandler<B extends TileEntity, C extends Container> ex
 		}
 		// Fallback, will fail for situations where the custom name
 		// is the vanilla name
-		String name = inventory.getDisplayName().getString();
+		String name = inventory.getDisplayName().getFormattedText();
 		for (String key : defaultNames) {
 			if (I18n.format(key).equals(name)) {
 				return null;

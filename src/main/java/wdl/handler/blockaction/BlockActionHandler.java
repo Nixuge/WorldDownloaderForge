@@ -22,7 +22,7 @@ import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.math.BlockPos;
 import net.minecraft.util.text.ITextComponent;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IBlockAccess;
 import wdl.handler.BaseHandler;
 import wdl.handler.HandlerException;
 import wdl.versioned.VersionedFunctions;
@@ -84,7 +84,7 @@ public abstract class BlockActionHandler<B extends Block, E extends TileEntity> 
 	 *             If block or blockEntity are not instances of the handled class.
 	 */
 	public final ITextComponent handleCasting(BlockPos pos, Block block,
-			TileEntity blockEntity, int data1, int data2, IBlockReader world,
+			TileEntity blockEntity, int data1, int data2, IBlockAccess world,
 			BiConsumer<BlockPos, E> saveMethod) throws HandlerException, ClassCastException {
 		B b = blockClass.cast(block);
 		E e = blockEntityClass.cast(blockEntity);
@@ -113,7 +113,7 @@ public abstract class BlockActionHandler<B extends Block, E extends TileEntity> 
 	 *             When something is handled wrong.
 	 */
 	public abstract ITextComponent handle(BlockPos pos, B block,
-			E blockEntity, int data1, int data2, IBlockReader world,
+			E blockEntity, int data1, int data2, IBlockAccess world,
 			BiConsumer<BlockPos, E> saveMethod) throws HandlerException;
 
 	/**

@@ -38,11 +38,12 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.util.math.BlockPos;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.storage.SaveHandler;
 import wdl.handler.block.BeaconHandler;
-import wdl.handler.block.BlockHandler;
+// import wdl.handler.block.BlockHandler;
 import wdl.handler.block.BrewingStandHandler;
 import wdl.handler.block.ChestHandler;
 import wdl.handler.block.DispenserHandler;
@@ -65,13 +66,14 @@ final class HandlerFunctions {
 	 */
 	static boolean hasSkyLight(World world) {
 		// 1.10-: use isNether (hasNoSky)
-		return !world.dimension.isNether();
+		return !world.provider.getDimensionType().equals(DimensionType.NETHER);
 	}
 
 	/* (non-javadoc)
 	 * @see VersionedFunctions#BLOCK_HANDLERS
 	 */
-	static final ImmutableList<BlockHandler<?, ?>> BLOCK_HANDLERS = ImmutableList.of(
+	// ImmutableList<BlockHandler<?, ?>>
+	static final ImmutableList<Object> BLOCK_HANDLERS = ImmutableList.of(
 			new BeaconHandler(),
 			new BrewingStandHandler(),
 			new ChestHandler(),

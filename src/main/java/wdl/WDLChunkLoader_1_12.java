@@ -23,7 +23,6 @@ import net.minecraft.world.MinecraftException;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import me.nixuge.worlddownloader.VersionConstants;
 import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;

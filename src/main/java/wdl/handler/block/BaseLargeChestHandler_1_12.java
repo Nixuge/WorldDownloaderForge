@@ -23,7 +23,7 @@ import net.minecraft.inventory.ContainerChest;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
 import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.IBlockReader;
+import net.minecraft.world.IBlockAccess;
 import wdl.WDLMessageTypes;
 import wdl.handler.HandlerException;
 
@@ -55,7 +55,7 @@ abstract class BaseLargeChestHandler<B extends TileEntityChest> extends BlockHan
 	 * @throws HandlerException As per {@link #handle}
 	 */
 	protected void saveDoubleChest(BlockPos clickedPos, ContainerChest container,
-			B blockEntity, IBlockReader world,
+			B blockEntity, IBlockAccess world,
 			BiConsumer<BlockPos, B> saveMethod,
 			@Nullable String displayName) throws HandlerException {
 		// This is messy, but it needs to be like this because

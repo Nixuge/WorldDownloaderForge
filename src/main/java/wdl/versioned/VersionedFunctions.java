@@ -42,7 +42,7 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.nbt.INBTBase;
+import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
@@ -60,7 +60,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.biome.Biome;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
-import net.minecraft.world.dimension.DimensionType;
+import net.minecraft.world.DimensionType;
 import net.minecraft.world.storage.MapData;
 import net.minecraft.world.storage.SaveHandler;
 import wdl.config.settings.GeneratorSettings.Generator;
@@ -166,7 +166,7 @@ public final class VersionedFunctions {
 	 * @param tag The tag to use
 	 * @return The string version.
 	 */
-	public static String nbtString(INBTBase tag) {
+	public static String nbtString(NBTBase tag) {
 		return NBTFunctions.nbtString(tag);
 	}
 
@@ -430,7 +430,7 @@ public final class VersionedFunctions {
 	 * @param generatorOptions The content.  Either a string or an SNBT representation of the data.
 	 * @return An NBT tag of some type.
 	 */
-	public static INBTBase createGeneratorOptionsTag(String generatorOptions) {
+	public static NBTBase createGeneratorOptionsTag(String generatorOptions) {
 		return GeneratorFunctions.createGeneratorOptionsTag(generatorOptions);
 	}
 
