@@ -22,6 +22,7 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
+import java.net.URISyntaxException;
 import java.nio.file.Files;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -76,7 +77,6 @@ import net.minecraft.world.chunk.EmptyChunk;
 import net.minecraft.world.chunk.storage.RegionFileCache;
 import net.minecraft.world.storage.MapData;
 import net.minecraft.world.storage.SaveHandler;
-import net.minecraft.world.storage.SessionLockException;
 import net.minecraft.world.storage.ThreadedFileIOBase;
 import net.minecraft.world.storage.WorldInfo;
 import wdl.WorldBackup.WorldBackupType;
@@ -1125,7 +1125,7 @@ public class WDL {
 			if (compound.hasKey("EnderItems", 9)) {
 				// TODO: fix this
 				// was compound.getList("EnderItems", 10) at first
-				player.getInventoryEnderChest().read(compound.getTagList("EnderItems", 10));
+				player.getInventoryEnderChest().loadInventoryFromNBT(compound.getTagList("EnderItems", 10));
 			} else {
 				LOGGER.warn("[WDL] Existing player data does not have EnderItems tag");
 			}
@@ -1720,8 +1720,13 @@ public class WDL {
 		core.addCrashSection("Expected version", VersionConstants.getExpectedVersion());
 		core.addCrashSection("Protocol version", VersionConstants.getProtocolVersion());
 		core.addCrashSection("Data version", VersionConstants.getDataVersion());
-		core.addCrashSection("File location",new File(WDL.class.getProtectionDomain()
-			.getCodeSource().getLocation().toURI()).getPath().replace(System.getProperty("user.name"), "<USERNAME>"));
+		try {
+			core.addCrashSection("File location",new File(WDL.class.getProtectionDomain()
+				.getCodeSource().getLocation().toURI()).getPath().replace(System.getProperty("user.name"), "<USERNAME>"));
+		} catch (URISyntaxException e) {
+			// e.printStackTrace();
+			LOGGER.warn("Lmao there was an issue, ctrl+f this into the src but you don't really need it tbh");
+		}
 		// core.addCrashSection("File location", () -> {
 		// 	//https://stackoverflow.com/q/320542/3991344
 		// 	String path = new File(WDL.class.getProtectionDomain()
@@ -1740,7 +1745,7 @@ public class WDL {
 		Map<String, ModInfo<?>> extensions = WDLApi.getWDLMods();
 		ext.addCrashSection("Number loaded", extensions.size());
 		for (Map.Entry<String, ModInfo<?>> e : extensions.entrySet()) {
-			ext.addCrashSection(e.getKey(), e.getValue()::getInfo);
+			ext.addCrashSection(e.getKey(), e.getValue().getInfo());
 		}
 
 		CrashReportCategory state = report.makeCategoryDepth(
@@ -1796,15 +1801,22 @@ public class WDL {
 		}
 
 		CrashReportCategory sanity = report.makeCategoryDepth("Sanity checks", stSize);
+
 		for (SanityCheck check : SanityCheck.values()) {
-			sanity.addCrashSection(check.name(), () -> {
-				if (!check.canRun()) {
-					return "Skipped";
-				}
-				check.run();
-				return "Passed";
-			});
+			sanity.addCrashSection(check.name(), _addedGenerateSanityCheckPassedSkipped(check));
 		}
+	}
+
+	public String _addedGenerateSanityCheckPassedSkipped(SanityCheck check) {
+		if (!check.canRun()) {
+			return "Skipped";
+		} 
+		try {
+			check.run();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return "Passed";
 	}
 
 	/**

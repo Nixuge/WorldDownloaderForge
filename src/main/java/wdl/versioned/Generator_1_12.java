@@ -78,8 +78,8 @@ final class GeneratorFunctions {
 		}
 
 		@Override
-		public void init() {
-			minecraft.displayGuiScreen(parent);
+		public void initGui() {
+			this.mc.displayGuiScreen(parent);
 		}
 
 		@Override
@@ -88,7 +88,7 @@ final class GeneratorFunctions {
 		}
 
 		@Override
-		public void render(int mouseX, int mouseY, float partialTicks) {
+		public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 			// Do nothing
 		}
 
@@ -129,9 +129,9 @@ final class GeneratorFunctions {
 		}
 
 		@Override
-		public void init() {
+		public void initGui() {
 			callback.accept(this.chunkProviderSettingsJson);
-			minecraft.displayGuiScreen(this.parent);
+			this.mc.displayGuiScreen(this.parent);
 		}
 
 		@Override
@@ -140,7 +140,7 @@ final class GeneratorFunctions {
 		}
 
 		@Override
-		public void render(int mouseX, int mouseY, float partialTicks) {
+		public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 			// Do nothing
 		}
 	}
@@ -167,8 +167,8 @@ final class GeneratorFunctions {
 	static {
 		// Make sure that the void biome exists
 		// (this check partially exists so that this class will not compile in versions without it)
-		if (Biome.func_185362_a(Biomes.THE_VOID) != 127) {
-			LOGGER.warn("[WDL] Mismatched ID for void biome: " + Biomes.THE_VOID + " = " + Biome.func_185362_a(Biomes.THE_VOID));
+		if (Biome.getIdForBiome(Biomes.VOID) != 127) {
+			LOGGER.warn("[WDL] Mismatched ID for void biome: " + Biomes.VOID + " = " + Biome.getIdForBiome(Biomes.VOID));
 		}
 	}
 

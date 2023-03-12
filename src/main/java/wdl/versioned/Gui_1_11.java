@@ -44,7 +44,7 @@ final class GuiFunctions {
 	 */
 	static EntityPlayerSP makePlayer(Minecraft minecraft, World world, NetHandlerPlayClient nhpc, EntityPlayerSP base) {
 		return new EntityPlayerSP(minecraft, world, nhpc,
-				base.getStats());
+				base.getStatFileWriter());
 	}
 
 	/* (non-javadoc)
@@ -57,8 +57,10 @@ final class GuiFunctions {
 		Tessellator t = Tessellator.getInstance();
 		VertexBuffer b = t.getBuffer();
 
-		Minecraft.getInstance().getTextureManager().bindTexture(Gui.BACKGROUND_LOCATION);
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		// Minecraft.getMinecraft().getTextureManager().bindTexture(Gui.BACKGROUND_LOCATION);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(Gui.OPTIONS_BACKGROUND);
+		// GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		float textureSize = 32.0F;
 		b.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
@@ -79,11 +81,14 @@ final class GuiFunctions {
 	static void drawBorder(int topMargin, int bottomMargin, int top, int left, int bottom, int right) {
 		GlStateManager.disableLighting();
 		GlStateManager.disableFog();
-		GlStateManager.disableDepthTest();
+		// GlStateManager.disableDepthTest();
+		GlStateManager.disableDepth();
 		byte padding = 4;
 
-		Minecraft.getInstance().getTextureManager().bindTexture(Gui.BACKGROUND_LOCATION);
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		// Minecraft.getMinecraft().getTextureManager().bindTexture(Gui.BACKGROUND_LOCATION);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(Gui.OPTIONS_BACKGROUND);
+		// GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		float textureSize = 32.0F;
 
@@ -94,7 +99,8 @@ final class GuiFunctions {
 		//Upper box
 		int upperBoxEnd = top + topMargin;
 
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		// GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		b.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
 		b.pos(left, upperBoxEnd, 0.0D).tex(0.0D, upperBoxEnd
 				/ textureSize).color(64, 64, 64, 255).endVertex();
@@ -109,7 +115,8 @@ final class GuiFunctions {
 		// Lower box
 		int lowerBoxStart = bottom - bottomMargin;
 
-		GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		// GlStateManager.color4f(1.0F, 1.0F, 1.0F, 1.0F);
+		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 		b.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
 		b.pos(left, bottom, 0.0D).tex(0.0D, bottom / textureSize)
 		.color(64, 64, 64, 255).endVertex();
@@ -123,12 +130,18 @@ final class GuiFunctions {
 		t.draw();
 
 		//Gradients
+		// GlStateManager.enableBlend();
+		// GlStateManager.blendFuncSeparate(GL_SRC_ALPHA,
+		// 		GL_ONE_MINUS_SRC_ALPHA, 0, 1);
+		// GlStateManager.disableAlphaTest();
+		// GlStateManager.shadeModel(GL_SMOOTH);
+		// GlStateManager.disableTexture();
 		GlStateManager.enableBlend();
-		GlStateManager.blendFuncSeparate(GL_SRC_ALPHA,
-				GL_ONE_MINUS_SRC_ALPHA, 0, 1);
-		GlStateManager.disableAlphaTest();
+		GlStateManager.blendFunc(GL_SRC_ALPHA,
+				GL_ONE_MINUS_SRC_ALPHA);
+		GlStateManager.disableAlpha();
 		GlStateManager.shadeModel(GL_SMOOTH);
-		GlStateManager.disableTexture();
+		GlStateManager.disableTexture2D();
 		b.begin(7, DefaultVertexFormats.POSITION_TEX_COLOR);
 		b.pos(left, upperBoxEnd + padding, 0.0D).tex(0.0D, 1.0D)
 		.color(0, 0, 0, 0).endVertex();
@@ -150,9 +163,13 @@ final class GuiFunctions {
 		.color(0, 0, 0, 0).endVertex();
 		t.draw();
 
-		GlStateManager.enableTexture();
+		// GlStateManager.enableTexture();
+		// GlStateManager.shadeModel(GL_FLAT);
+		// GlStateManager.enableAlphaTest();
+		// GlStateManager.disableBlend();
+		GlStateManager.enableTexture2D();
 		GlStateManager.shadeModel(GL_FLAT);
-		GlStateManager.enableAlphaTest();
+		GlStateManager.enableAlpha();
 		GlStateManager.disableBlend();
 	}
 

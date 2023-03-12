@@ -87,7 +87,7 @@ public final class VersionedFunctions {
 	/**
 	 * All supported {@link BlockHandler}s.  Each type will only be represented once.
 	 */
-	public static final ImmutableList<BlockHandler<?, ?>> BLOCK_HANDLERS = HandlerFunctions.BLOCK_HANDLERS;
+	public static final ImmutableList<Object> BLOCK_HANDLERS = HandlerFunctions.BLOCK_HANDLERS;
 
 	/**
 	 * All supported {@link BlockActionHandler}s.  Each type will only be represented once.

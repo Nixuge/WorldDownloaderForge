@@ -177,7 +177,10 @@ public abstract class BlockHandler<B extends TileEntity, C extends Container> ex
 	@SuppressWarnings("unchecked")
 	@Nullable
 	public static <B extends TileEntity, C extends Container> BlockHandler<B, C> getHandler(Class<B> blockEntityClass, Class<C> containerClass) {
-		for (BlockHandler<?, ?> h : VersionedFunctions.BLOCK_HANDLERS) {
+		for (Object hObj : VersionedFunctions.BLOCK_HANDLERS) {
+			//TODO: ABSOLUTELY UNSURE ABOUT THAT
+			// VSCODE NOT THROWING ERRORS BUT TO CHECK!!!
+			BlockHandler<?, ?> h = (BlockHandler<?, ?>)hObj;
 			if (h.getBlockEntityClass().equals(blockEntityClass) &&
 					h.getContainerClass().equals(containerClass)) {
 				return (BlockHandler<B, C>)h;
