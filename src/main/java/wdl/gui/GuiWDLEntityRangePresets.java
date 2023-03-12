@@ -20,7 +20,6 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiYesNo;
-import net.minecraft.client.gui.GuiYesNoCallback;
 import net.minecraft.client.resources.I18n;
 import wdl.EntityUtils;
 import wdl.EntityUtils.SpigotEntityType;
@@ -34,7 +33,7 @@ import wdl.gui.widget.WDLScreen;
 /**
  * Provides fast setting for various entity options.
  */
-public class GuiWDLEntityRangePresets extends WDLScreen implements GuiYesNoCallback {
+public class GuiWDLEntityRangePresets extends WDLScreen {
 	@Nullable
 	private final GuiScreen parent;
 	private final WDL wdl;

@@ -412,7 +412,7 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 
 					// TODO: add toggle for that
 					entityData.setBoolean("NoAI", true);
-					
+
 					chunk.setHasEntities(true);
 					entityList.appendTag(entityData);
 				}
@@ -541,11 +541,11 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 			} else if (oldTEMap.containsKey(pos)) {
 				NBTTagCompound compound = oldTEMap.get(pos);
 				String entityType = compound.getString("id");
-				//TODO: READD
-				// WDLMessages.chatMessageTranslated(
-				// 		WDL.serverProps,
-				// 		WDLMessageTypes.LOAD_TILE_ENTITY,
-				// 		"wdl.messages.tileEntity.usingOld", entityType, pos);
+
+				WDLMessages.chatMessageTranslated(
+						WDL.serverProps,
+						WDLMessageTypes.LOAD_TILE_ENTITY,
+						"wdl.messages.tileEntity.usingOld", entityType, pos);
 
 				editTileEntity(pos, compound, TileEntityCreationMode.IMPORTED);
 
@@ -628,11 +628,11 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 						// Even if this tile entity is saved in another way
 						// later, we still want the player to know we did not
 						// import something in that chunk.
-						//TODO: READD
-						// WDLMessages.chatMessageTranslated(
-						// 		WDL.serverProps,
-						// 		WDLMessageTypes.LOAD_TILE_ENTITY,
-						// 		"wdl.messages.tileEntity.notImporting", entityID, pos);
+
+						WDLMessages.chatMessageTranslated(
+								WDL.serverProps,
+								WDLMessageTypes.LOAD_TILE_ENTITY,
+								"wdl.messages.tileEntity.notImporting", entityID, pos);
 					}
 				}
 			}
