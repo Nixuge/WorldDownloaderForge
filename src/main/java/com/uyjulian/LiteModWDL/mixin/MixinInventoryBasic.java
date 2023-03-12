@@ -28,7 +28,7 @@ import wdl.ducks.INetworkNameable;
 
 @Mixin(InventoryBasic.class)
 public abstract class MixinInventoryBasic implements INetworkNameable {
-	@Inject(method = "<init>(Lnet/minecraft/util/text/IChatComponent;I)V", at = @At("RETURN"))
+	@Inject(method = "<init>(Lnet/minecraft/util/IChatComponent;I)V", at = @At("RETURN"))
 	private void onConstructed(IChatComponent title, int slotCount, CallbackInfo ci) {
 		if (title instanceof ChatComponentText) {
 //			this.networkCustomName = title.getString();

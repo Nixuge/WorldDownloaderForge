@@ -900,7 +900,7 @@ public class WDL {
 		// Dirty af but should work
 		Object object = worldClient.getChunkProvider();
 		Class<?> typeOfObject = ChunkProviderClient.class;
-		Class<?> typeOfField = ArrayList.class;
+		Class<?> typeOfField = List.class;
 		Object obj;
 		try {
 			Field f = ReflectionUtils.findField(typeOfObject, typeOfField);
@@ -912,21 +912,24 @@ public class WDL {
 							+ "\" !", e);
 		}
 
-		ReflectionUtils.findAndGetPrivateField(null, null, null);
 
 		List<Chunk> chunks;
 		if (obj instanceof List<?>) {
 			@SuppressWarnings("unchecked")
 			List<Chunk> chunkList = (List<Chunk>)obj;
 			chunks = new ArrayList<>(chunkList);
+			System.out.println("chunks is a list!");
 		} else if (obj instanceof Map<?, ?>) {
 			@SuppressWarnings("unchecked")
 			Map<?, Chunk> chunkMap = (Map<?, Chunk>)obj;
 			chunks = new ArrayList<>(chunkMap.values());
+			System.out.println("chunks is a map!");
 		} else {
 			// Shouldn't ever happen
 			throw new RuntimeException("Could not get ChunkProviderClient's chunk list: unexpected type for object " + obj);
 		}
+		System.out.println("chunkssize: " + chunks.size());
+		// System.out.println(chunks);
 		return chunks;
 	}
 
@@ -952,9 +955,9 @@ public class WDL {
 			Chunk c = chunks.get(currentChunk);
 			if (c != null) {
 				//Serverside restrictions check
-				if (!WDLPluginChannels.canSaveChunk(c)) {
-					continue;
-				}
+				// if (!WDLPluginChannels.canSaveChunk(c)) {
+				// 	continue;
+				// }
 
 				progressScreen.setMinorTaskProgress(I18n.format(
 						"wdl.saveProgress.chunk.saving", c.getChunkCoordIntPair().chunkXPos,
@@ -974,11 +977,11 @@ public class WDL {
 		if (!WDLPluginChannels.canDownloadAtAll()) { return; }
 
 		if (!WDLPluginChannels.canSaveChunk(c)) { return; }
-
+		
 		try {
 			savedChunks.add(c.getChunkCoordIntPair());
 			if (isEmpty(c)) {
-				//LOGGER.warn("[WDL] Tried to save empty chunk! (" + c + "@" + c.getChunkCoordIntPair().chunkXPos + "," + c.getChunkCoordIntPair().chunkZPos + ")");
+				LOGGER.warn("[WDL] Tried to save empty chunk! (" + c + "@" + c.getChunkCoordIntPair().chunkXPos + "," + c.getChunkCoordIntPair().chunkZPos + ")");
 				return;
 			}
 			chunkLoader.saveChunk(worldClient, c);

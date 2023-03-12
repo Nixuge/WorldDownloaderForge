@@ -15,6 +15,7 @@ package wdl;
 
 import java.io.DataInputStream;
 import java.io.File;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -48,6 +49,15 @@ import wdl.api.ITileEntityImportationIdentifier;
 import wdl.api.WDLApi;
 import wdl.api.WDLApi.ModInfo;
 import wdl.versioned.VersionedFunctions;
+import java.io.IOException;
+import net.minecraft.world.MinecraftException;
+import net.minecraft.util.ResourceLocation;
+import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.world.NextTickListEntry;
+import net.minecraft.world.World;
+import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
+import net.minecraft.world.chunk.NibbleArray;
+import wdl.config.settings.MiscSettings;
 
 /**
  * Alternative implementation of {@link AnvilChunkLoader} that handles editing
@@ -56,24 +66,291 @@ import wdl.versioned.VersionedFunctions;
  * Extends the class in either WDLChunkLoader12.java or WDLChunkLoader13.java,
  * depending on the Minecraft version.
  */
-public class WDLChunkLoader extends WDLChunkLoaderBase {
+public class WDLChunkLoader extends AnvilChunkLoader {
 	private static final Logger LOGGER = LogManager.getLogger();
+
+	/**
+	 * Gets the save folder for the given WorldProvider, respecting Forge's
+	 * dimension names if forge is present.
+	 */
+	protected static File getWorldSaveFolder(SaveHandler handler,
+			WorldProvider dimension) {
+		File baseFolder = handler.getWorldDirectory();
+
+		if (WDL.serverProps.getValue(MiscSettings.FORCE_DIMENSION_TO_OVERWORLD)) {
+			return baseFolder;
+		}
+
+		// Based off of AnvilSaveHandler.getChunkLoader, but also accounts
+		// for forge changes.
+		try {
+			// See forge changes here:
+			// https://github.com/MinecraftForge/MinecraftForge/blob/250a77b35936e7ac68006dfd28a9e93c6def9128/patches/minecraft/net/minecraft/world/WorldProvider.java.patch#L85-L93
+			// https://github.com/MinecraftForge/MinecraftForge/blob/250a77b35936e7ac68006dfd28a9e93c6def9128/patches/minecraft/net/minecraft/world/chunk/storage/AnvilSaveHandler.java.patch
+			Method forgeGetSaveFolderMethod = dimension.getClass().getMethod(
+					"getSaveFolder");
+
+			String name = (String) forgeGetSaveFolderMethod.invoke(dimension);
+			if (name != null) {
+				File file = new File(baseFolder, name);
+				file.mkdirs();
+				return file;
+			}
+			return baseFolder;
+		} catch (Exception e) {
+			// Not a forge setup - emulate the vanilla method in
+			// AnvilSaveHandler.getChunkLoader.
+			// TODO: not sure if this is right
+			if (dimension.getDimensionId() == -1) { // Nether
+				File file = new File(baseFolder, "DIM-1");
+				file.mkdirs();
+				return file;
+			} else if (dimension.getDimensionId() == 1) { // The end
+				File file = new File(baseFolder, "DIM1");
+				file.mkdirs();
+				return file;
+			}
+
+			return baseFolder;
+		}
+	}
+
+	protected final WDL wdl;
+	protected final Map<ChunkCoordIntPair, NBTTagCompound> chunksToSave;
+	/**
+	 * Location where chunks are saved.
+	 *
+	 * In this version, this directly is parent to the region folder for the given dimension;
+	 * in the overworld it is simply world and for other dimensions it is world/DIM#.
+	 */
+	protected final File chunkSaveLocation;
+
+	protected WDLChunkLoader(WDL wdl, File file) {
+		super(file);
+		this.wdl = wdl;
+		@SuppressWarnings("unchecked")
+		Map<ChunkCoordIntPair, NBTTagCompound> chunksToSave =
+				ReflectionUtils.findAndGetPrivateField(this, AnvilChunkLoader.class, VersionedFunctions.getChunksToSaveClass());
+		this.chunksToSave = chunksToSave;
+		this.chunkSaveLocation = file;
+	}
+
+
+	/**
+	 * Saves the given chunk.
+	 *
+	 * Note that while the normal implementation swallows Exceptions, this
+	 * version does not.
+	 */
+	@Override
+	public void saveChunk(World world, Chunk chunk) throws IOException, MinecraftException {
+		// TODO: work this out actually bc i think it's broken rn
+		wdl.saveHandler.checkSessionLock();
+		
+		NBTTagCompound levelTag = writeChunkToNBT(chunk, world);
+
+		NBTTagCompound rootTag = new NBTTagCompound();
+		rootTag.setTag("Level", levelTag);
+		rootTag.setInteger("DataVersion", VersionConstants.getDataVersion());
+
+		addChunkToPending(chunk.getChunkCoordIntPair(), rootTag);
+
+		// wdl.unloadChunk(chunk.getChunkCoordIntPair());
+	}
+
+	/**
+	 * Writes the given chunk, creating an NBT compound tag.
+	 *
+	 * Note that this does <b>not</b> override the private method
+	 * {@link AnvilChunkLoader#writeChunkToNBT(Chunk, World, NBTCompoundTag)}.
+	 * That method is private and cannot be overridden; plus, this version
+	 * returns a tag rather than modifying the one passed as an argument.
+	 *
+	 * @param chunk
+	 *            The chunk to write
+	 * @param world
+	 *            The world the chunk is in, used to determine the modified
+	 *            time.
+	 * @return A new NBTTagCompound
+	 */
+	private NBTTagCompound writeChunkToNBT(Chunk chunk, World world) {
+		NBTTagCompound compound = new NBTTagCompound();
+		
+		compound.setByte("V", (byte) 1);
+		compound.setInteger("xPos", chunk.getChunkCoordIntPair().chunkXPos);
+		compound.setInteger("zPos", chunk.getChunkCoordIntPair().chunkZPos);
+		compound.setLong("LastUpdate", world.getWorldTime());
+		compound.setIntArray("HeightMap", chunk.getHeightMap());
+		compound.setBoolean("TerrainPopulated", true);  // We always want this
+		compound.setBoolean("LightPopulated", chunk.isLightPopulated());
+		compound.setLong("InhabitedTime", chunk.getInhabitedTime());
+		
+		ExtendedBlockStorage[] chunkSections = chunk.getBlockStorageArray();
+		NBTTagList chunkSectionList = new NBTTagList();
+		boolean hasSky = VersionedFunctions.hasSkyLight(world);
+		
+		for (ExtendedBlockStorage blockStorage : chunkSections) {
+			// Part ripped from the 1.8.9a WorldDownloader, which only handles actually writing the blocks
+			if (blockStorage != null) {
+				NBTTagCompound blockData = new NBTTagCompound();
+				blockData.setByte("Y",
+						(byte) (blockStorage.getYLocation() >> 4 & 255));
+				byte[] var12 = new byte[blockStorage.getData().length];
+				NibbleArray var13 = new NibbleArray();
+				NibbleArray var14 = null;
+
+				for (int var15 = 0; var15 < blockStorage.getData().length; ++var15) {
+					char var16 = blockStorage.getData()[var15];
+					int var17 = var15 & 15;
+					int var18 = var15 >> 8 & 15;
+					int var19 = var15 >> 4 & 15;
+
+					if (var16 >> 12 != 0) {
+						if (var14 == null) {
+							var14 = new NibbleArray();
+						}
+
+						var14.set(var17, var18, var19, var16 >> 12);
+					}
+
+					var12[var15] = (byte) (var16 >> 4 & 255);
+					var13.set(var17, var18, var19, var16 & 15);
+				}
+
+				blockData.setByteArray("Blocks", var12);
+				blockData.setByteArray("Data", var13.getData());
+
+				if (var14 != null) {
+					blockData.setByteArray("Add", var14.getData());
+				}
+
+				blockData.setByteArray("BlockLight", blockStorage
+						.getBlocklightArray().getData());
+
+				// End of part ripped from the 1.8.9a WorldDownloader
+				NibbleArray blocklightArray = blockStorage.getBlocklightArray();
+				int lightArrayLen = blocklightArray.getData().length;
+				if (hasSky) {
+					NibbleArray skylightArray = blockStorage.getSkylightArray();
+					if (skylightArray != null) {
+						blockData.setByteArray("SkyLight", skylightArray.getData());
+					} else {
+						// Shouldn't happen, but if it does, handle it smoothly.
+						LOGGER.error("[WDL] Skylight array for chunk at " +
+								chunk.getChunkCoordIntPair().chunkXPos + ", " + chunk.getChunkCoordIntPair().chunkZPos +
+								" is null despite VersionedProperties " +
+								"saying it shouldn't be!");
+							blockData.setByteArray("SkyLight", new byte[lightArrayLen]);
+					}
+				} else {
+					blockData.setByteArray("SkyLight", new byte[lightArrayLen]);
+				}
+
+				chunkSectionList.appendTag(blockData);
+			}
+		}
+		// for (ExtendedBlockStorage chunkSection : chunkSections) {
+		// 	if (chunkSection != null) {
+		// 		NBTTagCompound sectionNBT = new NBTTagCompound();
+		// 		sectionNBT.setByte("Y",
+		// 				(byte) (chunkSection.getYLocation() >> 4 & 255));
+		// 		byte[] buffer = new byte[4096];
+		// 		NibbleArray nibblearray = new NibbleArray();
+		// 		// getData() is juste a byte array in 1.8.9
+		// 		// NibbleArray nibblearray1 = chunkSection.getData()
+		// 		// 		.getDataForNBT(buffer, nibblearray);
+
+		// 		sectionNBT.setByteArray("Blocks", buffer);
+		// 		sectionNBT.setByteArray("Data", nibblearray.getData());
+				
+		// 		// if (nibblearray1 != null) {
+		// 		// 	sectionNBT.setByteArray("Add", nibblearray1.getData());
+		// 		// }
+				
+		// 		NibbleArray blocklightArray = chunkSection.getBlocklightArray();
+		// 		int lightArrayLen = blocklightArray.getData().length;
+		// 		sectionNBT.setByteArray("BlockLight", blocklightArray.getData());
+				
+		// 		if (hasSky) {
+		// 			NibbleArray skylightArray = chunkSection.getSkylightArray();
+		// 			if (skylightArray != null) {
+		// 				sectionNBT.setByteArray("SkyLight", skylightArray.getData());
+		// 			} else {
+		// 				// Shouldn't happen, but if it does, handle it smoothly.
+		// 				LOGGER.error("[WDL] Skylight array for chunk at " +
+		// 						chunk.getChunkCoordIntPair().chunkXPos + ", " + chunk.getChunkCoordIntPair().chunkZPos +
+		// 						" is null despite VersionedProperties " +
+		// 						"saying it shouldn't be!");
+		// 				sectionNBT.setByteArray("SkyLight", new byte[lightArrayLen]);
+		// 			}
+		// 		} else {
+		// 			sectionNBT.setByteArray("SkyLight", new byte[lightArrayLen]);
+		// 		}
+
+		// 		chunkSectionList.appendTag(sectionNBT);
+		// 	}
+		// }
+
+		compound.setTag("Sections", chunkSectionList);
+		compound.setByteArray("Biomes", chunk.getBiomeArray());
+
+		chunk.setHasEntities(false);
+		//TODO: FIX ENTITY & TILEENTITY PARSING AS IT'S BROKEN RN
+		NBTTagList entityList = getEntityList(chunk);
+		compound.setTag("Entities", entityList);
+
+		NBTTagList tileEntityList = getTileEntityList(chunk);
+		compound.setTag("TileEntities", tileEntityList);
+
+		List<NextTickListEntry> updateList = world.getPendingBlockUpdates(
+				chunk, false);
+		if (updateList != null) {
+			long worldTime = world.getWorldTime();
+			NBTTagList entries = new NBTTagList();
+
+			for (NextTickListEntry entry : updateList) {
+				NBTTagCompound entryTag = new NBTTagCompound();
+				ResourceLocation location = Block.blockRegistry.getNameForObject(entry.getBlock());
+				entryTag.setString("i",
+						location == null ? "" : location.toString());
+				entryTag.setInteger("x", entry.position.getX());
+				entryTag.setInteger("y", entry.position.getY());
+				entryTag.setInteger("z", entry.position.getZ());
+				entryTag.setInteger("t",
+						(int) (entry.scheduledTime - worldTime));
+				entryTag.setInteger("p", entry.priority);
+				entries.appendTag(entryTag);
+			}
+
+			compound.setTag("TileTicks", entries);
+		}
+
+		return compound;
+	}
+
+
+	/**
+	 * Gets a count of how many chunks there are that still need to be written to
+	 * disk. (Does not include any chunk that is currently being written to disk)
+	 *
+	 * @return The number of chunks that still need to be written to disk
+	 */
+	public synchronized int getNumPendingChunks() {
+		return this.chunksToSave.size();
+	}
 
 	public static WDLChunkLoader create(WDL wdl,
 			SaveHandler handler, WorldProvider dimension) {
 		return new WDLChunkLoader(wdl, getWorldSaveFolder(handler, dimension));
 	}
 
-	public WDLChunkLoader(WDL wdl, File file) {
-		super(wdl, file);
-	}
+
 
 	/**
 	 * Creates an NBT list of all entities in this chunk, adding in custom entities.
 	 * @param chunk
 	 * @return
 	 */
-	@Override
 	protected NBTTagList getEntityList(Chunk chunk) {
 		NBTTagList entityList = new NBTTagList();
 
@@ -131,6 +408,7 @@ public class WDLChunkLoader extends WDLChunkLoaderBase {
 				if (entity.writeToNBTOptional(entityData)) {
 					chunk.setHasEntities(true);
 					entityList.appendTag(entityData);
+					// System.out.println("saved entity tag");
 				}
 			} catch (Exception e) {
 				WDLMessages.chatMessageTranslated(
@@ -169,6 +447,11 @@ public class WDLChunkLoader extends WDLChunkLoaderBase {
 				continue;
 			}
 		}
+		if (entityList.tagCount() > 0) {
+			System.out.println("count:" + entityList.tagCount());
+			System.out.println(entityList.toString());
+			System.out.println(chunk.getChunkCoordIntPair().toString());
+		}
 
 		return entityList;
 	}
@@ -202,7 +485,6 @@ public class WDLChunkLoader extends WDLChunkLoaderBase {
 	 * Creates an NBT list of all tile entities in this chunk, importing tile
 	 * entities as needed.
 	 */
-	@Override
 	protected NBTTagList getTileEntityList(Chunk chunk) {
 		NBTTagList tileEntityList = new NBTTagList();
 

@@ -26,7 +26,7 @@ import wdl.versioned.VersionedFunctions.GameRuleType;
 
 /**
  * Contains functions related to gamerules. This version of the class is used
- * between Minecraft 1.9 and Minecraft 1.12.2.
+ * between Minecraft 1.8 and Minecraft 1.12.2.
  */
 final class GameRuleFunctions {
 	private GameRuleFunctions() { throw new AssertionError(); }
