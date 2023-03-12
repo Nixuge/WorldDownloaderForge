@@ -2,15 +2,13 @@
     "compatibilityLevel": "JAVA_8",
     "required": true,
     "package": "com.uyjulian.LiteModWDL.mixin",
-    "refmap": "mixins.worlddownloader.refmap.json",
+    "refmap": "refmap.worlddownloader.json",
     "mixins": [
-        "MixinGuiIngameMenu",
-        "MixinWorldClient",
-        "MixinNetHandlerPlayClient",
-        "MixinCrashReport",
-        "MixinInventoryBasic"
-    ],
-    "injectors": {
-        "defaultRequire": 1
-    }
+      "MixinGuiIngameMenu",
+      "MixinWorldClient",
+      "MixinNetHandlerPlayClient",
+      "MixinCrashReport",
+      "MixinInventoryBasic"
+    ]
+
 }
