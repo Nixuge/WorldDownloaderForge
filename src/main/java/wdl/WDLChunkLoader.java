@@ -145,7 +145,6 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 	 */
 	@Override
 	public void saveChunk(World world, Chunk chunk) throws IOException, MinecraftException {
-		// TODO: work this out actually bc i think it's broken rn
 		wdl.saveHandler.checkSessionLock();
 		
 		NBTTagCompound levelTag = writeChunkToNBT(chunk, world);
@@ -278,9 +277,6 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 
 		chunk.setHasEntities(false);
 
-		// TODO: FIX ENTITY & TILEENTITY NBT DATA PARSING
-		// RN DOESN'T SAVE DATA
-
 		NBTTagList entityList = getEntityList(chunk);
 		compound.setTag("Entities", entityList);
 
@@ -388,7 +384,6 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 			}
 
 			NBTTagCompound entityData = new NBTTagCompound();
-			// STILL TODO: minecart chest data doesn't save properly
 			try {
 				if (entity.writeToNBTOptional(entityData)) {
 					// For some fucking reason, at least in a dev env, 

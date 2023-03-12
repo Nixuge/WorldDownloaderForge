@@ -164,14 +164,14 @@ final class GeneratorFunctions {
 	 */
 	static final String VOID_FLAT_CONFIG = "3;minecraft:air;127";
 
-	static {
+	// static {
 		// Make sure that the void biome exists
 		// (this check partially exists so that this class will not compile in versions without it)
 		// REMOVED AS THERE DOESNT SEEM TO BE AN ENUM WITH VOID
 		// if (Biome.getIdForBiome(Biomes.VOID) != 127) {
 		// 	LOGGER.warn("[WDL] Mismatched ID for void biome: " + Biomes.VOID + " = " + Biome.getIdForBiome(Biomes.VOID));
 		// }
-	}
+	// }
 
 	/* (non-javadoc)
 	 * @see GeneratorFunctions#createGeneratorOptionsTag

@@ -20,6 +20,7 @@ import javax.annotation.Nullable;
 
 import com.google.common.io.Files;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiYesNo;
 import net.minecraft.client.resources.I18n;
@@ -79,10 +80,18 @@ public class GuiWDLBackup extends WDLScreen {
 				200, 20, getBackupButtonText()) {
 			public @Override void performAction() {
 				switch (backupType) {
-				case NONE: backupType = WorldBackupType.FOLDER; break;
-				case FOLDER: backupType = WorldBackupType.ZIP; break;
-				case ZIP: backupType = WorldBackupType.CUSTOM; break;
-				case CUSTOM: backupType = WorldBackupType.NONE; break;
+					case NONE:
+						backupType = WorldBackupType.FOLDER;
+						break;
+					case FOLDER:
+						backupType = WorldBackupType.ZIP;
+						break;
+					case ZIP:
+						backupType = WorldBackupType.CUSTOM;
+						break;
+					case CUSTOM:
+						backupType = WorldBackupType.NONE;
+						break;
 				}
 
 				updateFieldVisibility();
@@ -135,7 +144,8 @@ public class GuiWDLBackup extends WDLScreen {
 					!newExt.equals(customBackupExtension)) {
 				customBackupCommandTemplate = newTemplate;
 				customBackupExtension = newExt;
-				// If a check is already queued, delay it until the user stops typing, even if the typing isn't changing anything.
+				// If a check is already queued, delay it until the user stops typing, even if
+				// the typing isn't changing anything.
 				// Otherwise, only recheck if the typing changes something.
 				isCommandValid = false;
 				checkValidTime = System.currentTimeMillis() + 1000; // 1 second later
@@ -185,79 +195,18 @@ public class GuiWDLBackup extends WDLScreen {
 		checkValidTime = 0;
 		checkingCommandValid = true;
 
-		class BackupTestRunnable implements ICustomBackupProgressMonitor, Runnable {
-			public BackupTestRunnable() {
-				this.origCommandTemplate = customBackupCommandTemplate;
-				this.origExtension = customBackupExtension;
-				this.endTime = System.currentTimeMillis() + 5000; // 5 seconds later
-			}
-			public final String origCommandTemplate, origExtension;
-			public StringBuilder output = new StringBuilder();
-			public final long endTime;
-			@Override
-			public void incrementNumerator() { }
-			@Override
-			public void onTextUpdate(String text) {
-				if (output.length() != 0) {
-					output.append("\n");
-				}
-				output.append(text);
-			}
-			@Override
-			public void setDenominator(int value, boolean show) { }
-			@Override
-			public void setNumerator(int value) { }
-			@Override
-			public boolean shouldCancel() {
-				// True if too much time passed, the command changed, or the GUI was closed.
-				return customSettingsChanged() ||
-						System.currentTimeMillis() >= endTime ||
-						mc.currentScreen != GuiWDLBackup.this;
-			}
-
-			private boolean customSettingsChanged() {
-				return !origCommandTemplate.equals(customBackupCommandTemplate) ||
-						!origExtension.equals(customBackupExtension);
-			}
-
-			@Override
-			public void run() {
-				File tempDir = null, tempOptions = null, tempDest = null;
-				boolean valid;
-				String invalidReason;
-
-				try {
-					tempDir = Files.createTempDir();
-					File optionsTxt = new File(mc.mcDataDir, "options.txt"); // Should exist
-					tempOptions = new File(tempDir, "options.txt");
-					Files.copy(optionsTxt, tempOptions);
-					tempDest = File.createTempFile("wdlbackuptest", "." + customBackupExtension);
-					tempDest.delete(); // We only want it for the file name; the empty file actually causes other problems
-
-					WorldBackup.runCustomBackup(customBackupCommandTemplate, tempDir, tempDest, this);
-
-					valid = true;
-					invalidReason = null;
-				} catch (Exception ex) {
-					valid = false;
-					invalidReason = ex.getMessage() + "\n\n" + output.toString();
-				}
-				if (tempOptions != null) tempOptions.delete();
-				if (tempDir != null) tempDir.delete();
-				if (tempDest != null) tempDest.delete();
-
-				if (!customSettingsChanged()) {
-					isCommandValid = valid;
-					commandInvalidReason = invalidReason;
-					checkingCommandValid = false;
-				}
-			}
-		}
-
-		new Thread(new BackupTestRunnable()).start();
+		new Thread(new BackupTestRunnable(
+				customBackupCommandTemplate,
+				customBackupExtension,
+				isCommandValid,
+				commandInvalidReason,
+				checkingCommandValid,
+				mc,
+				GuiWDLBackup.this
+				)).start();
 	}
 
-        @Override
+	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		Utils.drawListBackground(23, 32, 0, 0, height, width);
 
@@ -276,7 +225,9 @@ public class GuiWDLBackup extends WDLScreen {
 			this.drawString(fontRendererObj, text, x, y, 0xFFFFFF);
 			if (customBackupExtensionFld.getText().equalsIgnoreCase("rar")) {
 				x = customBackupExtensionFld.xPosition + customBackupExtensionFld.getWidth() + 14;
-				this.drawString(fontRendererObj, "ಠ_ಠ", x, y, 0xFF0000); // See some of my experiences with dealing with rar files.  Use a non-proprietary format, please, it's for your own good!
+				this.drawString(fontRendererObj, "ಠ_ಠ", x, y, 0xFF0000); // See some of my experiences with dealing with
+																			// rar files. Use a non-proprietary format,
+																			// please, it's for your own good!
 			}
 		}
 		if (!isCommandValid && commandInvalidReason != null) {
@@ -293,8 +244,10 @@ public class GuiWDLBackup extends WDLScreen {
 		} else if (customBackupExtensionFld.isMouseOver()) {
 			Utils.drawGuiInfoBox(I18n.format("wdl.gui.backup.customExtension.description"), width, height, 48);
 		} else if (commandInvalidReason == null || backupTypeButton.isMouseOver()) {
-			// Only draw the large description if the command is valid (i.e. there isn't other text)
-			// or the mouse is directly over the backup type button (i.e. the info is useful)
+			// Only draw the large description if the command is valid (i.e. there isn't
+			// other text)
+			// or the mouse is directly over the backup type button (i.e. the info is
+			// useful)
 			Utils.drawGuiInfoBox(description, width - 50, 3 * this.height / 5, width,
 					height, 48);
 		}
@@ -313,6 +266,107 @@ public class GuiWDLBackup extends WDLScreen {
 			}, I18n.format("wdl.gui.backup.customCommandFailed.line1"),
 					I18n.format("wdl.gui.backup.customCommandFailed.line2"),
 					I18n.format("gui.yes"), I18n.format("gui.cancel"), 0);
+		}
+	}
+}
+
+// Had to extract the class out of a function (checkCustomBackupConfig()) because
+// of a Forge issue with anonymous classes
+// See -> 
+// https://forums.minecraftforge.net/topic/40670-build-terminates-at-extractrangemapreplacedmain/
+// https://github.com/MinecraftForge/Srg2Source/issues/14#issuecomment-260096443
+// https://forums.minecraftforge.net/topic/59708-solved-build-failed-could-not-dispatch-a-message-to-the-daemon/
+class BackupTestRunnable implements ICustomBackupProgressMonitor, Runnable {
+	public BackupTestRunnable(
+			String customBackupCommandTemplate,
+			String customBackupExtension,
+			boolean isCommandValid,
+			String commandInvalidReason,
+			boolean checkingCommandValid,
+			Minecraft mc, GuiWDLBackup guiWDLBackup) {
+		this.guiWDLBackup = guiWDLBackup;
+		this.mc = mc;
+		this.isCommandValid = isCommandValid;
+		this.checkingCommandValid = checkingCommandValid;
+		this.origCommandTemplate = customBackupCommandTemplate;
+		this.origExtension = customBackupExtension;
+		this.commandInvalidReason = commandInvalidReason;
+		this.endTime = System.currentTimeMillis() + 5000; // 5 seconds later
+	}
+	public final GuiWDLBackup guiWDLBackup;
+	public final Minecraft mc;
+	public boolean isCommandValid, checkingCommandValid;
+	public String origCommandTemplate, origExtension, commandInvalidReason;
+	public StringBuilder output = new StringBuilder();
+	public final long endTime;
+
+	@Override
+	public void incrementNumerator() {
+	}
+
+	@Override
+	public void onTextUpdate(String text) {
+		if (output.length() != 0) {
+			output.append("\n");
+		}
+		output.append(text);
+	}
+
+	@Override
+	public void setDenominator(int value, boolean show) {
+	}
+
+	@Override
+	public void setNumerator(int value) {
+	}
+
+	@Override
+	public boolean shouldCancel() {
+		// True if too much time passed, the command changed, or the GUI was closed.
+		return customSettingsChanged() ||
+				System.currentTimeMillis() >= endTime ||
+				mc.currentScreen != guiWDLBackup;
+	}
+
+	private boolean customSettingsChanged() {
+		return !origCommandTemplate.equals(origCommandTemplate) ||
+				!origExtension.equals(origExtension);
+	}
+
+	@Override
+	public void run() {
+		File tempDir = null, tempOptions = null, tempDest = null;
+		boolean valid;
+		String invalidReason;
+
+		try {
+			tempDir = Files.createTempDir();
+			File optionsTxt = new File(mc.mcDataDir, "options.txt"); // Should exist
+			tempOptions = new File(tempDir, "options.txt");
+			Files.copy(optionsTxt, tempOptions);
+			tempDest = File.createTempFile("wdlbackuptest", "." + origExtension);
+			tempDest.delete(); // We only want it for the file name; the empty file actually causes other
+								// problems
+
+			WorldBackup.runCustomBackup(origCommandTemplate, tempDir, tempDest, this);
+
+			valid = true;
+			invalidReason = null;
+		} catch (Exception ex) {
+			valid = false;
+			invalidReason = ex.getMessage() + "\n\n" + output.toString();
+		}
+		if (tempOptions != null)
+			tempOptions.delete();
+		if (tempDir != null)
+			tempDir.delete();
+		if (tempDest != null)
+			tempDest.delete();
+
+		if (!customSettingsChanged()) {
+			isCommandValid = valid;
+			commandInvalidReason = invalidReason;
+			checkingCommandValid = false;
 		}
 	}
 }

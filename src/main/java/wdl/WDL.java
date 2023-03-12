@@ -689,35 +689,11 @@ public class WDL {
 			progressScreen.setMinorTaskProgress(
 					I18n.format("wdl.saveProgress.backingUp.preparing"), 1);
 
-			class BackupState implements WorldBackup.ICustomBackupProgressMonitor {
-				int curFile = 0;
-				@Override
-				public void setDenominator(int value, boolean show) {
-					progressScreen.setMinorTaskCount(value, show);
-				}
-				@Override
-				public void incrementNumerator() {
-					curFile++;
-					progressScreen.setMinorTaskProgress(curFile);
-				}
-				@Override
-				public void setNumerator(int value) {
-					curFile = value;
-					progressScreen.setMinorTaskProgress(value);
-				}
-				@Override
-				public void onTextUpdate(String text) {
-					progressScreen.setMinorTaskProgress(text, curFile);
-				}
-				@Override
-				public boolean shouldCancel() {
-					return progressScreen.cancelAttempted();
-				}
-			}
+
 
 			try {
 				WorldBackup.backupWorld(saveHandler.getWorldDirectory(),
-						getWorldFolderName(worldName), backupType, new BackupState(),
+						getWorldFolderName(worldName), backupType, new BackupState(progressScreen),
 						serverProps.getValue(MiscSettings.BACKUP_COMMAND_TEMPLATE),
 						serverProps.getValue(MiscSettings.BACKUP_EXTENSION));
 			} catch (IOException ex) {
@@ -915,9 +891,6 @@ public class WDL {
 
 		List<Chunk> chunks = new ArrayList<>(chunkList);
 
-
-		System.out.println("chunkssize: " + chunks.size());
-		// System.out.println(chunks);
 		return chunks;
 	}
 
@@ -1880,5 +1853,41 @@ public class WDL {
 			report = CrashReport.makeCrashReport(t, category);
 		}
 		minecraft.crashed(report);
+	}
+}
+
+// Had to extract the class out of a function (saveEverything()) because
+// of a Forge issue with anonymous classes
+// See -> 
+// https://forums.minecraftforge.net/topic/40670-build-terminates-at-extractrangemapreplacedmain/
+// https://github.com/MinecraftForge/Srg2Source/issues/14#issuecomment-260096443
+// https://forums.minecraftforge.net/topic/59708-solved-build-failed-could-not-dispatch-a-message-to-the-daemon/
+class BackupState implements WorldBackup.ICustomBackupProgressMonitor {
+	private GuiWDLSaveProgress progressScreen;
+	public BackupState(GuiWDLSaveProgress progressScreen) {
+		this.progressScreen = progressScreen;
+	}
+	int curFile = 0;
+	@Override
+	public void setDenominator(int value, boolean show) {
+		progressScreen.setMinorTaskCount(value, show);
+	}
+	@Override
+	public void incrementNumerator() {
+		curFile++;
+		progressScreen.setMinorTaskProgress(curFile);
+	}
+	@Override
+	public void setNumerator(int value) {
+		curFile = value;
+		progressScreen.setMinorTaskProgress(value);
+	}
+	@Override
+	public void onTextUpdate(String text) {
+		progressScreen.setMinorTaskProgress(text, curFile);
+	}
+	@Override
+	public boolean shouldCancel() {
+		return progressScreen.cancelAttempted();
 	}
 }

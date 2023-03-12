@@ -33,5 +33,4 @@ I had to manually (w ctrl+f) replace ~600 lines with errors to go from liteloade
 ### Don't except this to be bug free and/or perform well (for now).
 
 # Known issues
-- Entities won't save
-- Tile Entities won't save
+- NPCs aren't saved, don't know yet if it's possible to fix but will see later
