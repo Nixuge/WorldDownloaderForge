@@ -34,3 +34,11 @@ I had to manually (w ctrl+f) replace ~600 lines with errors to go from liteloade
 
 # Known issues
 - NPCs aren't saved, don't know yet if it's possible to fix but will see later
+- Some crashes when clicking on some buttons (about->copy info button)
+- Not sure if the saved chunks map is working, to check
+
+# Todo
+- Better UI (If possible notifications-based like some clients)
+- More settings (eg. freeze entities)
+- Better name parsing (to implement)
+- Some kind of script on map save
