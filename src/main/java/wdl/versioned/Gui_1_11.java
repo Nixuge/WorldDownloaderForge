@@ -27,7 +27,7 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
-import net.minecraft.client.renderer.VertexBufferUploader;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraft.world.World;
 
@@ -55,7 +55,7 @@ final class GuiFunctions {
 		GlStateManager.disableFog();
 
 		Tessellator t = Tessellator.getInstance();
-		VertexBufferUploader b = t.getBuffer();
+		WorldRenderer b = t.getWorldRenderer();
 
 		// Minecraft.getMinecraft().getTextureManager().bindTexture(Gui.BACKGROUND_LOCATION);
 		Minecraft.getMinecraft().getTextureManager().bindTexture(Gui.optionsBackground);
@@ -93,7 +93,7 @@ final class GuiFunctions {
 		float textureSize = 32.0F;
 
 		Tessellator t = Tessellator.getInstance();
-		VertexBufferUploader b = t.getBuffer();
+		WorldRenderer b = t.getWorldRenderer();
 
 		//Box code is GuiSlot.overlayBackground
 		//Upper box

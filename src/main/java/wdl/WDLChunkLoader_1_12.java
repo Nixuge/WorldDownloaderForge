@@ -173,14 +173,16 @@ abstract class WDLChunkLoaderBase extends AnvilChunkLoader {
 						(byte) (chunkSection.getYLocation() >> 4 & 255));
 				byte[] buffer = new byte[4096];
 				NibbleArray nibblearray = new NibbleArray();
-				NibbleArray nibblearray1 = chunkSection.getData()
-						.getDataForNBT(buffer, nibblearray);
+				// getData() is juste a byte array in 1.8.9
+				// NibbleArray nibblearray1 = chunkSection.getData()
+				// 		.getDataForNBT(buffer, nibblearray);
+
 				sectionNBT.setByteArray("Blocks", buffer);
 				sectionNBT.setByteArray("Data", nibblearray.getData());
 				
-				if (nibblearray1 != null) {
-					sectionNBT.setByteArray("Add", nibblearray1.getData());
-				}
+				// if (nibblearray1 != null) {
+				// 	sectionNBT.setByteArray("Add", nibblearray1.getData());
+				// }
 				
 				NibbleArray blocklightArray = chunkSection.getBlocklightArray();
 				int lightArrayLen = blocklightArray.getData().length;
@@ -224,8 +226,7 @@ abstract class WDLChunkLoaderBase extends AnvilChunkLoader {
 
 			for (NextTickListEntry entry : updateList) {
 				NBTTagCompound entryTag = new NBTTagCompound();
-				ResourceLocation location = Block.REGISTRY
-						.getNameForObject(entry.getBlock());
+				ResourceLocation location = Block.blockRegistry.getNameForObject(entry.getBlock());
 				entryTag.setString("i",
 						location == null ? "" : location.toString());
 				entryTag.setInteger("x", entry.position.getX());

@@ -29,7 +29,7 @@ import net.minecraft.network.play.server.S24PacketBlockAction;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S3FPacketCustomPayload;
 import net.minecraft.network.play.server.S34PacketMaps;
-import net.minecraft.network.play.server.SPacketUnloadChunk;
+// import net.minecraft.network.play.server.SPacketUnloadChunk;
 import net.minecraft.util.IChatComponent;
 
 
@@ -50,7 +50,7 @@ public final class WDLHooks {
 	public static interface IHooksListener {
 		void onWorldClientTick(WorldClient sender);
 		void onWorldClientRemoveEntityFromWorld(WorldClient sender, int eid);
-		void onNHPCHandleChunkUnload(NetHandlerPlayClient sender, WorldClient world, SPacketUnloadChunk packet);
+		// void onNHPCHandleChunkUnload(NetHandlerPlayClient sender, WorldClient world, SPacketUnloadChunk packet);
 		void onNHPCHandleChat(NetHandlerPlayClient sender, S02PacketChat packet);
 		void onNHPCHandleMaps(NetHandlerPlayClient sender, S34PacketMaps packet);
 		void onNHPCHandleCustomPayload(NetHandlerPlayClient sender, S3FPacketCustomPayload packet);
@@ -83,11 +83,11 @@ public final class WDLHooks {
 			listener.onWorldClientRemoveEntityFromWorld(sender, eid);
 		}
 
-		@Override
-		public void onNHPCHandleChunkUnload(NetHandlerPlayClient sender, WorldClient world, SPacketUnloadChunk packet) {
-			bootstrap();
-			listener.onNHPCHandleChunkUnload(sender, world, packet);
-		}
+		// @Override
+		// public void onNHPCHandleChunkUnload(NetHandlerPlayClient sender, WorldClient world, SPacketUnloadChunk packet) {
+		// 	bootstrap();
+		// 	listener.onNHPCHandleChunkUnload(sender, world, packet);
+		// }
 
 		@Override
 		public void onNHPCHandleChat(NetHandlerPlayClient sender, S02PacketChat packet) {
@@ -178,10 +178,10 @@ public final class WDLHooks {
 	 * <br/>
 	 * Should be at the start of the method.
 	 */
-	public static void onNHPCHandleChunkUnload(NetHandlerPlayClient sender,
-			WorldClient world, SPacketUnloadChunk packet) {
-		listener.onNHPCHandleChunkUnload(sender, world, packet);
-	}
+	// public static void onNHPCHandleChunkUnload(NetHandlerPlayClient sender,
+	// 		WorldClient world, SPacketUnloadChunk packet) {
+	// 	listener.onNHPCHandleChunkUnload(sender, world, packet);
+	// }
 
 	/**
 	 * Called when {@link NetHandlerPlayClient#handleChat(S02PacketChat)} is

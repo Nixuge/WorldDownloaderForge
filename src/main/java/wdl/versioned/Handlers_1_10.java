@@ -13,14 +13,16 @@
  */
 package wdl.versioned;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.Nullable;
 
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import com.google.common.collect.ImmutableList;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectArrayMap;
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockBeacon;
 import net.minecraft.block.BlockBrewingStand;
@@ -38,7 +40,7 @@ import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityCommandBlock;
 import net.minecraft.util.BlockPos;
-import net.minecraft.world.WorldProvider;
+// import net.minecraft.world.WorldProvider;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.storage.SaveHandler;
@@ -159,10 +161,11 @@ final class HandlerFunctions {
 		return (SaveHandler)minecraft.getSaveLoader().getSaveLoader(worldName, false);
 	}
 
+	// VILLAGED REMOVED
 	/* (non-javadoc)
 	 * @see VersionedFunctions#VANILLA_VILLAGER_CAREERS
 	 */
-	static final Int2ObjectMap<BiMap<String, Integer>> VANILLA_VILLAGER_CAREERS = new Int2ObjectArrayMap<>();
+	static final Map<Integer, BiMap<String, Integer>> VANILLA_VILLAGER_CAREERS = new HashMap<>();
 	static {
 		BiMap<String, Integer> farmer = HashBiMap.create(4);
 		farmer.put("entity.Villager.farmer", 1);

@@ -15,7 +15,6 @@ package wdl.versioned;
 
 import java.util.Map;
 
-import it.unimi.dsi.fastutil.longs.Long2ObjectMap;
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.renderer.EntityRenderer;
 
@@ -25,13 +24,6 @@ import net.minecraft.client.renderer.EntityRenderer;
 final class TypeFunctions {
 	private TypeFunctions() { throw new AssertionError(); }
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#getChunkListClass
-	 */
-	@SuppressWarnings("rawtypes")
-	static Class<Long2ObjectMap> getChunkListClass() {
-		return Long2ObjectMap.class;
-	}
 
 	/* (non-javadoc)
 	 * @see VersionedFunctions#getChunksToSaveClass

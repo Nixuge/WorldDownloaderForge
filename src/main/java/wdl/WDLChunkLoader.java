@@ -31,7 +31,7 @@ import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
-import net.minecraft.network.datasync.EntityDataManager; // maybe entity.DataWatcher ?
+// import net.minecraft.network.datasync.EntityDataManager; // maybe entity.DataWatcher ?
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ClassInheritanceMultiMap;
 import net.minecraft.util.BlockPos;
@@ -140,27 +140,28 @@ public class WDLChunkLoader extends WDLChunkLoaderBase {
 				LOGGER.warn("Compound: " + entityData);
 				LOGGER.warn("Entity metadata dump:");
 				try {
-					List<EntityDataManager.DataEntry<?>> objects = entity
-							.getDataManager().getAll();
-					if (objects == null) {
-						LOGGER.warn("No entries (getAllWatched() returned null)");
-					} else {
-						LOGGER.warn(objects);
-						for (EntityDataManager.DataEntry<?> obj : objects) {
-							if (obj != null) {
-								LOGGER.warn("DataEntry [getValue()="
-										+ obj.getValue()
-										+ ", isDirty()="
-										+ obj.isDirty()
-										+ ", getKey()="
-										+ "DataParameter ["
-										+ "getId()="
-										+ obj.getKey().getId()
-										+ ", getSerializer()="
-										+ obj.getKey().getSerializer() + "]]");
-							}
-						}
-					}
+					// EntityDataManager doesn't exist here
+					// List<EntityDataManager.DataEntry<?>> objects = entity
+					// 		.getDataManager().getAll();
+					// if (objects == null) {
+					// 	LOGGER.warn("No entries (getAllWatched() returned null)");
+					// } else {
+					// 	LOGGER.warn(objects);
+					// 	for (EntityDataManager.DataEntry<?> obj : objects) {
+					// 		if (obj != null) {
+					// 			LOGGER.warn("DataEntry [getValue()="
+					// 					+ obj.getValue()
+					// 					+ ", isDirty()="
+					// 					+ obj.isDirty()
+					// 					+ ", getKey()="
+					// 					+ "DataParameter ["
+					// 					+ "getId()="
+					// 					+ obj.getKey().getId()
+					// 					+ ", getSerializer()="
+					// 					+ obj.getKey().getSerializer() + "]]");
+					// 		}
+					// 	}
+					// }
 				} catch (Exception e2) {
 					LOGGER.warn("Failed to complete dump: ", e);
 				}

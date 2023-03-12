@@ -34,13 +34,13 @@ import net.minecraft.network.play.server.S24PacketBlockAction;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S3FPacketCustomPayload;
 import net.minecraft.network.play.server.S34PacketMaps;
-import net.minecraft.network.play.server.SPacketUnload;
 import net.minecraft.util.IChatComponent;
 import wdl.ReflectionUtils;
 import wdl.ducks.IBaseChangesApplied;
 
 @Mixin(NetHandlerPlayClient.class)
 public abstract class MixinNetHandlerPlayClient implements INetHandlerPlayClient, IBaseChangesApplied {
+	
 	@Inject(method="<init>", at=@At("RETURN"))
 	private void init(Minecraft mcIn, GuiScreen p_i46300_2_, NetworkManager networkManagerIn, GameProfile profileIn, CallbackInfo ci) {
 		if (networkManagerIn == null) return; // Happens during unit tests
@@ -63,15 +63,9 @@ public abstract class MixinNetHandlerPlayClient implements INetHandlerPlayClient
 	@Shadow
 	private WorldClient clientWorldController;
 
-	@Inject(method="processChunkUnload", at=@At("HEAD"))
-	private void onProcessChunkUnload(SPacketUnloadChunk packetIn, CallbackInfo ci) {
-		/* WDL >>> */
-		wdl.WDLHooks.onNHPCHandleChunkUnload((NetHandlerPlayClient)(Object)this, this.clientWorldController, packetIn);
-		/* <<< WDL */
-		//more down here
-	}
+
 	@Inject(method="onDisconnect", at=@At("HEAD"))
-	private void onDisconnect(ITextComponent reason, CallbackInfo ci) {
+	private void onDisconnect(IChatComponent reason, CallbackInfo ci) {
 		/* WDL >>> */
 		wdl.WDLHooks.onNHPCDisconnect((NetHandlerPlayClient)(Object)this, reason);
 		/* <<< WDL */

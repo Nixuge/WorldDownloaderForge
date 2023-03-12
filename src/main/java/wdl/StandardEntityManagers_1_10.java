@@ -14,7 +14,7 @@
 package wdl;
 
 import java.lang.reflect.Field;
-import java.util.Collections;
+// import java.util.Collections;
 import java.util.Map;
 import java.util.Set;
 
@@ -84,12 +84,14 @@ class StandardEntityManagers {
 	public static final ISpigotEntityManager SPIGOT = new ISpigotEntityManager() {
 		@Override
 		public Set<String> getProvidedEntities() {
-			if (WDL.getInstance().isSpigot()) {
-				return PROVIDED_ENTITIES;
-			} else {
-				// Don't try to do spigot ranges on non-spigot servers
-				return Collections.emptySet();
-			}
+			// if (WDL.getInstance().isSpigot()) {
+			// 	return PROVIDED_ENTITIES;
+			// } else {
+			// 	// Don't try to do spigot ranges on non-spigot servers
+			// 	return Collections.emptySet();
+			// }
+			// Basically all servers are spigot now, might as well set to always true
+			return PROVIDED_ENTITIES;
 		}
 
 		@Override

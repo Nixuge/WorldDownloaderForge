@@ -19,6 +19,7 @@ import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Consumer;
 
@@ -30,7 +31,7 @@ import javax.annotation.meta.TypeQualifierNickname;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.ImmutableList;
 
-import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
+// import it.unimi.dsi.fastutil.ints.Int2ObjectMap;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.state.IBlockState;
@@ -157,7 +158,7 @@ public final class VersionedFunctions {
 	 * @see https://minecraft.gamepedia.com/Villager#Professions_and_careers
 	 * @see EntityVillager#getDisplayName
 	 */
-	public static final Int2ObjectMap<BiMap<String, Integer>> VANILLA_VILLAGER_CAREERS = HandlerFunctions.VANILLA_VILLAGER_CAREERS;
+	public static final Map<Integer, BiMap<String, Integer>> VANILLA_VILLAGER_CAREERS = HandlerFunctions.VANILLA_VILLAGER_CAREERS;
 
 	/**
 	 * Returns a well-formated String version of the tag, suitable for tests and logging.
@@ -526,13 +527,13 @@ public final class VersionedFunctions {
 		return RegistryFunctions.getBiomeId(biome);
 	}
 
-	/**
-	 * Gets the class used to store the list of chunks in ChunkProviderClient
-	 * ({@link ChunkProviderClient#loadedChunks}).
-	 */
-	public static Class<?> getChunkListClass() {
-		return TypeFunctions.getChunkListClass();
-	}
+	// /**
+	//  * Gets the class used to store the list of chunks in ChunkProviderClient
+	//  * ({@link ChunkProviderClient#loadedChunks}).
+	//  */
+	// public static Class<?> getChunkListClass() {
+	// 	return TypeFunctions.getChunkListClass();
+	// }
 
 	/**
 	 * Gets the class used to store the list of chunks in pending saving in AnvilChunkLoader

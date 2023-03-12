@@ -21,6 +21,7 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.lang.reflect.Field;
+// import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URISyntaxException;
 import java.nio.file.Files;
@@ -41,17 +42,16 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
-import com.mojang.realmsclient.RealmsMainScreen;
-import com.mojang.realmsclient.dto.RealmsServer;
+
 
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockBed;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
-import net.minecraft.client.gui.GuiScreen;
-import net.minecraft.client.gui.GuiScreenRealmsProxy;
 import net.minecraft.client.multiplayer.ChunkProviderClient;
+// import net.minecraft.client.gui.GuiScreen;
+// import net.minecraft.client.multiplayer.ChunkProviderClient;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetworkPlayerInfo;
 import net.minecraft.client.resources.I18n;
@@ -65,7 +65,6 @@ import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.realms.RealmsScreen;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
 import net.minecraft.world.ChunkCoordIntPair;
@@ -890,9 +889,31 @@ public class WDL {
 	 * list.
 	 */
 	public List<Chunk> getChunkList() {
-		Object obj = ReflectionUtils.findAndGetPrivateField(worldClient.getChunkProvider(),
-				ChunkProviderClient.class,
-				VersionedFunctions.getChunkListClass());
+		// TODO: CHECK IF WORKING
+		// List obj = ReflectionUtils.findAndGetPrivateField(
+		// 		worldClient.getChunkProvider(),
+		// 		ChunkProviderClient.class,
+		// 		ArrayList.class
+		// );
+		// Apparently reflectionUtils doesn't really enjoy this input
+		// so here we go reimplementing it
+		// Dirty af but should work
+		Object object = worldClient.getChunkProvider();
+		Class<?> typeOfObject = ChunkProviderClient.class;
+		Class<?> typeOfField = ArrayList.class;
+		Object obj;
+		try {
+			Field f = ReflectionUtils.findField(typeOfObject, typeOfField);
+			obj = (List<Chunk>) typeOfField.cast(f.get(object));
+		} catch (Exception e) {
+			throw new RuntimeException(
+					"WorldDownloader: Couldn't get Field of type \""
+							+ typeOfField + "\" from object \"" + object
+							+ "\" !", e);
+		}
+
+		ReflectionUtils.findAndGetPrivateField(null, null, null);
+
 		List<Chunk> chunks;
 		if (obj instanceof List<?>) {
 			@SuppressWarnings("unchecked")
