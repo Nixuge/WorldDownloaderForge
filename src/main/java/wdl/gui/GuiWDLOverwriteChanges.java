@@ -195,8 +195,8 @@ public class GuiWDLOverwriteChanges extends GuiTurningCameraBase implements IBac
 		return false;
 	}
 
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+        @Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
 
 		if (this.backingUp) {
@@ -233,7 +233,7 @@ public class GuiWDLOverwriteChanges extends GuiTurningCameraBase implements IBac
 			drawCenteredString(fontRendererObj, overwriteWarning2, width / 2,
 					infoBoxY + 115 + fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
 
-			super.render(mouseX, mouseY, partialTicks);
+			super.drawScreen(mouseX, mouseY, partialTicks);
 
 			String tooltip = null;
 			if (backupAsZipButton.isMouseOver()) {

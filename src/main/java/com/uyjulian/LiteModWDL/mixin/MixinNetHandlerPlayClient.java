@@ -43,7 +43,6 @@ import wdl.ducks.IBaseChangesApplied;
 public abstract class MixinNetHandlerPlayClient implements INetHandlerPlayClient, IBaseChangesApplied {
 	@Inject(method="<init>", at=@At("RETURN"))
 	private void init(Minecraft mcIn, GuiScreen p_i46300_2_, NetworkManager networkManagerIn, GameProfile profileIn, CallbackInfo ci) {
-		System.out.println("BAD PACKET INCOMING!!");
 		if (networkManagerIn == null) return; // Happens during unit tests
 
 		// Litemod-only: work around forge issue

@@ -17,6 +17,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
+import net.minecraft.client.resources.Language;
 import wdl.VersionConstants;
 import wdl.WDL;
 import wdl.gui.widget.WDLButton;
@@ -67,6 +68,7 @@ public class GuiWDLAbout extends WDLScreen {
 				setMessage(I18n.format("wdl.gui.about.debugInfo.copied"));
 			}
 		});
+
 		this.addButton(new ButtonDisplayGui((this.width / 2) - 100, this.height - 29,
 				200, 20, parent));
 
@@ -81,8 +83,9 @@ public class GuiWDLAbout extends WDLScreen {
 				mcVersion));
 		list.addBlankLine();
 
-		String currentLanguage = wdl.minecraft.getLanguageManager()
-				.getCurrentLanguage().toString();
+		Language lmgr = wdl.minecraft.getLanguageManager().getCurrentLanguage();
+		String currentLanguage = (lmgr == null) ? "en_US" : lmgr.toString();
+
 		String translatorCredit = I18n.format("wdl.translatorCredit",
 				currentLanguage);
 		if (translatorCredit != null && !translatorCredit.isEmpty()) {
@@ -103,6 +106,7 @@ public class GuiWDLAbout extends WDLScreen {
 			list.addLinkLine(I18n.format("wdl.gui.about.fastutil.website"), FASTUTIL_PAGE);
 			list.addLinkLine(I18n.format("wdl.gui.about.fastutil.license"), APACHE_LICENSE_2_0);
 		}
+		
 	}
 
 	@Override

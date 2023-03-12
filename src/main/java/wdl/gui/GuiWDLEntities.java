@@ -299,11 +299,11 @@ public class GuiWDLEntities extends WDLScreen {
 		wdl.saveProps();
 	}
 
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+        @Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
 
-		super.render(mouseX, mouseY, partialTicks);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 
 		if (this.rangeModeButton.isMouseOver()) {
 			Utils.drawGuiInfoBox(this.rangeModeButton.getTooltip(), width, height, 48);

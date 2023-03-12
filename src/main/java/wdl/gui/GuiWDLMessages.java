@@ -171,12 +171,12 @@ public class GuiWDLMessages extends WDLScreen {
 		wdl.saveProps();
 	}
 
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+        @Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		hoveredButtonTooltip = null;
 
 		this.drawDefaultBackground();
-		super.render(mouseX, mouseY, partialTicks);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 
 		String tooltip = null;
 		if (hoveredButtonTooltip != null) {

@@ -85,8 +85,8 @@ public class GuiWDLMultiworld extends WDLScreen {
 	/**
 	 * Draws the screen and all the components in it.
 	 */
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+        @Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
 		Utils.drawBorder(32, 32, 0, 0, height, width);
 
@@ -108,7 +108,7 @@ public class GuiWDLMultiworld extends WDLScreen {
 				+ multiworldEnabledBtn.getButtonWidth() + 2,
 				multiworldEnabledBtn.yPosition + 20 + 2, 0xFFFF0000);
 
-		super.render(mouseX, mouseY, partialTicks);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 
 	/**

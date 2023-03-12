@@ -179,7 +179,7 @@ public class GuiWDLExtensions extends WDLScreen {
 		public void render(int mouseX, int mouseY, float partialTicks) {
 			this.height = this.bottom = bottomLocation;
 
-			super.render(mouseX, mouseY, partialTicks);
+			super.drawScreen(mouseX, mouseY, partialTicks);
 		}
 
 		@Override
@@ -206,7 +206,7 @@ public class GuiWDLExtensions extends WDLScreen {
 			this.height = GuiWDLExtensions.this.height - bottomLocation;
 			this.bottom = this.height - 32;
 
-			super.render(mouseX, mouseY, partialTicks);
+			super.drawScreen(mouseX, mouseY, partialTicks);
 
 			drawCenteredString(fontRendererObj,
 					I18n.format("wdl.gui.extensions.detailsCaption"),
@@ -286,8 +286,8 @@ public class GuiWDLExtensions extends WDLScreen {
 		}
 	}
 
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+        @Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
 
 		//Clamp bottomLocation.
@@ -298,6 +298,6 @@ public class GuiWDLExtensions extends WDLScreen {
 			bottomLocation = height - MIDDLE_HEIGHT - BOTTOM_HEIGHT - 33;
 		}
 
-		super.render(mouseX, mouseY, partialTicks);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 }

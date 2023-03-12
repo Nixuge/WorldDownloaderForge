@@ -152,12 +152,12 @@ public class GuiWDL extends WDLScreen {
 	 * Draws the screen and all the components in it.
 	 */
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.drawDefaultBackground();
 
 		displayedTooltip = null;
 
-		super.render(mouseX, mouseY, partialTicks);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 
 		String name = I18n.format("wdl.gui.wdl.worldname");
 		this.drawString(this.fontRendererObj, name, this.worldname.xPosition

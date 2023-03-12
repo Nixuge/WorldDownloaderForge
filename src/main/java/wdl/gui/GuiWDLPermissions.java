@@ -133,14 +133,14 @@ public class GuiWDLPermissions extends WDLScreen {
 	}
 
 	@Override
-	public void tick() {
+	public void updateScreen() {
 		if (refreshTicks > 0) {
 			refreshTicks--;
 		} else if (refreshTicks == 0) {
 			initGui();
 			refreshTicks = -1;
 		}
-		super.tick();
+		super.updateScreen();
 	}
 
 	@Override
@@ -148,9 +148,9 @@ public class GuiWDLPermissions extends WDLScreen {
 		wdl.saveProps();
 	}
 
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
-		super.render(mouseX, mouseY, partialTicks);
+        @Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+		super.drawScreen(mouseX, mouseY, partialTicks);
 
 		if (!WDLPluginChannels.hasPermissions()) {
 			this.drawCenteredString(this.fontRendererObj,

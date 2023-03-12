@@ -9,7 +9,6 @@ import java.io.File;
         modid = McMod.MOD_ID,
         name = McMod.NAME,
         version = McMod.VERSION,
-        guiFactory = "me.nixuge.nochunkunload.gui.GuiFactory",
         clientSideOnly = true
 )
 public class McMod {

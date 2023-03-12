@@ -273,11 +273,11 @@ public class GuiWDLGameRules extends WDLScreen {
 				this.height - 29, 200, 20, this.parent));
 	}
 
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+        @Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		hoveredToolTip = null;
 
-		super.render(mouseX, mouseY, partialTicks);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 
 		if (this.doneButton.isMouseOver()) {
 			Utils.drawGuiInfoBox(I18n.format("wdl.gui.gamerules.doneInfo"),

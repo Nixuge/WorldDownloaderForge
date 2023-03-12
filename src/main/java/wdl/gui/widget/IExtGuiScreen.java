@@ -88,5 +88,5 @@ public interface IExtGuiScreen {
 	 * @param mouseY The mouse's vertical coordinate.
 	 * @param partialTicks Time inside of the tick, when multiple frames are rendered in one tick.
 	 */
-	public abstract void render(int mouseX, int mouseY, float partialTicks);
+	public abstract void drawScreen(int mouseX, int mouseY, float partialTicks);
 }

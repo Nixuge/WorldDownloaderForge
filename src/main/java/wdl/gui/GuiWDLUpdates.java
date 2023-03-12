@@ -195,11 +195,11 @@ public class GuiWDLUpdates extends WDLScreen {
 		WDL.saveGlobalProps();
 	}
 
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+        @Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		this.list.regenerateVersionList();
 
-		super.render(mouseX, mouseY, partialTicks);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 
 		if (!WDLUpdateChecker.hasFinishedUpdateCheck()) {
 			drawCenteredString(fontRendererObj,

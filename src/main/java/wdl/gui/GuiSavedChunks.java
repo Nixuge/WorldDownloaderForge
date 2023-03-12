@@ -125,7 +125,7 @@ public class GuiSavedChunks extends WDLScreen {
 	}
 
 	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		VersionedFunctions.drawDarkBackground(0, 0, height, width);
 
 		// Old chunks
@@ -200,7 +200,7 @@ public class GuiSavedChunks extends WDLScreen {
 			this.drawCenteredString(fontRendererObj, "In the future, this GUI will work even when downloading hasn't been started.", width / 2, height / 2, 0xFFFFFF);
 		}
 
-		super.render(mouseX, mouseY, partialTicks);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 
 	/**

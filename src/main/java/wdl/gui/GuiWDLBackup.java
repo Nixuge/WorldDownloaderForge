@@ -155,8 +155,8 @@ public class GuiWDLBackup extends WDLScreen {
 	}
 
 	@Override
-	public void tick() {
-		super.tick();
+	public void updateScreen() {
+		super.updateScreen();
 
 		long now = System.currentTimeMillis();
 		if (checkValidTime != 0 && now >= checkValidTime) {
@@ -257,11 +257,11 @@ public class GuiWDLBackup extends WDLScreen {
 		new Thread(new BackupTestRunnable()).start();
 	}
 
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+        @Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		Utils.drawListBackground(23, 32, 0, 0, height, width);
 
-		super.render(mouseX, mouseY, partialTicks);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 
 		if (customBackupCommandTemplateFld.getVisible()) {
 			String text = I18n.format("wdl.gui.backup.customCommandTemplate");

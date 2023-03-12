@@ -112,7 +112,7 @@ public abstract class GuiTurningCameraBase extends WDLScreen {
 	 * Increment yaw to the yaw for the next tick.
 	 */
 	@Override
-	public void tick() {
+	public void updateScreen() {
 		if (mc.theWorld != null && this.initializedCamera) {
 			this.cam.prevRotationPitch = this.cam.rotationPitch = 0.0F;
 			this.cam.prevRotationYaw = this.yaw;
@@ -154,7 +154,7 @@ public abstract class GuiTurningCameraBase extends WDLScreen {
 
 		this.deactivateRenderViewEntity();
 
-		super.tick();
+		super.updateScreen();
 	}
 
 	/**

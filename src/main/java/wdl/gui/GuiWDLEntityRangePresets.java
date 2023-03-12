@@ -89,8 +89,8 @@ public class GuiWDLEntityRangePresets extends WDLScreen implements GuiYesNoCallb
 		return () -> new GuiYesNo(this, upper, lower, id);
 	}
 
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+        @Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		Utils.drawListBackground(23, 32, 0, 0, height, width);
 
 		String infoText = null;
@@ -115,7 +115,7 @@ public class GuiWDLEntityRangePresets extends WDLScreen implements GuiYesNoCallb
 			Utils.drawGuiInfoBox(infoText, width, height, 48);
 		}
 
-		super.render(mouseX, mouseY, partialTicks);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 	}
 
 	@Override

@@ -106,14 +106,14 @@ public class GuiWDLGenerator extends WDLScreen {
 	/**
 	 * Draws the screen and all the components in it.
 	 */
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+        @Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		Utils.drawListBackground(23, 32, 0, 0, height, width);
 
 		this.drawString(this.fontRendererObj, seedText, this.width / 2 - 100,
 				this.height / 4 - 10, 0xFFFFFF);
 
-		super.render(mouseX, mouseY, partialTicks);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 
 		String tooltip = null;
 

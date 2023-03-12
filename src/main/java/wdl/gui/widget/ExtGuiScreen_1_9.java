@@ -145,10 +145,6 @@ abstract class ExtGuiScreen extends GuiScreen implements IExtGuiScreen {
 	@Deprecated
 	protected final void actionPerformed(GuiButton button) { }
 
-	// bridge func
-	public void tick() {
-		updateScreen();
-	}
 
 	@Override
 	@OverridingMethodsMustInvokeSuper
@@ -160,14 +156,13 @@ abstract class ExtGuiScreen extends GuiScreen implements IExtGuiScreen {
 		for (GuiTextField field : this.textFieldList) {
 			// field.tick();
 			field.updateCursorCounter();
-			// may be field.updateCursorCounter();? idk
 		}
 	}
 
 	// honestly not sure of what I need to replace for this one
 	@Override
 	@OverridingMethodsMustInvokeSuper
-	public void render(int mouseX, int mouseY, float partialTicks) {
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		for (GuiList<?> list : this.listList) {
 			list.render(mouseX, mouseY, partialTicks);
 		}
@@ -176,7 +171,6 @@ abstract class ExtGuiScreen extends GuiScreen implements IExtGuiScreen {
 			if (field instanceof ExtTextField) {
 				((ExtTextField) field).render(mouseX, mouseY, partialTicks);
 			} else {
-				// field.render();
 				field.drawTextBox();
 			}
 		}

@@ -223,8 +223,8 @@ public class GuiWDLChunkOverrides extends WDLScreen {
 		}
 	}
 
-	@Override
-	public void render(int mouseX, int mouseY, float partialTicks) {
+        @Override
+	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
 		VersionedFunctions.drawDarkBackground(0, 0, height, width);
 
 		// Draw the current request range.
@@ -265,7 +265,7 @@ public class GuiWDLChunkOverrides extends WDLScreen {
 		// Draw the main borders now so that ranges are hidden behind it.
 		Utils.drawBorder(TOP_MARGIN, BOTTOM_MARGIN, 0, 0, height, width);
 
-		super.render(mouseX, mouseY, partialTicks);
+		super.drawScreen(mouseX, mouseY, partialTicks);
 
 		this.drawCenteredString(this.fontRendererObj, "\u00A7c\u00A7lThis is a work in progress.",
 				this.width / 2, this.height / 2, 0xFFFFFF);
