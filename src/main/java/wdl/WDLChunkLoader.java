@@ -31,8 +31,9 @@ import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.nbt.CompressedStreamTools;
 import net.minecraft.nbt.NBTTagCompound;
+import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagList;
-// import net.minecraft.network.datasync.EntityDataManager; // maybe entity.DataWatcher ?
+import net.minecraft.entity.DataWatcher;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.ClassInheritanceMultiMap;
 import net.minecraft.util.BlockPos;
@@ -267,26 +268,7 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 		// 		// 	sectionNBT.setByteArray("Add", nibblearray1.getData());
 		// 		// }
 				
-		// 		NibbleArray blocklightArray = chunkSection.getBlocklightArray();
-		// 		int lightArrayLen = blocklightArray.getData().length;
 		// 		sectionNBT.setByteArray("BlockLight", blocklightArray.getData());
-				
-		// 		if (hasSky) {
-		// 			NibbleArray skylightArray = chunkSection.getSkylightArray();
-		// 			if (skylightArray != null) {
-		// 				sectionNBT.setByteArray("SkyLight", skylightArray.getData());
-		// 			} else {
-		// 				// Shouldn't happen, but if it does, handle it smoothly.
-		// 				LOGGER.error("[WDL] Skylight array for chunk at " +
-		// 						chunk.getChunkCoordIntPair().chunkXPos + ", " + chunk.getChunkCoordIntPair().chunkZPos +
-		// 						" is null despite VersionedProperties " +
-		// 						"saying it shouldn't be!");
-		// 				sectionNBT.setByteArray("SkyLight", new byte[lightArrayLen]);
-		// 			}
-		// 		} else {
-		// 			sectionNBT.setByteArray("SkyLight", new byte[lightArrayLen]);
-		// 		}
-
 		// 		chunkSectionList.appendTag(sectionNBT);
 		// 	}
 		// }
@@ -295,7 +277,10 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 		compound.setByteArray("Biomes", chunk.getBiomeArray());
 
 		chunk.setHasEntities(false);
-		//TODO: FIX ENTITY & TILEENTITY PARSING AS IT'S BROKEN RN
+
+		// TODO: FIX ENTITY & TILEENTITY NBT DATA PARSING
+		// RN DOESN'T SAVE DATA
+
 		NBTTagList entityList = getEntityList(chunk);
 		compound.setTag("Entities", entityList);
 
@@ -403,12 +388,33 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 			}
 
 			NBTTagCompound entityData = new NBTTagCompound();
-
+			// STILL TODO: minecart chest data doesn't save properly
 			try {
 				if (entity.writeToNBTOptional(entityData)) {
+					// For some fucking reason, at least in a dev env, 
+					// the tagCompund.setTag("Pos", ...) from entity.writeToNBT doesn't work,
+					// as entity.posX, Y, Z have got some absolute nonsense as their values.
+					// To fix this, the "Pos" tag is reimplemented here using "prevPosX" instead of "posX"
+					// which works correctly
+					NBTTagList nbttaglist = new NBTTagList();
+					nbttaglist.appendTag(new NBTTagDouble(entity.prevPosX));
+					nbttaglist.appendTag(new NBTTagDouble(entity.prevPosY));
+					nbttaglist.appendTag(new NBTTagDouble(entity.prevPosZ));
+
+					entityData.setTag("Pos", nbttaglist);
+					// Uncomment those lines to undestant the nonsense of the pos values
+					// System.out.println("====================");
+					// System.out.println("entity chunkcoords: " + entity.chunkCoordX + " " + entity.chunkCoordY + " " + entity.chunkCoordZ);
+					// System.out.println("entity prevcoords: " + entity.prevPosX + " " + entity.prevPosY + " " + entity.prevPosZ);
+					// System.out.println("entity coords: " + entity.posX + " " + entity.posY + " " + entity.posZ);
+					// System.out.println("entity type: " + entity.getName());
+					// System.out.println(entityData.getTagList("Pos", 6));
+
+					// TODO: add toggle for that
+					entityData.setBoolean("NoAI", true);
+					
 					chunk.setHasEntities(true);
 					entityList.appendTag(entityData);
-					// System.out.println("saved entity tag");
 				}
 			} catch (Exception e) {
 				WDLMessages.chatMessageTranslated(
@@ -419,27 +425,25 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 				LOGGER.warn("Entity metadata dump:");
 				try {
 					// EntityDataManager doesn't exist here
-					// List<EntityDataManager.DataEntry<?>> objects = entity
-					// 		.getDataManager().getAll();
-					// if (objects == null) {
-					// 	LOGGER.warn("No entries (getAllWatched() returned null)");
-					// } else {
-					// 	LOGGER.warn(objects);
-					// 	for (EntityDataManager.DataEntry<?> obj : objects) {
-					// 		if (obj != null) {
-					// 			LOGGER.warn("DataEntry [getValue()="
-					// 					+ obj.getValue()
-					// 					+ ", isDirty()="
-					// 					+ obj.isDirty()
-					// 					+ ", getKey()="
-					// 					+ "DataParameter ["
-					// 					+ "getId()="
-					// 					+ obj.getKey().getId()
-					// 					+ ", getSerializer()="
-					// 					+ obj.getKey().getSerializer() + "]]");
-					// 		}
-					// 	}
-					// }
+					List<DataWatcher.WatchableObject> objects = entity
+							.getDataWatcher().getAllWatched();
+					if (objects == null) {
+						LOGGER.warn("No entries (getAllWatched() returned null)");
+					} else {
+						LOGGER.warn(objects);
+						for (DataWatcher.WatchableObject obj : objects) {
+							if (obj != null) {
+								LOGGER.warn("WatchableObject [getDataValueId()="
+										+ obj.getDataValueId()
+										+ ", getObject()="
+										+ obj.getObject()
+										+ ", getObjectType()="
+										+ obj.getObjectType()
+										+ ", isWatched()="
+										+ obj.isWatched() + "]");
+							}
+						}
+					}
 				} catch (Exception e2) {
 					LOGGER.warn("Failed to complete dump: ", e);
 				}
@@ -447,11 +451,11 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 				continue;
 			}
 		}
-		if (entityList.tagCount() > 0) {
-			System.out.println("count:" + entityList.tagCount());
-			System.out.println(entityList.toString());
-			System.out.println(chunk.getChunkCoordIntPair().toString());
-		}
+		// if (entityList.tagCount() > 0) {
+		// 	System.out.println("count:" + entityList.tagCount());
+		// 	System.out.println(entityList.toString());
+		// 	System.out.println(chunk.getChunkCoordIntPair().toString());
+		// }
 
 		return entityList;
 	}
@@ -512,6 +516,7 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 				NBTTagCompound compound = new NBTTagCompound();
 
 				TileEntity te = newTEMap.get(pos);
+				
 				try {
 					te.writeToNBT(compound);
 				} catch (Exception e) {
@@ -536,10 +541,11 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 			} else if (oldTEMap.containsKey(pos)) {
 				NBTTagCompound compound = oldTEMap.get(pos);
 				String entityType = compound.getString("id");
-				WDLMessages.chatMessageTranslated(
-						WDL.serverProps,
-						WDLMessageTypes.LOAD_TILE_ENTITY,
-						"wdl.messages.tileEntity.usingOld", entityType, pos);
+				//TODO: READD
+				// WDLMessages.chatMessageTranslated(
+				// 		WDL.serverProps,
+				// 		WDLMessageTypes.LOAD_TILE_ENTITY,
+				// 		"wdl.messages.tileEntity.usingOld", entityType, pos);
 
 				editTileEntity(pos, compound, TileEntityCreationMode.IMPORTED);
 
@@ -565,7 +571,6 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 				tileEntityList.appendTag(compound);
 			}
 		}
-
 		return tileEntityList;
 	}
 
@@ -602,6 +607,7 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 				}
 
 				chunkNBT = CompressedStreamTools.read(dis);
+				dis.close();
 			}
 
 			NBTTagCompound levelNBT = chunkNBT.getCompoundTag("Level");
@@ -614,7 +620,7 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 					String entityID = oldNBT.getString("id");
 					BlockPos pos = new BlockPos(oldNBT.getInteger("x"),
 							oldNBT.getInteger("y"), oldNBT.getInteger("z"));
-					Block block = chunk.getBlockState(pos).getBlock();
+					Block block = chunk.getBlock(pos);
 
 					if (shouldImportBlockEntity(entityID, pos, block, oldNBT, chunk)) {
 						returned.put(pos, oldNBT);
@@ -622,10 +628,11 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 						// Even if this tile entity is saved in another way
 						// later, we still want the player to know we did not
 						// import something in that chunk.
-						WDLMessages.chatMessageTranslated(
-								WDL.serverProps,
-								WDLMessageTypes.LOAD_TILE_ENTITY,
-								"wdl.messages.tileEntity.notImporting", entityID, pos);
+						//TODO: READD
+						// WDLMessages.chatMessageTranslated(
+						// 		WDL.serverProps,
+						// 		WDLMessageTypes.LOAD_TILE_ENTITY,
+						// 		"wdl.messages.tileEntity.notImporting", entityID, pos);
 					}
 				}
 			}

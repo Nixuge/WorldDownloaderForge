@@ -888,6 +888,7 @@ public class WDL {
 	 * Gets a list of all currently-loaded chunks. There may be null elements in the
 	 * list.
 	 */
+	@SuppressWarnings("unchecked")
 	public List<Chunk> getChunkList() {
 		// TODO: CHECK IF WORKING
 		// List obj = ReflectionUtils.findAndGetPrivateField(
@@ -901,10 +902,10 @@ public class WDL {
 		Object object = worldClient.getChunkProvider();
 		Class<?> typeOfObject = ChunkProviderClient.class;
 		Class<?> typeOfField = List.class;
-		Object obj;
+		List<Chunk> chunkList;
 		try {
 			Field f = ReflectionUtils.findField(typeOfObject, typeOfField);
-			obj = (List<Chunk>) typeOfField.cast(f.get(object));
+			chunkList = (List<Chunk>) typeOfField.cast(f.get(object));
 		} catch (Exception e) {
 			throw new RuntimeException(
 					"WorldDownloader: Couldn't get Field of type \""
@@ -912,22 +913,9 @@ public class WDL {
 							+ "\" !", e);
 		}
 
+		List<Chunk> chunks = new ArrayList<>(chunkList);
 
-		List<Chunk> chunks;
-		if (obj instanceof List<?>) {
-			@SuppressWarnings("unchecked")
-			List<Chunk> chunkList = (List<Chunk>)obj;
-			chunks = new ArrayList<>(chunkList);
-			System.out.println("chunks is a list!");
-		} else if (obj instanceof Map<?, ?>) {
-			@SuppressWarnings("unchecked")
-			Map<?, Chunk> chunkMap = (Map<?, Chunk>)obj;
-			chunks = new ArrayList<>(chunkMap.values());
-			System.out.println("chunks is a map!");
-		} else {
-			// Shouldn't ever happen
-			throw new RuntimeException("Could not get ChunkProviderClient's chunk list: unexpected type for object " + obj);
-		}
+
 		System.out.println("chunkssize: " + chunks.size());
 		// System.out.println(chunks);
 		return chunks;
@@ -997,12 +985,14 @@ public class WDL {
 		if (c.isEmpty() || c instanceof EmptyChunk) {
 			return true;
 		}
+	
 		ExtendedBlockStorage[] array = c.getBlockStorageArray();
 		for (int i = 1; i < array.length; i++) {
-			if (!array[i].isEmpty()) {
+			if (array[i] != null && (!array[i].isEmpty())) {
 				return false;
 			}
 		}
+
 		if (!array[0].isEmpty()) {
 			// All-air empty chunks sometimes are sent with a bottom section;
 			// handle that and a few other special cases.
@@ -1392,33 +1382,34 @@ public class WDL {
 		}
 		worldInfoNBT.setTag("GameRules", gamerules);
 
-		addForgeDataToWorldInfo(rootWorldInfoNBT, worldInfoNBT);
+		// addForgeDataToWorldInfo(rootWorldInfoNBT, worldInfoNBT);
 	}
+	
+	// Forge data is useless for a map save, ignoring
+	// private void addForgeDataToWorldInfo(NBTTagCompound rootWorldInfoNBT, NBTTagCompound worldInfoNBT) {
+	// 	try {
+	// 		NBTTagCompound versionInfo = worldInfoNBT.getCompoundTag("Version");
 
-	private void addForgeDataToWorldInfo(NBTTagCompound rootWorldInfoNBT, NBTTagCompound worldInfoNBT) {
-		try {
-			NBTTagCompound versionInfo = worldInfoNBT.getCompoundTag("Version");
+	// 		Class<?> fmlCommonHandler = Class.forName("net.minecraftforge.fml.common.FMLCommonHandler");
+	// 		Object instance = fmlCommonHandler.getMethod("instance").invoke(null);
+	// 		Object dataFixer = fmlCommonHandler.getMethod("getDataFixer").invoke(instance);
+	// 		Method writeVersionData = dataFixer.getClass()
+	// 				.getMethod("writeVersionData", NBTTagCompound.class);
+	// 		writeVersionData.invoke(dataFixer, versionInfo);
+	// 	} catch (Throwable ex) {
+	// 		LOGGER.info("Failed to call FML writeVersionData", ex);
+	// 	}
 
-			Class<?> fmlCommonHandler = Class.forName("net.minecraftforge.fml.common.FMLCommonHandler");
-			Object instance = fmlCommonHandler.getMethod("instance").invoke(null);
-			Object dataFixer = fmlCommonHandler.getMethod("getDataFixer").invoke(instance);
-			Method writeVersionData = dataFixer.getClass()
-					.getMethod("writeVersionData", NBTTagCompound.class);
-			writeVersionData.invoke(dataFixer, versionInfo);
-		} catch (Throwable ex) {
-			LOGGER.info("Failed to call FML writeVersionData", ex);
-		}
-
-		try {
-			Class<?> fmlCommonHandler = Class.forName("net.minecraftforge.fml.common.FMLCommonHandler");
-			Object instance = fmlCommonHandler.getMethod("instance").invoke(null);
-			Method handleWorldDataSave = fmlCommonHandler.getMethod("handleWorldDataSave",
-					SaveHandler.class, WorldInfo.class, NBTTagCompound.class);
-			handleWorldDataSave.invoke(instance, saveHandler, worldClient.getWorldInfo(), rootWorldInfoNBT);
-		} catch (Throwable ex) {
-			LOGGER.info("Failed to call FML handleWorldDataSave", ex);
-		}
-	}
+	// 	try {
+	// 		Class<?> fmlCommonHandler = Class.forName("net.minecraftforge.fml.common.FMLCommonHandler");
+	// 		Object instance = fmlCommonHandler.getMethod("instance").invoke(null);
+	// 		Method handleWorldDataSave = fmlCommonHandler.getMethod("handleWorldDataSave",
+	// 				SaveHandler.class, WorldInfo.class, NBTTagCompound.class);
+	// 		handleWorldDataSave.invoke(instance, saveHandler, worldClient.getWorldInfo(), rootWorldInfoNBT);
+	// 	} catch (Throwable ex) {
+	// 		LOGGER.info("Failed to call FML handleWorldDataSave", ex);
+	// 	}
+	// }
 
 	/**
 	 * Saves existing map data.  Map data referring to the items
