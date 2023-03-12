@@ -20,7 +20,7 @@ import javax.annotation.CheckForSigned;
 import javax.annotation.Nonnegative;
 
 import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.IChatComponent;
 
 /**
  * WDL configuration.  Mostly, based off of {@Link Setting} objects; there are a few things
@@ -85,7 +85,7 @@ public interface IConfiguration {
 	 * @param setting The setting to use
 	 * @see CyclableSetting#getButtonText
 	 */
-	public default <T> ITextComponent getButtonText(CyclableSetting<T> setting) {
+	public default <T> IChatComponent getButtonText(CyclableSetting<T> setting) {
 		return setting.getButtonText(this.getValue(setting));
 	}
 

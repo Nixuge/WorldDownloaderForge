@@ -37,8 +37,8 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityCommandBlock;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.world.DimensionType;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.storage.SaveHandler;
@@ -66,7 +66,7 @@ final class HandlerFunctions {
 	 */
 	static boolean hasSkyLight(World world) {
 		// 1.10-: use isNether (hasNoSky)
-		return !world.provider.getDimensionType().equals(DimensionType.NETHER);
+		return !world.provider.getWorldProvider().equals(WorldProvider.NETHER);
 	}
 
 	/* (non-javadoc)

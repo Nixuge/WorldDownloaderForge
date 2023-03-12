@@ -18,8 +18,8 @@ import java.util.function.Supplier;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.IChatComponent;
 import wdl.WDL;
 
 /**
@@ -55,7 +55,7 @@ public class GuiWDLSaveProgress extends GuiTurningCameraBase {
 	 * @param title The title.
 	 * @param taskCount The total number of major tasks that there will be.
 	 */
-	public GuiWDLSaveProgress(WDL wdl, ITextComponent title, int taskCount) {
+	public GuiWDLSaveProgress(WDL wdl, IChatComponent title, int taskCount) {
 		super(wdl, title);
 		this.majorTaskCount = taskCount;
 		this.majorTaskNumber = 0;
@@ -203,7 +203,7 @@ public class GuiWDLSaveProgress extends GuiTurningCameraBase {
 	private void drawProgressBar(int y, int emptyV, int filledV, float progress) {
 		progress = MathHelper.clamp_float(progress, 0, 1);
 
-		this.mc.getTextureManager().bindTexture(Gui.ICONS);
+		this.mc.getTextureManager().bindTexture(Gui.icons);
 
 		final int height = 5;
 

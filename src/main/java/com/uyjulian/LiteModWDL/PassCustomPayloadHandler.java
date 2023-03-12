@@ -20,7 +20,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.Packet;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.server.SPacketCustomPayload;
+import net.minecraft.network.play.server.S3FPacketCustomPayload;
 import wdl.WDLHooks;
 
 /**
@@ -61,12 +61,12 @@ public class PassCustomPayloadHandler extends SimpleChannelInboundHandler<Packet
 			}
 		}
 
-		if (msg instanceof SPacketCustomPayload) {
-			SPacketCustomPayload packet = (SPacketCustomPayload)msg;
+		if (msg instanceof S3FPacketCustomPayload) {
+			S3FPacketCustomPayload packet = (S3FPacketCustomPayload)msg;
 			if (packet.getChannelName().equals("REGISTER") || packet.getChannelName().equals("UNREGISTER")) {
 				// Make a copy of the packet contents, because otherwise, it'll be read on multiple threads.
 				final PacketBuffer copiedBuffer = new PacketBuffer(packet.getBufferData().copy());
-				final SPacketCustomPayload copiedPacket = new SPacketCustomPayload(packet.getChannelName(), copiedBuffer);
+				final S3FPacketCustomPayload copiedPacket = new S3FPacketCustomPayload(packet.getChannelName(), copiedBuffer);
 				// mc.execute
 				mc.addScheduledTask(new Runnable() {
 					@Override

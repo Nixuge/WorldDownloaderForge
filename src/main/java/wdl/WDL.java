@@ -66,9 +66,9 @@ import net.minecraft.nbt.NBTTagList;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.realms.RealmsScreen;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.MinecraftException;
 import net.minecraft.world.chunk.Chunk;
@@ -184,19 +184,19 @@ public class WDL {
 	/**
 	 * All tile entities that were saved manually, by chunk and then position.
 	 */
-	public Map<ChunkPos, Map<BlockPos, TileEntity>> newTileEntities = new HashMap<>();
+	public Map<ChunkCoordIntPair, Map<BlockPos, TileEntity>> newTileEntities = new HashMap<>();
 
 	/**
 	 * All entities that were downloaded, by chunk.
 	 */
-	public Multimap<ChunkPos, Entity> newEntities = HashMultimap.create();
+	public Multimap<ChunkCoordIntPair, Entity> newEntities = HashMultimap.create();
 
 	/**
 	 * The chunk position of each entity that has been saved, by UUID.
 	 * Cleared after that chunk has been written to disk.  Used to avoid
 	 * writing the same entity into multiple chunks.
 	 */
-	public Map<UUID, ChunkPos> entityPositions = new HashMap<>();
+	public Map<UUID, ChunkCoordIntPair> entityPositions = new HashMap<>();
 
 	/**
 	 * All of the {@link MapData}s that were sent to the client in the current
@@ -207,7 +207,7 @@ public class WDL {
 	/**
 	 * All chunks that have been saved, for use in a UI.
 	 */
-	public Set<ChunkPos> savedChunks = new HashSet<>();
+	public Set<ChunkCoordIntPair> savedChunks = new HashSet<>();
 
 	// State variables:
 	/**
@@ -338,7 +338,7 @@ public class WDL {
 		// This code really needs to be redone.
 		if (isMultiworld && worldName.isEmpty()) {
 			minecraft.displayGuiScreen(new GuiWDLMultiworldSelect(this,
-					new TextComponentTranslation("wdl.gui.multiworldSelect.title." + context),
+					new ChatComponentTranslation("wdl.gui.multiworldSelect.title." + context),
 					new GuiWDLMultiworldSelect.WorldSelectionCallback() {
 				@Override
 				public void onWorldSelected(String selectedWorld) {
@@ -625,7 +625,7 @@ public class WDL {
 		WorldBackupType backupType = serverProps.getValue(MiscSettings.BACKUP_TYPE);
 
 		final GuiWDLSaveProgress progressScreen = new GuiWDLSaveProgress(this,
-				new TextComponentTranslation("wdl.saveProgress.title"),
+				new ChatComponentTranslation("wdl.saveProgress.title"),
 				(backupType != WorldBackupType.NONE ? 6 : 5)
 				+ WDLApi.getImplementingExtensions(ISaveListener.class).size());
 
@@ -1602,7 +1602,7 @@ public class WDL {
 		int chunkX = pos.getX() >> 4;
 		int chunkZ = pos.getZ() >> 4;
 
-		ChunkPos chunkPos = new ChunkPos(chunkX, chunkZ);
+		ChunkCoordIntPair chunkPos = new ChunkCoordIntPair(chunkX, chunkZ);
 
 		if (!newTileEntities.containsKey(chunkPos)) {
 			newTileEntities.put(chunkPos, new HashMap<BlockPos, TileEntity>());
@@ -1615,7 +1615,7 @@ public class WDL {
 	 *
 	 * @param pos Location of the chunk
 	 */
-	public void unloadChunk(ChunkPos pos) {
+	public void unloadChunk(ChunkCoordIntPair pos) {
 		Map<BlockPos, TileEntity> m = newTileEntities.get(pos);
 		if (m != null) {
 			m.clear();

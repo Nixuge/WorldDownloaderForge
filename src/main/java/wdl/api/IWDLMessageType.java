@@ -13,8 +13,8 @@
  */
 package wdl.api;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.EnumChatFormatting;
 
 
 /**
@@ -30,24 +30,24 @@ public interface IWDLMessageType {
 	 *
 	 * @return The format code.
 	 */
-	public abstract TextFormatting getTitleColor();
+	public abstract EnumChatFormatting getTitleColor();
 	/**
 	 * Gets the <a href="https://minecraft.gamepedia.com/Formatting_codes">color
 	 * code</a> used for the main message.
 	 *
 	 * @return The format code.
 	 */
-	public abstract TextFormatting getTextColor();
+	public abstract EnumChatFormatting getTextColor();
 	/**
 	 * Gets the name to use on buttons and such.
 	 */
-	public abstract ITextComponent getDisplayName();
+	public abstract IChatComponent getDisplayName();
 	/**
 	 * Gets the description text for this message, used in the messages GUI.
 	 * <br/>
 	 * If you want to include a newline, use <code>\n</code>.
 	 */
-	public abstract ITextComponent getDescription();
+	public abstract IChatComponent getDescription();
 	/**
 	 * Whether this type of message should be enabled by default.
 	 */

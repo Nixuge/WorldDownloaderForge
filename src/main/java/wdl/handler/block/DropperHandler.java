@@ -20,9 +20,9 @@ import java.util.function.BiConsumer;
 import net.minecraft.inventory.ContainerDispenser;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntityDropper;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import wdl.ReflectionUtils;
 import wdl.handler.HandlerException;
@@ -33,7 +33,7 @@ public class DropperHandler extends BlockHandler<TileEntityDropper, ContainerDis
 	}
 
 	@Override
-	public ITextComponent handle(BlockPos clickedPos, ContainerDispenser container,
+	public IChatComponent handle(BlockPos clickedPos, ContainerDispenser container,
 			TileEntityDropper blockEntity, IBlockAccess world,
 			BiConsumer<BlockPos, TileEntityDropper> saveMethod) throws HandlerException {
 		IInventory dropperInventory = ReflectionUtils.findAndGetPrivateField(
@@ -44,6 +44,6 @@ public class DropperHandler extends BlockHandler<TileEntityDropper, ContainerDis
 		if (title != null) {
 			blockEntity.setCustomName(customName(title));
 		}
-		return new TextComponentTranslation("wdl.messages.onGuiClosedInfo.savedTileEntity.dropper");
+		return new ChatComponentTranslation("wdl.messages.onGuiClosedInfo.savedTileEntity.dropper");
 	}
 }

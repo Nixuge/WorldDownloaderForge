@@ -38,18 +38,18 @@ import net.minecraft.inventory.Container;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.inventory.InventoryEnderChest;
 import net.minecraft.inventory.Slot;
-import net.minecraft.network.play.server.SPacketBlockAction;
-import net.minecraft.network.play.server.SPacketChat;
-import net.minecraft.network.play.server.SPacketCustomPayload;
-import net.minecraft.network.play.server.SPacketMaps;
+import net.minecraft.network.play.server.S24PacketBlockAction;
+import net.minecraft.network.play.server.S02PacketChat;
+import net.minecraft.network.play.server.S3FPacketCustomPayload;
+import net.minecraft.network.play.server.S34PacketMaps;
 import net.minecraft.network.play.server.SPacketUnloadChunk;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityEnderChest;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.BlockPos;
+import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.storage.MapData;
 import wdl.MapDataHandler.MapDataResult;
@@ -181,7 +181,7 @@ public class WDLEvents {
 	public void onItemGuiOpened() {
 		if (!WDL.downloading) { return; }
 
-		RayTraceResult result = wdl.minecraft.objectMouseOver;
+		MovingObjectPosition result = wdl.minecraft.objectMouseOver;
 		if (result == null) {
 			// This case is hit via https://bugs.mojang.com/browse/MC-79925
 			wdl.lastEntity = null;
@@ -238,7 +238,7 @@ public class WDLEvents {
 					}
 
 					try {
-						ITextComponent msg = handler.copyDataCasting(windowContainer, ridingEntity, true);
+						IChatComponent msg = handler.copyDataCasting(windowContainer, ridingEntity, true);
 						WDLMessages.chatMessage(WDL.serverProps, WDLMessageTypes.ON_GUI_CLOSED_INFO, msg);
 						return true;
 					} catch (HandlerException e) {
@@ -264,7 +264,7 @@ public class WDLEvents {
 			EntityHandler<?, ?> handler = EntityHandler.getHandler(entity.getClass(), windowContainer.getClass());
 			if (handler != null) {
 				try {
-					ITextComponent msg = handler.copyDataCasting(windowContainer, entity, true);
+					IChatComponent msg = handler.copyDataCasting(windowContainer, entity, true);
 					WDLMessages.chatMessage(WDL.serverProps, WDLMessageTypes.ON_GUI_CLOSED_INFO, msg);
 					return true;
 				} catch (HandlerException e) {
@@ -309,7 +309,7 @@ public class WDLEvents {
 		if (handler != null) {
 			try {
 				// TODO: CHECK
-				ITextComponent msg = handler.handleCasting(wdl.lastClickedBlock, wdl.windowContainer,
+				IChatComponent msg = handler.handleCasting(wdl.lastClickedBlock, wdl.windowContainer,
 						te, wdl.worldClient, wdl::saveTileEntity);
 				WDLMessages.chatMessage(WDL.serverProps, WDLMessageTypes.ON_GUI_CLOSED_INFO, msg);
 				return true;
@@ -361,7 +361,7 @@ public class WDLEvents {
 		if (handler != null) {
 			try {
 				// TODO: CHECK
-				ITextComponent msg = handler.handleCasting(pos, block, blockEntity,
+				IChatComponent msg = handler.handleCasting(pos, block, blockEntity,
 						data1, data2, wdl.worldClient, wdl::saveTileEntity);
 				WDLMessages.chatMessage(WDL.serverProps, WDLMessageTypes.ON_GUI_CLOSED_INFO, msg);
 			} catch (HandlerException e) {
@@ -437,11 +437,11 @@ public class WDLEvents {
 						WDLMessageTypes.REMOVE_ENTITY,
 						"wdl.messages.removeEntity.savingDistance", entity,
 						entity.getPositionVector().toString(), wdl.player.getPositionVector(), threshold, serverViewDistance);
-				ChunkPos pos = new ChunkPos(entity.chunkCoordX, entity.chunkCoordZ);
+				ChunkCoordIntPair pos = new ChunkCoordIntPair(entity.chunkCoordX, entity.chunkCoordZ);
 				UUID uuid = entity.getUniqueID();
 				if (wdl.entityPositions.containsKey(uuid)) {
 					// Remove previous entity, to avoid saving the same one in multiple chunks.
-					ChunkPos prevPos = wdl.entityPositions.get(uuid);
+					ChunkCoordIntPair prevPos = wdl.entityPositions.get(uuid);
 					boolean removedSome = wdl.newEntities.get(pos).removeIf(e -> e.getUniqueID().equals(uuid));
 					LOGGER.info("Replacing entity with UUID {} previously located at {} with new position {}.  There was an entity at old position (should be true): {}", uuid, prevPos, pos, removedSome);
 				}
@@ -629,7 +629,7 @@ public class WDLEvents {
 		}
 		@Override
 		public void onNHPCHandleChat(NetHandlerPlayClient sender,
-				SPacketChat packet) {
+				S02PacketChat packet) {
 			try {
 				if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
 					return;
@@ -659,7 +659,7 @@ public class WDLEvents {
 		}
 		@Override
 		public void onNHPCHandleMaps(NetHandlerPlayClient sender,
-				SPacketMaps packet) {
+				S34PacketMaps packet) {
 			try {
 				if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
 					return;
@@ -686,7 +686,7 @@ public class WDLEvents {
 		}
 		@Override
 		public void onNHPCHandleCustomPayload(NetHandlerPlayClient sender,
-				SPacketCustomPayload packet) {
+				S3FPacketCustomPayload packet) {
 			try {
 				if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
 					return;
@@ -744,7 +744,7 @@ public class WDLEvents {
 		}
 		@Override
 		public void onNHPCHandleBlockAction(NetHandlerPlayClient sender,
-				SPacketBlockAction packet) {
+				S24PacketBlockAction packet) {
 			try {
 				if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
 					return;
@@ -778,7 +778,7 @@ public class WDLEvents {
 			}
 		}
 		@Override
-		public void onNHPCDisconnect(NetHandlerPlayClient sender, ITextComponent reason) {
+		public void onNHPCDisconnect(NetHandlerPlayClient sender, IChatComponent reason) {
 			if (WDL.downloading) {
 				// This is likely to be called from an unexpected thread, so queue a task
 				// if on a different thread (execute will run it immediately if on the right thread)

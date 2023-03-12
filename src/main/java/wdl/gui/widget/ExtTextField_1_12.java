@@ -15,7 +15,7 @@ package wdl.gui.widget;
 
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.IChatComponent;
 
 /**
  * Extendible text field, to deal with changing constructors between versions.
@@ -32,7 +32,7 @@ abstract class ExtTextField extends GuiTextField {
 	 */
 	private int mouseX, mouseY;
 
-	public ExtTextField(FontRenderer fontRenderer, int x, int y, int width, int height, ITextComponent label) {
+	public ExtTextField(FontRenderer fontRenderer, int x, int y, int width, int height, IChatComponent label) {
 		super(-1, fontRenderer, x, y, width, height);
 		this.width = width;
 		this.height = height;

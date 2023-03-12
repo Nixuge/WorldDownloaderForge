@@ -21,8 +21,8 @@ import java.util.Map;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
 import wdl.VersionConstants;
 import wdl.WDL;
 import wdl.WDLMessageTypes;
@@ -187,36 +187,36 @@ public class WDLUpdateChecker extends Thread {
 			if (!WDL.globalProps.getValue(MiscSettings.TUTORIAL_SHOWN)) {
 				sleep(5000);
 
-				TextComponentTranslation success = new TextComponentTranslation(
+				ChatComponentTranslation success = new ChatComponentTranslation(
 						"wdl.intro.success");
-				TextComponentTranslation mcfThread = new TextComponentTranslation(
+				ChatComponentTranslation mcfThread = new ChatComponentTranslation(
 						"wdl.intro.forumsLink");
 				mcfThread.setStyle(VersionedFunctions.createLinkFormatting(FORUMS_THREAD_USAGE_LINK));
-				TextComponentTranslation wikiLink = new TextComponentTranslation(
+				ChatComponentTranslation wikiLink = new ChatComponentTranslation(
 						"wdl.intro.wikiLink");
 				wikiLink.setStyle(VersionedFunctions.createLinkFormatting(WIKI_LINK));
-				TextComponentTranslation usage = new TextComponentTranslation(
+				ChatComponentTranslation usage = new ChatComponentTranslation(
 						"wdl.intro.usage", mcfThread, wikiLink);
-				TextComponentTranslation githubRepo = new TextComponentTranslation(
+				ChatComponentTranslation githubRepo = new ChatComponentTranslation(
 						"wdl.intro.githubRepo");
 				githubRepo.setStyle(VersionedFunctions.createLinkFormatting(GITHUB_LINK));
-				TextComponentTranslation contribute = new TextComponentTranslation(
+				ChatComponentTranslation contribute = new ChatComponentTranslation(
 						"wdl.intro.contribute", githubRepo);
-				TextComponentTranslation redistributionList = new TextComponentTranslation(
+				ChatComponentTranslation redistributionList = new ChatComponentTranslation(
 						"wdl.intro.redistributionList");
 				redistributionList.setStyle(VersionedFunctions.createLinkFormatting(REDISTRIBUTION_LINK));
-				TextComponentTranslation warning = new TextComponentTranslation(
+				ChatComponentTranslation warning = new ChatComponentTranslation(
 						"wdl.intro.warning");
-				warning.getStyle().setColor(TextFormatting.DARK_RED).setBold(true);
-				TextComponentTranslation illegally = new TextComponentTranslation(
+				warning.getStyle().setColor(EnumChatFormatting.DARK_RED).setBold(true);
+				ChatComponentTranslation illegally = new ChatComponentTranslation(
 						"wdl.intro.illegally");
-				illegally.getStyle().setColor(TextFormatting.DARK_RED).setBold(true);
-				TextComponentTranslation stolen = new TextComponentTranslation(
+				illegally.getStyle().setColor(EnumChatFormatting.DARK_RED).setBold(true);
+				ChatComponentTranslation stolen = new ChatComponentTranslation(
 						"wdl.intro.stolen", warning, redistributionList, illegally);
-				TextComponentTranslation smr = new TextComponentTranslation(
+				ChatComponentTranslation smr = new ChatComponentTranslation(
 						"wdl.intro.stopModReposts");
 				smr.setStyle(VersionedFunctions.createLinkFormatting(SMR_LINK));
-				TextComponentTranslation stolenBeware = new TextComponentTranslation(
+				ChatComponentTranslation stolenBeware = new ChatComponentTranslation(
 						"wdl.intro.stolenBeware", smr);
 
 				WDLMessages.chatMessage(WDL.serverProps, WDLMessageTypes.UPDATES, success);
@@ -267,7 +267,7 @@ public class WDLUpdateChecker extends Thread {
 			if (hasNewVersion()) {
 				Release recomendedRelease = getRecomendedRelease();
 
-				TextComponentTranslation updateLink = new TextComponentTranslation(
+				ChatComponentTranslation updateLink = new ChatComponentTranslation(
 						"wdl.messages.updates.newRelease.updateLink");
 				updateLink.setStyle(VersionedFunctions.createLinkFormatting(recomendedRelease.URL));
 
@@ -279,7 +279,7 @@ public class WDLUpdateChecker extends Thread {
 
 			// Next up: Check if the version is untested.
 			if (VersionConstants.isUntestedVersion()) {
-				TextComponentTranslation githubIssues = new TextComponentTranslation(
+				ChatComponentTranslation githubIssues = new ChatComponentTranslation(
 						"wdl.intro.githubRepo");
 				githubIssues.setStyle(VersionedFunctions.createLinkFormatting(GITHUB_ISSUES_LINK));
 				WDLMessages.chatMessageTranslated(WDL.serverProps,
@@ -333,7 +333,7 @@ public class WDLUpdateChecker extends Thread {
 			}
 
 			if (failed.size() > 0) {
-				TextComponentTranslation mcfThread = new TextComponentTranslation(
+				ChatComponentTranslation mcfThread = new ChatComponentTranslation(
 						"wdl.intro.forumsLink");
 				mcfThread.setStyle(VersionedFunctions.createLinkFormatting(FORUMS_THREAD_USAGE_LINK));
 				WDLMessages.chatMessageTranslated(WDL.serverProps,

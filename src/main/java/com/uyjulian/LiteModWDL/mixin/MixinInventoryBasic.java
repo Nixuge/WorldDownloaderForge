@@ -22,15 +22,15 @@ import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 import net.minecraft.inventory.InventoryBasic;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ChatComponentText;
 import wdl.ducks.INetworkNameable;
 
 @Mixin(InventoryBasic.class)
 public abstract class MixinInventoryBasic implements INetworkNameable {
-	@Inject(method = "<init>(Lnet/minecraft/util/text/ITextComponent;I)V", at = @At("RETURN"))
-	private void onConstructed(ITextComponent title, int slotCount, CallbackInfo ci) {
-		if (title instanceof TextComponentString) {
+	@Inject(method = "<init>(Lnet/minecraft/util/text/IChatComponent;I)V", at = @At("RETURN"))
+	private void onConstructed(IChatComponent title, int slotCount, CallbackInfo ci) {
+		if (title instanceof ChatComponentText) {
 //			this.networkCustomName = title.getString();
 			this.networkCustomName = title.getFormattedText();
 		}

@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.ChatComponentTranslation;
 import wdl.WDL;
 import wdl.config.BooleanSetting;
 import wdl.config.IConfiguration;
@@ -66,7 +66,7 @@ public class GuiWDLWorld extends WDLScreen {
 		}
 
 		//@Override
-		//public ITextComponent getNarratorMessage() {
+		//public IChatComponent getNarratorMessage() {
 			//return config.getButtonText(setting);
 		//}
 
@@ -74,13 +74,13 @@ public class GuiWDLWorld extends WDLScreen {
 		public void afterDraw() {
 			int textureX = config.getValue((BooleanSetting)this.setting) ? 0 : 20; 
 			int textureY = this.isMouseOver() ? 166 : 146;
-			mc.getTextureManager().bindTexture(GuiButton.BUTTON_TEXTURES);
+			mc.getTextureManager().bindTexture(GuiButton.buttonTextures);
 			drawTexturedModalRect(this.xPosition, this.yPosition, textureX, textureY, this.width, this.height);
 		}
 	}
 
 	public GuiWDLWorld(@Nullable GuiScreen parent, WDL wdl) {
-		super(new TextComponentTranslation("wdl.gui.world.title", WDL.baseFolderName));
+		super(new ChatComponentTranslation("wdl.gui.world.title", WDL.baseFolderName));
 		this.parent = parent;
 		this.wdl = wdl;
 		this.config = wdl.worldProps;
@@ -121,13 +121,13 @@ public class GuiWDLWorld extends WDLScreen {
 		this.spawnTextY = y + 4;
 		this.spawnX = this.addTextField(new GuiNumericTextField(this.fontRendererObj,
 				this.width / 2 - 87, y, 50, 16,
-				new TextComponentTranslation("wdl.gui.world.spawn.coord", "X")));
+				new ChatComponentTranslation("wdl.gui.world.spawn.coord", "X")));
 		this.spawnY = this.addTextField(new GuiNumericTextField(this.fontRendererObj,
 				this.width / 2 - 19, y, 50, 16,
-				new TextComponentTranslation("wdl.gui.world.spawn.coord", "Y")));
+				new ChatComponentTranslation("wdl.gui.world.spawn.coord", "Y")));
 		this.spawnZ = this.addTextField(new GuiNumericTextField(this.fontRendererObj,
 				this.width / 2 + 48, y, 50, 16,
-				new TextComponentTranslation("wdl.gui.world.spawn.coord", "Z")));
+				new ChatComponentTranslation("wdl.gui.world.spawn.coord", "Z")));
 		spawnX.setValue(config.getValue(WorldSettings.SPAWN_X));
 		spawnY.setValue(config.getValue(WorldSettings.SPAWN_Y));
 		spawnZ.setValue(config.getValue(WorldSettings.SPAWN_Z));

@@ -14,12 +14,12 @@
 
 package wdl;
 
-import static net.minecraft.util.text.TextFormatting.*;
+import static net.minecraft.util.text.EnumChatFormatting.*;
 import static wdl.MessageTypeCategory.*;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ChatComponentTranslation;
+import net.minecraft.util.EnumChatFormatting;
 import wdl.api.IMessageTypeAdder;
 import wdl.api.IWDLMessageType;
 
@@ -57,8 +57,8 @@ public enum WDLMessageTypes implements IWDLMessageType {
 	/**
 	 * Constructor that allows specification of all values.
 	 */
-	private WDLMessageTypes(String i18nKey, TextFormatting titleColor,
-			TextFormatting textColor, boolean enabledByDefault,
+	private WDLMessageTypes(String i18nKey, EnumChatFormatting titleColor,
+			EnumChatFormatting textColor, boolean enabledByDefault,
 			MessageTypeCategory category) {
 		this.displayTextKey = i18nKey + ".text";
 		this.titleColor = titleColor;
@@ -75,11 +75,11 @@ public enum WDLMessageTypes implements IWDLMessageType {
 	/**
 	 * Format code for the '[WorldDL]' label.
 	 */
-	private final TextFormatting titleColor;
+	private final EnumChatFormatting titleColor;
 	/**
 	 * Format code for the text after the label.
 	 */
-	private final TextFormatting textColor;
+	private final EnumChatFormatting textColor;
 	/**
 	 * I18n key for the description text.
 	 */
@@ -94,23 +94,23 @@ public enum WDLMessageTypes implements IWDLMessageType {
 	final MessageTypeCategory category;
 
 	@Override
-	public ITextComponent getDisplayName() {
-		return new TextComponentTranslation(displayTextKey);
+	public IChatComponent getDisplayName() {
+		return new ChatComponentTranslation(displayTextKey);
 	}
 
 	@Override
-	public TextFormatting getTitleColor() {
+	public EnumChatFormatting getTitleColor() {
 		return titleColor;
 	}
 
 	@Override
-	public TextFormatting getTextColor() {
+	public EnumChatFormatting getTextColor() {
 		return textColor;
 	}
 
 	@Override
-	public ITextComponent getDescription() {
-		return new TextComponentTranslation(descriptionKey);
+	public IChatComponent getDescription() {
+		return new ChatComponentTranslation(descriptionKey);
 	}
 
 	@Override

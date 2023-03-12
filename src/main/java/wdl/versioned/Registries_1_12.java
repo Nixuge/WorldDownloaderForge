@@ -14,7 +14,7 @@
 package wdl.versioned;
 
 import net.minecraft.block.Block;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeGenBase;
 
 /**
  * Contains functions that interact with registries.
@@ -28,12 +28,12 @@ final class RegistryFunctions {
 	 * @see VersionedFunctions#getBlockId
 	 */
 	static final int getBlockId(Block block) {
-		return Block.REGISTRY.getIDForObject(block);
+		return Block.getIdFromBlock(block);
 	}
 	/* (non-javadoc)
 	 * @see VersionedFunctions#getBiomeId
 	 */
-	static final int getBiomeId(Biome biome) {
-		return Biome.REGISTRY.getIDForObject(biome);
+	static final int getBiomeId(BiomeGenBase biome) {
+		return biome.biomeID;
 	}
 }

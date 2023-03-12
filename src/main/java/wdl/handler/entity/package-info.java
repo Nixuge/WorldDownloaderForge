@@ -15,8 +15,8 @@
  * Handlers for saving extra entity information on container closure.
  */
 @ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+// @MethodsReturnNonnullByDefault
 package wdl.handler.entity;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import mcp.MethodsReturnNonnullByDefault;
+// import mcp.MethodsReturnNonnullByDefault;

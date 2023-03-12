@@ -142,12 +142,12 @@ enum SanityCheck {
 	TRANSLATION("wdl.sanity.translation") {
 		@Override
 		public void run() throws Exception {
-			if (!I18n.hasKey(this.errorMessage)) {
-				// System.out.println("Should be an error message here for no translations but lol");
-				// System.out.println("(Forge/MCP 1.9.4 can't download translations anymore)");
+			// Function I18n.hasKey() unavailable for 1.8.9
+			
+			// if (!I18n.hasKey(this.errorMessage)) {
 				// Verbose, because obviously the normal string will not be translated.
-				throw new Exception("Translation strings are not present!  All messages will be the untranslated keys (e.g. `wdl.sanity.translation').  Please redownload the mod.  If this problem persists, file a bug report.");
-			}
+				// throw new Exception("Translation strings are not present!  All messages will be the untranslated keys (e.g. `wdl.sanity.translation').  Please redownload the mod.  If this problem persists, file a bug report.");
+			// }
 		}
 	},
 	;

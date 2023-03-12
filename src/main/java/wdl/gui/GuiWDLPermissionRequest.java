@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.ChatComponentText;
 import wdl.WDL;
 import wdl.WDLPluginChannels;
 import wdl.gui.widget.ButtonDisplayGui;
@@ -51,7 +51,7 @@ public class GuiWDLPermissionRequest extends WDLScreen {
 	private WDLButton submitButton;
 
 	public GuiWDLPermissionRequest(@Nullable GuiScreen parent, WDL wdl) {
-		super(new TextComponentString("Permission request")); // XXX untranslated
+		super(new ChatComponentText("Permission request")); // XXX untranslated
 		this.parent = parent;
 		this.wdl = wdl;
 	}
@@ -77,7 +77,7 @@ public class GuiWDLPermissionRequest extends WDLScreen {
 		}
 
 		this.requestField = this.addTextField(new WDLTextField(fontRendererObj,
-				width / 2 - 155, 18, 150, 20, new TextComponentString("Request")));
+				width / 2 - 155, 18, 150, 20, new ChatComponentText("Request")));
 
 		this.submitButton = this.addButton(new WDLButton(
 				width / 2 + 5, 18, 150, 20,

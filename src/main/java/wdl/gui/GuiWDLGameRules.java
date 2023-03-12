@@ -21,7 +21,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.GameRules;
 import wdl.WDL;
 import wdl.gui.widget.ButtonDisplayGui;
@@ -95,9 +95,10 @@ public class GuiWDLGameRules extends WDLScreen {
 
 				if (this.isControlHovered()) {
 					String key = "wdl.gui.gamerules.rules." + ruleName;
-					if (I18n.hasKey(key)) { // may return false for mods
-						hoveredToolTip = I18n.format(key);
-					}
+					// if (I18n.hasKey(key)) { // may return false for mods
+					// 	hoveredToolTip = I18n.format(key);
+					// }
+					hoveredToolTip = key;
 				}
 			}
 
@@ -127,7 +128,7 @@ public class GuiWDLGameRules extends WDLScreen {
 				super(ruleName);
 				field = this.addTextField(new GuiNumericTextField(
 						fontRendererObj, 0, 0, 100, 20,
-						new TextComponentTranslation("wdl.gui.gamerules.ruleValue", ruleName)),
+						new ChatComponentTranslation("wdl.gui.gamerules.ruleValue", ruleName)),
 						0, 0);
 				field.setText(getRule(ruleName));
 			}

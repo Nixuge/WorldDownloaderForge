@@ -18,9 +18,9 @@ import java.util.function.BiConsumer;
 import net.minecraft.inventory.ContainerBeacon;
 import net.minecraft.inventory.IInventory;
 import net.minecraft.tileentity.TileEntityBeacon;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import wdl.handler.HandlerException;
 
@@ -30,14 +30,15 @@ public class BeaconHandler extends BlockHandler<TileEntityBeacon, ContainerBeaco
 	}
 
 	@Override
-	public ITextComponent handle(BlockPos clickedPos, ContainerBeacon container,
+	public IChatComponent handle(BlockPos clickedPos, ContainerBeacon container,
 			TileEntityBeacon blockEntity, IBlockAccess world,
 			BiConsumer<BlockPos, TileEntityBeacon> saveMethod) throws HandlerException {
 		// NOTE: beacons do not have custom names, see https://bugs.mojang.com/browse/MC-124395
-		IInventory beaconInventory = container.getTileEntity();
+		// func_180611_e() = getTileEntity()
+		IInventory beaconInventory = container.func_180611_e();
 		saveContainerItems(container, blockEntity, 0);
 		saveInventoryFields(beaconInventory, blockEntity);
 		saveMethod.accept(clickedPos, blockEntity);
-		return new TextComponentTranslation("wdl.messages.onGuiClosedInfo.savedTileEntity.beacon");
+		return new ChatComponentTranslation("wdl.messages.onGuiClosedInfo.savedTileEntity.beacon");
 	}
 }

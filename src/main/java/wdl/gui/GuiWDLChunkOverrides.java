@@ -23,8 +23,8 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
 // import net.minecraft.init.SoundEvents;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.ChatComponentText;
 import wdl.WDL;
 import wdl.WDLPluginChannels;
 import wdl.WDLPluginChannels.ChunkRange;
@@ -103,7 +103,7 @@ public class GuiWDLChunkOverrides extends WDLScreen {
 	private int lastTickX, lastTickY;
 
 	public GuiWDLChunkOverrides(@Nullable GuiScreen parent, WDL wdl) {
-		super(new TextComponentString("Chunk overrides")); // XXX Untranslated
+		super(new ChatComponentText("Chunk overrides")); // XXX Untranslated
 		this.parent = parent;
 		this.wdl = wdl;
 

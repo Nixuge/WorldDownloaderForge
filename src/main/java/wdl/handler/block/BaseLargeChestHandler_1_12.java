@@ -22,7 +22,7 @@ import javax.annotation.Nullable;
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.math.BlockPos;
+import net.minecraft.util.BlockPos;
 import net.minecraft.world.IBlockAccess;
 import wdl.WDLMessageTypes;
 import wdl.handler.HandlerException;

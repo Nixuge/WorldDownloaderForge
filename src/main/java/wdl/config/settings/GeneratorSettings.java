@@ -22,8 +22,8 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ChatComponentTranslation;
 import wdl.config.BooleanSetting;
 import wdl.config.CyclableSetting;
 import wdl.config.IConfiguration;
@@ -127,13 +127,13 @@ public final class GeneratorSettings {
 		}
 
 		@Override
-		public ITextComponent getDescription() {
-			return new TextComponentTranslation(key + ".description");
+		public IChatComponent getDescription() {
+			return new ChatComponentTranslation(key + ".description");
 		}
 
 		@Override
-		public ITextComponent getButtonText(Generator curValue) {
-			return new TextComponentTranslation(key + "." + serializeToString(curValue));
+		public IChatComponent getButtonText(Generator curValue) {
+			return new ChatComponentTranslation(key + "." + serializeToString(curValue));
 		}
 	}
 

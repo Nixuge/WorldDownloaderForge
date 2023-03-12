@@ -21,7 +21,7 @@ import net.minecraft.client.gui.GuiScreen;
 // import net.minecraft.client.gui.GuiSlot;
 import net.minecraft.client.resources.I18n;
 // import net.minecraft.init.SoundEvents;
-import net.minecraft.util.text.TextFormatting;
+import net.minecraft.util.EnumChatFormatting;
 import wdl.api.IWDLModWithGui;
 import wdl.api.WDLApi;
 import wdl.api.WDLApi.ModInfo;
@@ -93,8 +93,8 @@ public class GuiWDLExtensions extends WDLScreen {
 						name, mod.version);
 
 				if (!mod.isEnabled()) {
-					this.label = "" + TextFormatting.GRAY
-							+ TextFormatting.ITALIC + modDescription;
+					this.label = "" + EnumChatFormatting.GRAY
+							+ EnumChatFormatting.ITALIC + modDescription;
 				} else {
 					this.label = modDescription;
 				}
@@ -125,8 +125,8 @@ public class GuiWDLExtensions extends WDLScreen {
 								+ (mod.isEnabled() ? "enabled" : "disabled")));
 
 						if (!mod.isEnabled()) {
-							label = "" + TextFormatting.GRAY
-									+ TextFormatting.ITALIC + modDescription;
+							label = "" + EnumChatFormatting.GRAY
+									+ EnumChatFormatting.ITALIC + modDescription;
 						} else {
 							label = modDescription;
 						}

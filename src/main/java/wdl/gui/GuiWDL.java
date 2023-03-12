@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.ChatComponentTranslation;
 import wdl.WDL;
 import wdl.WDLPluginChannels;
 import wdl.config.IConfiguration;
@@ -113,7 +113,7 @@ public class GuiWDL extends WDLScreen {
 	private WDLTextField worldname;
 
 	public GuiWDL(@Nullable GuiScreen parent, WDL wdl) {
-		super(new TextComponentTranslation("wdl.gui.wdl.title", WDL.baseFolderName));
+		super(new ChatComponentTranslation("wdl.gui.wdl.title", WDL.baseFolderName));
 		this.parent = parent;
 		this.wdl = wdl;
 		this.config = WDL.serverProps;
@@ -125,7 +125,7 @@ public class GuiWDL extends WDLScreen {
 	@Override
 	public void initGui() {
 		this.worldname = this.addTextField(new WDLTextField(this.fontRendererObj,
-				this.width / 2 - 155, 19, 150, 18, new TextComponentTranslation("wdl.gui.wdl.worldname")));
+				this.width / 2 - 155, 19, 150, 18, new ChatComponentTranslation("wdl.gui.wdl.worldname")));
 		this.worldname.setText(this.config.getValue(MiscSettings.SERVER_NAME));
 
 		this.addButton(new ButtonDisplayGui(this.width / 2 - 100, this.height - 29,

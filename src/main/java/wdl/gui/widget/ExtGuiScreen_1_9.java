@@ -25,7 +25,7 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiButton;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.gui.GuiTextField;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.IChatComponent;
 import wdl.gui.widget.GuiList.GuiListEntry;
 
 abstract class ExtGuiScreen extends GuiScreen implements IExtGuiScreen {
@@ -41,9 +41,9 @@ abstract class ExtGuiScreen extends GuiScreen implements IExtGuiScreen {
 	private final List<GuiTextField> textFieldList = new ArrayList<>();
 
 	// Called before init()
-	protected final ITextComponent title;
+	protected final IChatComponent title;
 
-	protected ExtGuiScreen(ITextComponent title) {
+	protected ExtGuiScreen(IChatComponent title) {
 		this.title = title;
 	}
 

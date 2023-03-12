@@ -16,7 +16,7 @@ package wdl.gui.widget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 
 /**
  * A slider that doesn't require a bunch of interfaces to work.
@@ -79,7 +79,7 @@ public class GuiSlider extends ExtButton {
 
 	@Override
 	public void midDraw() {
-		Minecraft.getMinecraft().getTextureManager().bindTexture(BUTTON_TEXTURES);
+		Minecraft.getMinecraft().getTextureManager().bindTexture(buttonTextures);
 		GlStateManager.color(1.0F, 1.0F, 1.0F, 1.0F);
 
 		if (this.isEnabled()) {

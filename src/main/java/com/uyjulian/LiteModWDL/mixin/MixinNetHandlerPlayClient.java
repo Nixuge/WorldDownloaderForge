@@ -30,12 +30,12 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.INetHandlerPlayClient;
-import net.minecraft.network.play.server.SPacketBlockAction;
-import net.minecraft.network.play.server.SPacketChat;
-import net.minecraft.network.play.server.SPacketCustomPayload;
-import net.minecraft.network.play.server.SPacketMaps;
-import net.minecraft.network.play.server.SPacketUnloadChunk;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.network.play.server.S24PacketBlockAction;
+import net.minecraft.network.play.server.S02PacketChat;
+import net.minecraft.network.play.server.S3FPacketCustomPayload;
+import net.minecraft.network.play.server.S34PacketMaps;
+import net.minecraft.network.play.server.SPacketUnload;
+import net.minecraft.util.IChatComponent;
 import wdl.ReflectionUtils;
 import wdl.ducks.IBaseChangesApplied;
 
@@ -78,28 +78,28 @@ public abstract class MixinNetHandlerPlayClient implements INetHandlerPlayClient
 		//more down here
 	}
 	@Inject(method="handleChat", at=@At("RETURN"))
-	private void onHandleChat(SPacketChat p_147251_1_, CallbackInfo ci) {
+	private void onHandleChat(S02PacketChat p_147251_1_, CallbackInfo ci) {
 		//more up here
 		/* WDL >>> */
 		wdl.WDLHooks.onNHPCHandleChat((NetHandlerPlayClient)(Object)this, p_147251_1_);
 		/* <<< WDL */
 	}
 	@Inject(method="handleBlockAction", at=@At("RETURN"))
-	private void onHandleBlockAction(SPacketBlockAction packetIn, CallbackInfo ci) {
+	private void onHandleBlockAction(S24PacketBlockAction packetIn, CallbackInfo ci) {
 		//more up here
 		/* WDL >>> */
 		wdl.WDLHooks.onNHPCHandleBlockAction((NetHandlerPlayClient)(Object)this, packetIn);
 		/* <<< WDL */
 	}
 	@Inject(method="handleMaps", at=@At("RETURN"))
-	private void onHandleMaps(SPacketMaps packetIn, CallbackInfo ci) {
+	private void onHandleMaps(S34PacketMaps packetIn, CallbackInfo ci) {
 		//more up here
 		/* WDL >>> */
 		wdl.WDLHooks.onNHPCHandleMaps((NetHandlerPlayClient)(Object)this, packetIn);
 		/* <<< WDL */
 	}
 	@Inject(method="handleCustomPayload", at=@At("RETURN"))
-	private void onHandleCustomPayload(SPacketCustomPayload packetIn, CallbackInfo ci) {
+	private void onHandleCustomPayload(S3FPacketCustomPayload packetIn, CallbackInfo ci) {
 		//more up here
 		/* WDL >>> */
 		wdl.WDLHooks.onNHPCHandleCustomPayload((NetHandlerPlayClient)(Object)this, packetIn);

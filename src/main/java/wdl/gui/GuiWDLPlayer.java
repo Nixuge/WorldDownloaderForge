@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.ChatComponentTranslation;
 import wdl.WDL;
 import wdl.config.IConfiguration;
 import wdl.config.settings.PlayerSettings;
@@ -43,7 +43,7 @@ public class GuiWDLPlayer extends WDLScreen {
 	private int posTextY;
 
 	public GuiWDLPlayer(@Nullable GuiScreen parent, WDL wdl) {
-		super(new TextComponentTranslation("wdl.gui.player.title", WDL.baseFolderName));
+		super(new ChatComponentTranslation("wdl.gui.player.title", WDL.baseFolderName));
 		this.parent = parent;
 		this.wdl = wdl;
 		this.config = wdl.worldProps;
@@ -72,13 +72,13 @@ public class GuiWDLPlayer extends WDLScreen {
 		this.posTextY = y + 4;
 		this.posX = this.addTextField(new GuiNumericTextField(this.fontRendererObj,
 				this.width / 2 - 87, y, 50, 16,
-				new TextComponentTranslation("wdl.gui.player.position.coord", "X")));
+				new ChatComponentTranslation("wdl.gui.player.position.coord", "X")));
 		this.posY = this.addTextField(new GuiNumericTextField(this.fontRendererObj,
 				this.width / 2 - 19, y, 50, 16,
-				new TextComponentTranslation("wdl.gui.player.position.coord", "Y")));
+				new ChatComponentTranslation("wdl.gui.player.position.coord", "Y")));
 		this.posZ = this.addTextField(new GuiNumericTextField(this.fontRendererObj,
 				this.width / 2 + 48, y, 50, 16,
-				new TextComponentTranslation("wdl.gui.player.position.coord", "Z")));
+				new ChatComponentTranslation("wdl.gui.player.position.coord", "Z")));
 		this.posX.setValue(config.getValue(PlayerSettings.PLAYER_X));
 		this.posY.setValue(config.getValue(PlayerSettings.PLAYER_Y));
 		this.posZ.setValue(config.getValue(PlayerSettings.PLAYER_Z));

@@ -20,8 +20,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.IChatComponent;
 import net.minecraft.world.IBlockAccess;
 import wdl.handler.BaseHandler;
 import wdl.handler.HandlerException;
@@ -83,7 +83,7 @@ public abstract class BlockActionHandler<B extends Block, E extends TileEntity> 
 	 * @throws ClassCastException
 	 *             If block or blockEntity are not instances of the handled class.
 	 */
-	public final ITextComponent handleCasting(BlockPos pos, Block block,
+	public final IChatComponent handleCasting(BlockPos pos, Block block,
 			TileEntity blockEntity, int data1, int data2, IBlockAccess world,
 			BiConsumer<BlockPos, E> saveMethod) throws HandlerException, ClassCastException {
 		B b = blockClass.cast(block);
@@ -112,7 +112,7 @@ public abstract class BlockActionHandler<B extends Block, E extends TileEntity> 
 	 * @throws HandlerException
 	 *             When something is handled wrong.
 	 */
-	public abstract ITextComponent handle(BlockPos pos, B block,
+	public abstract IChatComponent handle(BlockPos pos, B block,
 			E blockEntity, int data1, int data2, IBlockAccess world,
 			BiConsumer<BlockPos, E> saveMethod) throws HandlerException;
 

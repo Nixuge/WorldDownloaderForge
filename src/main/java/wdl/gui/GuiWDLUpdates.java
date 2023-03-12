@@ -20,7 +20,7 @@ import javax.annotation.Nullable;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
 // import net.minecraft.init.SoundEvents;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.ChatComponentText;
 import wdl.VersionConstants;
 import wdl.WDL;
 import wdl.gui.widget.WDLButton;
@@ -291,7 +291,7 @@ public class GuiWDLUpdates extends WDLScreen {
 		private final Release release;
 
 		public GuiWDLSingleUpdate(GuiWDLUpdates parent, Release releaseToShow) {
-			super(new TextComponentString(buildReleaseTitle(releaseToShow))); // Already translated
+			super(new ChatComponentText(buildReleaseTitle(releaseToShow))); // Already translated
 			this.parent = parent;
 			this.release = releaseToShow;
 		}

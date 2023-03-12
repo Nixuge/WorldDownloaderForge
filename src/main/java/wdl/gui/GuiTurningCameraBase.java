@@ -19,10 +19,10 @@ import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.player.EntityPlayer.EnumChatVisibility;
-import net.minecraft.util.math.MathHelper;
-import net.minecraft.util.math.RayTraceResult;
-import net.minecraft.util.math.Vec3d;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.MathHelper;
+import net.minecraft.util.MovingObjectPosition;
+import net.minecraft.util.Vec3;
+import net.minecraft.util.IChatComponent;
 import wdl.WDL;
 import wdl.gui.widget.WDLScreen;
 import wdl.versioned.VersionedFunctions;
@@ -73,7 +73,7 @@ public abstract class GuiTurningCameraBase extends WDLScreen {
 		this.wdl = wdl;
 	}
 
-	protected GuiTurningCameraBase(WDL wdl, ITextComponent title) {
+	protected GuiTurningCameraBase(WDL wdl, IChatComponent title) {
 		super(title);
 		this.wdl = wdl;
 	}
@@ -85,7 +85,7 @@ public abstract class GuiTurningCameraBase extends WDLScreen {
 	@OverridingMethodsMustInvokeSuper
 	public void initGui() {
 		if (!initializedCamera) {
-			this.cam = VersionedFunctions.makePlayer(wdl.minecraft, wdl.worldClient, wdl.player.connection, wdl.player);
+			this.cam = VersionedFunctions.makePlayer(wdl.minecraft, wdl.worldClient, wdl.player.sendQueue, wdl.player);
 			this.cam.setLocationAndAngles(wdl.player.posX, wdl.player.posY,
 					wdl.player.posZ, wdl.player.rotationYaw, 0.0F);
 			this.yaw = wdl.player.rotationYaw;
@@ -166,8 +166,8 @@ public abstract class GuiTurningCameraBase extends WDLScreen {
 	 * @return A new distance, equal to or less than <code>currentDistance</code>.
 	 */
 	private double truncateDistanceIfBlockInWay(double camX, double camZ, double currentDistance) {
-		Vec3d playerPos = wdl.player.getPositionVector().addVector(0, wdl.player.getEyeHeight(), 0);
-		Vec3d offsetPos = new Vec3d(wdl.player.posX - currentDistance * camX, wdl.player.posY + wdl.player.getEyeHeight(), wdl.player.posZ + camZ);
+		Vec3 playerPos = wdl.player.getPositionVector().addVector(0, wdl.player.getEyeHeight(), 0);
+		Vec3 offsetPos = new Vec3(wdl.player.posX - currentDistance * camX, wdl.player.posY + wdl.player.getEyeHeight(), wdl.player.posZ + camZ);
 
 		// NOTE: Vec3.addVector and Vec3.add return new vectors and leave the
 		// current vector unmodified.
@@ -183,10 +183,10 @@ public abstract class GuiTurningCameraBase extends WDLScreen {
 				offsetZ = 0;
 			}
 
-			Vec3d from = playerPos.addVector(offsetX, offsetY, offsetZ);
-			Vec3d to = offsetPos.addVector(offsetX, offsetY, offsetZ);
+			Vec3 from = playerPos.addVector(offsetX, offsetY, offsetZ);
+			Vec3 to = offsetPos.addVector(offsetX, offsetY, offsetZ);
 
-			RayTraceResult pos = mc.theWorld.rayTraceBlocks(from, to);
+			MovingObjectPosition pos = mc.theWorld.rayTraceBlocks(from, to);
 
 			if (pos != null) {
 				double distance = pos.hitVec.distanceTo(playerPos);

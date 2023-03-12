@@ -17,9 +17,9 @@ import java.util.function.BiConsumer;
 
 import net.minecraft.block.BlockNote;
 import net.minecraft.tileentity.TileEntityNote;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import wdl.handler.HandlerException;
 
@@ -39,10 +39,10 @@ public class NoteBlockHandler extends BlockActionHandler<BlockNote, TileEntityNo
 	}
 
 	@Override
-	public ITextComponent handle(BlockPos pos, BlockNote block, TileEntityNote blockEntity, int data1, int data2,
+	public IChatComponent handle(BlockPos pos, BlockNote block, TileEntityNote blockEntity, int data1, int data2,
 			IBlockAccess world, BiConsumer<BlockPos, TileEntityNote> saveMethod) throws HandlerException {
 		blockEntity.note = (byte)(data2 % 25);
 		saveMethod.accept(pos, blockEntity);
-		return new TextComponentTranslation("wdl.messages.onBlockEvent.noteblock", pos, data2, blockEntity);
+		return new ChatComponentTranslation("wdl.messages.onBlockEvent.noteblock", pos, data2, blockEntity);
 	}
 }

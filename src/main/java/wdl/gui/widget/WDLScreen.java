@@ -13,8 +13,8 @@
  */
 package wdl.gui.widget;
 
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ChatComponentTranslation;
 
 /**
  * A specialty screen that can store text fields and lists.
@@ -22,10 +22,10 @@ import net.minecraft.util.text.TextComponentTranslation;
 public class WDLScreen extends ExtGuiScreen {
 
 	public WDLScreen(String titleI18nKey) {
-		this(new TextComponentTranslation(titleI18nKey));
+		this(new ChatComponentTranslation(titleI18nKey));
 	}
 
-	public WDLScreen(ITextComponent title) {
+	public WDLScreen(IChatComponent title) {
 		super(title);
 	}
 

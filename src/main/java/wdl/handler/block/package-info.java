@@ -15,8 +15,8 @@
  * Handlers for saving blocks on container closure.
  */
 @ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+// @MethodsReturnNonnullByDefault
 package wdl.handler.block;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import mcp.MethodsReturnNonnullByDefault;
+// import mcp.MethodsReturnNonnullByDefault;

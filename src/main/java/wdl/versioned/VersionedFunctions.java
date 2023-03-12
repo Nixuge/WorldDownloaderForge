@@ -46,21 +46,21 @@ import net.minecraft.nbt.NBTBase;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
-import net.minecraft.network.play.client.CPacketCustomPayload;
-import net.minecraft.network.play.server.SPacketCustomPayload;
-import net.minecraft.network.play.server.SPacketMaps;
+import net.minecraft.network.play.client.C17PacketCustomPayload;
+import net.minecraft.network.play.server.S3FPacketCustomPayload;
+import net.minecraft.network.play.server.S34PacketMaps;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.Style;
-import net.minecraft.util.text.TextFormatting;
-import net.minecraft.util.text.event.ClickEvent;
-import net.minecraft.util.text.event.ClickEvent.Action;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.ChatStyle;
+import net.minecraft.util.EnumChatFormatting;
+import net.minecraft.event.ClickEvent;
+import net.minecraft.event.ClickEvent.Action;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
-import net.minecraft.world.biome.Biome;
+import net.minecraft.world.biome.BiomeGenBase;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
-import net.minecraft.world.DimensionType;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.storage.MapData;
 import net.minecraft.world.storage.SaveHandler;
 import wdl.config.settings.GeneratorSettings.Generator;
@@ -232,7 +232,7 @@ public final class VersionedFunctions {
 	 * @param bytes The payload.
 	 * @return The new packet.
 	 */
-	public static CPacketCustomPayload makePluginMessagePacket(@ChannelName String channel, byte[] bytes) {
+	public static C17PacketCustomPayload makePluginMessagePacket(@ChannelName String channel, byte[] bytes) {
 		return PacketFunctions.makePluginMessagePacket(channel, bytes);
 	}
 
@@ -242,7 +242,7 @@ public final class VersionedFunctions {
 	 * @param bytes The payload.
 	 * @return The new packet.
 	 */
-	public static SPacketCustomPayload makeServerPluginMessagePacket(@ChannelName String channel, byte[] bytes) {
+	public static S3FPacketCustomPayload makeServerPluginMessagePacket(@ChannelName String channel, byte[] bytes) {
 		return PacketFunctions.makeServerPluginMessagePacket(channel, bytes);
 	}
 
@@ -254,7 +254,7 @@ public final class VersionedFunctions {
 	 * @return The map data, or null if the underlying function returns null.
 	 */
 	@Nullable
-	public static MapData getMapData(World world, SPacketMaps mapPacket) {
+	public static MapData getMapData(World world, S34PacketMaps mapPacket) {
 		return MapFunctions.getMapData(world, mapPacket);
 	}
 
@@ -266,7 +266,7 @@ public final class VersionedFunctions {
 	 * @return The map ID
 	 */
 	public static int getMapId(ItemStack stack) {
-		assert stack.getItem() == Items.FILLED_MAP;
+		assert stack.getItem() == Items.filled_map;
 		return MapFunctions.getMapID(stack);
 	}
 
@@ -284,9 +284,9 @@ public final class VersionedFunctions {
 	/**
 	 * Sets the map's dimension to the given dimension.  In some versions,
 	 * the {@link MapData#dimension} field is a byte, while in other ones it is
-	 * a DimensionType (which might start out null).
+	 * a WorldProvider (which might start out null).
 	 */
-	public static void setMapDimension(MapData map, DimensionType dim) {
+	public static void setMapDimension(MapData map, WorldProvider dim) {
 		MapFunctions.setMapDimension(map, dim);
 	}
 
@@ -502,12 +502,12 @@ public final class VersionedFunctions {
 	 * @param url The URL to open.
 	 * @return A new style
 	 */
-	public static Style createLinkFormatting(String url) {
+	public static ChatStyle createLinkFormatting(String url) {
 		// Forwards-compatibility with 1.14
-		return new Style()
-				.setColor(TextFormatting.BLUE)
+		return new ChatStyle()
+				.setColor(EnumChatFormatting.BLUE)
 				.setUnderlined(true)
-				.setClickEvent(new ClickEvent(Action.OPEN_URL, url));
+				.setChatClickEvent(new ClickEvent(Action.OPEN_URL, url));
 	}
 
 	/**
@@ -522,7 +522,7 @@ public final class VersionedFunctions {
 	 * Gets the numeric ID for the given biome.
 	 * @return A numeric ID, the meaning and value of which is unspecified.
 	 */
-	public static int getBiomeId(Biome biome) {
+	public static int getBiomeId(BiomeGenBase biome) {
 		return RegistryFunctions.getBiomeId(biome);
 	}
 
@@ -550,7 +550,7 @@ public final class VersionedFunctions {
 	 * @param name The name. Non-null.
 	 * @param <T> The type that is expected to be returned, based on the method
 	 *             being called.
-	 * @return Either a String or a TextComponentString, depending on the version; T
+	 * @return Either a String or a ChatComponentText, depending on the version; T
 	 *         should be inferred to the right one of those.
 	 */
 	@SuppressWarnings("unchecked")

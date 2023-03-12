@@ -26,21 +26,21 @@ import net.minecraft.entity.item.EntityItemFrame;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.SPacketMaps;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.network.play.server.S34PacketMaps;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.MathHelper;
 import net.minecraft.util.math.Vec4b;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
-import net.minecraft.world.DimensionType;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.storage.MapData;
 import wdl.versioned.VersionedFunctions;
 
 /**
  * Attempts to reconstruct information about a MapData that isn't present.
  *
- * From {@link SPacketMaps#setMapdataTo}, we already have:
+ * From {@link S34PacketMaps#setMapdataTo}, we already have:
  *
  * <ul>
  * <li>mapScale (byte for size)
@@ -241,7 +241,7 @@ public final class MapDataHandler {
 			// In later versions, getItem() will return Items.AIR, which means the next check fails instead
 			return false;
 		}
-		if (stack.getItem() != Items.FILLED_MAP) {
+		if (stack.getItem() != Items.filled_map) {
 			return false;
 		}
 		int id = VersionedFunctions.getMapId(stack);
@@ -285,7 +285,7 @@ public final class MapDataHandler {
 		 * The dimension found, or null if it wasn't.
 		 */
 		@Nullable
-		public DimensionType dim = null;
+		public WorldProvider dim = null;
 
 		/**
 		 * Sets the dimension of the map, assuming that it's known. The game crashes if
@@ -294,14 +294,14 @@ public final class MapDataHandler {
 		void fixDimension() {
 			if (confirmedOwner != null) {
 				assert confirmedOwner.worldObj != null;
-				DimensionType dim = confirmedOwner.worldObj.provider.getDimensionType();
+				WorldProvider dim = confirmedOwner.worldObj.provider.getWorldProvider();
 				assert dim != null;
 				VersionedFunctions.setMapDimension(map, dim);
 				VersionedFunctions.setMapDimension(map, dim);
 				this.dim = dim;
 			} else if (VersionedFunctions.isMapDimensionNull(map)) {
 				// Ensure that some dimension is set, so that the game doesn't crash.
-				VersionedFunctions.setMapDimension(map, DimensionType.OVERWORLD);
+				VersionedFunctions.setMapDimension(map, WorldProvider.OVERWORLD);
 				// The dimension wasn't confirmed, so don't notify this in chat
 			}
 		}
@@ -332,19 +332,19 @@ public final class MapDataHandler {
 		/**
 		 * Makes a string component version of what's known about the result.
 		 */
-		public ITextComponent toComponent() {
+		public IChatComponent toComponent() {
 			boolean hasDim = (dim != null);
 			if (hasDim) {
 				if (hasCenter) {
-					return new TextComponentTranslation("wdl.messages.onMapSaved.dimAndCenterKnown", dim, xCenter, zCenter);
+					return new ChatComponentTranslation("wdl.messages.onMapSaved.dimAndCenterKnown", dim, xCenter, zCenter);
 				} else {
-					return new TextComponentTranslation("wdl.messages.onMapSaved.onlyDimKnown", dim);
+					return new ChatComponentTranslation("wdl.messages.onMapSaved.onlyDimKnown", dim);
 				}
 			} else {
 				if (hasCenter) {
-					return new TextComponentTranslation("wdl.messages.onMapSaved.onlyCenterKnown", xCenter, zCenter);
+					return new ChatComponentTranslation("wdl.messages.onMapSaved.onlyCenterKnown", xCenter, zCenter);
 				} else {
-					return new TextComponentTranslation("wdl.messages.onMapSaved.neitherKnown");
+					return new ChatComponentTranslation("wdl.messages.onMapSaved.neitherKnown");
 				}
 			}
 		}

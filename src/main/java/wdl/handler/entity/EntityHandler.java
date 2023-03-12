@@ -18,7 +18,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.Container;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.IChatComponent;
 import wdl.handler.BaseHandler;
 import wdl.handler.HandlerException;
 import wdl.versioned.VersionedFunctions;
@@ -124,7 +124,7 @@ public abstract class EntityHandler<E extends Entity, C extends Container> exten
 	 * @throws ClassCastException
 	 *             If container or entity are not instances of the handled class.
 	 */
-	public final ITextComponent copyDataCasting(Container container, Entity entity, boolean riding)
+	public final IChatComponent copyDataCasting(Container container, Entity entity, boolean riding)
 			throws HandlerException, ClassCastException {
 		C c = containerClass.cast(container);
 		E e = entityClass.cast(entity);
@@ -145,7 +145,7 @@ public abstract class EntityHandler<E extends Entity, C extends Container> exten
 	 * @throws HandlerException
 	 *             When something is handled wrong.
 	 */
-	public abstract ITextComponent copyData(C container, E entity, boolean riding) throws HandlerException;
+	public abstract IChatComponent copyData(C container, E entity, boolean riding) throws HandlerException;
 
 	/**
 	 * Looks up the handler that handles the given block entity/container combo,

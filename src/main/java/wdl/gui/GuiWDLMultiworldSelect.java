@@ -18,8 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ChatComponentTranslation;
 import wdl.WDL;
 import wdl.config.Configuration;
 import wdl.config.IConfiguration;
@@ -223,7 +223,7 @@ public class GuiWDLMultiworldSelect extends GuiTurningCameraBase {
 	 */
 	private String searchText = "";
 
-	public GuiWDLMultiworldSelect(WDL wdl, ITextComponent title, WorldSelectionCallback callback) {
+	public GuiWDLMultiworldSelect(WDL wdl, IChatComponent title, WorldSelectionCallback callback) {
 		super(wdl, title);
 
 		this.wdl = wdl;
@@ -311,11 +311,11 @@ public class GuiWDLMultiworldSelect extends GuiTurningCameraBase {
 
 		this.newNameField = this.addTextField(new WDLTextField(this.fontRendererObj,
 				this.width / 2 - 155, 29, 150, 20,
-				new TextComponentTranslation("wdl.gui.multiworldSelect.newName")));
+				new ChatComponentTranslation("wdl.gui.multiworldSelect.newName")));
 
 		this.searchField = this.addTextField(new WDLTextField(this.fontRendererObj,
 				this.width / 2 + 5, 29, 150, 20,
-				new TextComponentTranslation("wdl.gui.multiworldSelect.search")));
+				new ChatComponentTranslation("wdl.gui.multiworldSelect.search")));
 		this.searchField.setText(searchText);
 	}
 

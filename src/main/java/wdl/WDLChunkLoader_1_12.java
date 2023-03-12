@@ -27,14 +27,14 @@ import net.minecraft.block.Block;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.util.ResourceLocation;
-import net.minecraft.util.math.ChunkPos;
+import net.minecraft.world.ChunkCoordIntPair;
 import net.minecraft.world.NextTickListEntry;
 import net.minecraft.world.World;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraft.world.chunk.NibbleArray;
 import net.minecraft.world.chunk.storage.AnvilChunkLoader;
-import net.minecraft.world.DimensionType;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.storage.SaveHandler;
 import wdl.config.settings.MiscSettings;
@@ -82,11 +82,11 @@ abstract class WDLChunkLoaderBase extends AnvilChunkLoader {
 			// Not a forge setup - emulate the vanilla method in
 			// AnvilSaveHandler.getChunkLoader.
 			// TODO: not sure if this is right
-			if (dimension.getDimensionType().equals(DimensionType.NETHER)) {
+			if (dimension.getWorldProvider().equals(WorldProvider.NETHER)) {
 				File file = new File(baseFolder, "DIM-1");
 				file.mkdirs();
 				return file;
-			} else if (dimension.getDimensionType().equals(DimensionType.THE_END)) {
+			} else if (dimension.getWorldProvider().equals(WorldProvider.THE_END)) {
 				File file = new File(baseFolder, "DIM1");
 				file.mkdirs();
 				return file;
@@ -97,7 +97,7 @@ abstract class WDLChunkLoaderBase extends AnvilChunkLoader {
 	}
 
 	protected final WDL wdl;
-	protected final Map<ChunkPos, NBTTagCompound> chunksToSave;
+	protected final Map<ChunkCoordIntPair, NBTTagCompound> chunksToSave;
 	/**
 	 * Location where chunks are saved.
 	 *
@@ -110,7 +110,7 @@ abstract class WDLChunkLoaderBase extends AnvilChunkLoader {
 		super(file, null);
 		this.wdl = wdl;
 		@SuppressWarnings("unchecked")
-		Map<ChunkPos, NBTTagCompound> chunksToSave =
+		Map<ChunkCoordIntPair, NBTTagCompound> chunksToSave =
 				ReflectionUtils.findAndGetPrivateField(this, AnvilChunkLoader.class, VersionedFunctions.getChunksToSaveClass());
 		this.chunksToSave = chunksToSave;
 		this.chunkSaveLocation = file;

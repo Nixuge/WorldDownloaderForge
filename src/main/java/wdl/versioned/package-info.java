@@ -20,9 +20,9 @@
  * Note that this is not the only location that uses version-specific code; for instance,
  * {@link wdl.WDLChunkLoader} also uses it.
  */
-@MethodsReturnNonnullByDefault
+// @MethodsReturnNonnullByDefault
 @ParametersAreNonnullByDefault
 package wdl.versioned;
 
-import mcp.MethodsReturnNonnullByDefault;
+// import mcp.MethodsReturnNonnullByDefault;
 import javax.annotation.ParametersAreNonnullByDefault;

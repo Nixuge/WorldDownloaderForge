@@ -21,9 +21,9 @@ import javax.annotation.Nullable;
 
 import net.minecraft.inventory.ContainerChest;
 import net.minecraft.tileentity.TileEntityChest;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.IBlockAccess;
 import wdl.handler.HandlerException;
 
@@ -36,17 +36,17 @@ public class BaseChestHandler<B extends TileEntityChest> extends BaseLargeChestH
 	}
 
 	@Override
-	public ITextComponent handle(BlockPos clickedPos, ContainerChest container,
+	public IChatComponent handle(BlockPos clickedPos, ContainerChest container,
 			B blockEntity, IBlockAccess world,
 			BiConsumer<BlockPos, B> saveMethod) throws HandlerException {
 		String title = getCustomDisplayName(container.getLowerChestInventory());
 
 		if (container.inventorySlots.size() > 63) {
 			saveDoubleChest(clickedPos, container, blockEntity, world, saveMethod, title);
-			return new TextComponentTranslation("wdl.messages.onGuiClosedInfo.savedTileEntity.doubleChest");
+			return new ChatComponentTranslation("wdl.messages.onGuiClosedInfo.savedTileEntity.doubleChest");
 		} else {
 			saveSingleChest(clickedPos, container, blockEntity, world, saveMethod, title);
-			return new TextComponentTranslation("wdl.messages.onGuiClosedInfo.savedTileEntity.singleChest");
+			return new ChatComponentTranslation("wdl.messages.onGuiClosedInfo.savedTileEntity.singleChest");
 		}
 	}
 	/**

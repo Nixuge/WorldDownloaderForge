@@ -17,8 +17,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import wdl.WDL;
 import wdl.config.IConfiguration;
 import wdl.config.settings.GeneratorSettings;
@@ -42,7 +42,7 @@ public class GuiWDLGenerator extends WDLScreen {
 	private String seedText;
 
 	public GuiWDLGenerator(@Nullable GuiScreen parent, WDL wdl) {
-		super(new TextComponentTranslation("wdl.gui.generator.title", WDL.baseFolderName));
+		super(new ChatComponentTranslation("wdl.gui.generator.title", WDL.baseFolderName));
 		this.parent = parent;
 		this.wdl = wdl;
 		this.config = wdl.worldProps;
@@ -59,7 +59,7 @@ public class GuiWDLGenerator extends WDLScreen {
 		int y = this.height / 4 - 15;
 		this.seedField = this.addTextField(new WDLTextField(this.fontRendererObj,
 				this.width / 2 - (100 - seedWidth), y, 200 - seedWidth, 18,
-				new TextComponentString(this.seedText)));
+				new ChatComponentText(this.seedText)));
 		this.seedField.setText(config.getValue(GeneratorSettings.SEED));
 		y += 22;
 		this.generatorBtn = this.addButton(new SettingButton(

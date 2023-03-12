@@ -21,8 +21,8 @@ import java.util.function.BooleanSupplier;
 import com.google.common.annotations.VisibleForTesting;
 
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ChatComponentTranslation;
 import wdl.WDLPluginChannels;
 import wdl.config.CyclableSetting;
 import wdl.config.IConfiguration;
@@ -111,13 +111,13 @@ public final class EntitySettings {
 		}
 
 		@Override
-		public ITextComponent getDescription() {
-			return new TextComponentTranslation(key + ".description");
+		public IChatComponent getDescription() {
+			return new ChatComponentTranslation(key + ".description");
 		}
 
 		@Override
-		public ITextComponent getButtonText(TrackDistanceMode curValue) {
-			return new TextComponentTranslation(key + "." + serializeToString(curValue));
+		public IChatComponent getButtonText(TrackDistanceMode curValue) {
+			return new ChatComponentTranslation(key + "." + serializeToString(curValue));
 		}
 	}
 }

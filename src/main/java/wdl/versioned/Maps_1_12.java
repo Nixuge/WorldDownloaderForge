@@ -20,9 +20,9 @@ import org.apache.logging.log4j.Logger;
 
 import net.minecraft.item.ItemMap;
 import net.minecraft.item.ItemStack;
-import net.minecraft.network.play.server.SPacketMaps;
+import net.minecraft.network.play.server.S34PacketMaps;
 import net.minecraft.world.World;
-import net.minecraft.world.DimensionType;
+import net.minecraft.world.WorldProvider;
 import net.minecraft.world.storage.MapData;
 
 
@@ -40,7 +40,7 @@ final class MapFunctions {
 	 * {@see VersionedFunctions#getMapData}
 	 */
 	@Nullable
-	static MapData getMapData(World world, SPacketMaps mapPacket) {
+	static MapData getMapData(World world, S34PacketMaps mapPacket) {
 		return ItemMap.loadMapData(mapPacket.getMapId(), world);
 	}
 
@@ -64,7 +64,7 @@ final class MapFunctions {
 	/* (non-javadoc)
 	 * {@see VersionedFunctions#setMapDimension}
 	 */
-	static void setMapDimension(MapData map, DimensionType dim) {
+	static void setMapDimension(MapData map, WorldProvider dim) {
 		if (!useForgeMethod) {
 			try {
 				setMapDimensionVanilla(map, dim.getId());

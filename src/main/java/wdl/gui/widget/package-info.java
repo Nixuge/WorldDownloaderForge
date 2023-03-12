@@ -15,8 +15,8 @@
  * Contains various GUI widgets.
  */
 @ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+// @MethodsReturnNonnullByDefault
 package wdl.gui.widget;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import mcp.MethodsReturnNonnullByDefault;
+// import mcp.MethodsReturnNonnullByDefault;

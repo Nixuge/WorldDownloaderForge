@@ -24,10 +24,10 @@ import org.apache.logging.log4j.Logger;
 import com.google.common.collect.ImmutableMap;
 
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.math.BlockPos;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentString;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.BlockPos;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ChatComponentText;
+import net.minecraft.util.ChatComponentTranslation;
 import wdl.EntityRealigner;
 import wdl.HologramHandler;
 import wdl.MessageTypeCategory;
@@ -196,13 +196,13 @@ public class APIImpl implements WDLApi.APIInstance {
 		}
 
 		@Override
-		public ITextComponent getDisplayName() {
-			return new TextComponentString(mod.getDisplayName());
+		public IChatComponent getDisplayName() {
+			return new ChatComponentText(mod.getDisplayName());
 		}
 
 		@Override
-		public ITextComponent getDescription() {
-			return new TextComponentTranslation("Messages for " + mod.getDisplayName()); // XXX Not translated
+		public IChatComponent getDescription() {
+			return new ChatComponentTranslation("Messages for " + mod.getDisplayName()); // XXX Not translated
 		}
 	}
 

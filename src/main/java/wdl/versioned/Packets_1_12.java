@@ -15,8 +15,8 @@ package wdl.versioned;
 
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.PacketBuffer;
-import net.minecraft.network.play.client.CPacketCustomPayload;
-import net.minecraft.network.play.server.SPacketCustomPayload;
+import net.minecraft.network.play.client.C17PacketCustomPayload;
+import net.minecraft.network.play.server.S3FPacketCustomPayload;
 import wdl.versioned.VersionedFunctions.ChannelName;
 
 /**
@@ -36,15 +36,15 @@ final class PacketFunctions {
 	/* (non-javadoc)
 	 * @see VersionedFunctions#makePluginMessagePacket
 	 */
-	static CPacketCustomPayload makePluginMessagePacket(@ChannelName String channel, byte[] bytes) {
-		return new CPacketCustomPayload(channel, new PacketBuffer(Unpooled.copiedBuffer(bytes)));
+	static C17PacketCustomPayload makePluginMessagePacket(@ChannelName String channel, byte[] bytes) {
+		return new C17PacketCustomPayload(channel, new PacketBuffer(Unpooled.copiedBuffer(bytes)));
 	}
 
 	/* (non-javadoc)
 	 * @see VersionedFunctions#makeServerPluginMessagePacket
 	 */
-	static SPacketCustomPayload makeServerPluginMessagePacket(@ChannelName String channel, byte[] bytes) {
-		return new SPacketCustomPayload(channel, new PacketBuffer(Unpooled.copiedBuffer(bytes)));
+	static S3FPacketCustomPayload makeServerPluginMessagePacket(@ChannelName String channel, byte[] bytes) {
+		return new S3FPacketCustomPayload(channel, new PacketBuffer(Unpooled.copiedBuffer(bytes)));
 	}
 
 	/* (non-javadoc)

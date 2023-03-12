@@ -17,8 +17,8 @@ import net.minecraft.entity.passive.EntityHorse;
 import net.minecraft.inventory.AnimalChest;
 import net.minecraft.inventory.ContainerHorseInventory;
 import net.minecraft.inventory.Slot;
-import net.minecraft.util.text.ITextComponent;
-import net.minecraft.util.text.TextComponentTranslation;
+import net.minecraft.util.IChatComponent;
+import net.minecraft.util.ChatComponentTranslation;
 import wdl.ReflectionUtils;
 import wdl.handler.HandlerException;
 
@@ -43,7 +43,7 @@ public class HorseHandler extends EntityHandler<EntityHorse, ContainerHorseInven
 	}
 
 	@Override
-	public ITextComponent copyData(ContainerHorseInventory container, EntityHorse horse, boolean riding) throws HandlerException {
+	public IChatComponent copyData(ContainerHorseInventory container, EntityHorse horse, boolean riding) throws HandlerException {
 		AnimalChest horseInventory = new AnimalChest(
 				horse.getName(), // This was hardcoded to "HorseChest" in 1.12, but the name in 1.13.  The actual value is unused.
 				container.inventorySlots.size() - PLAYER_INVENTORY_SLOTS);
@@ -58,9 +58,9 @@ public class HorseHandler extends EntityHandler<EntityHorse, ContainerHorseInven
 		ReflectionUtils.findAndSetPrivateField(horse, EntityHorse.class, AnimalChest.class, horseInventory);
 
 		if (riding) {
-			return new TextComponentTranslation("wdl.messages.onGuiClosedInfo.savedRiddenEntity.horse");
+			return new ChatComponentTranslation("wdl.messages.onGuiClosedInfo.savedRiddenEntity.horse");
 		} else {
-			return new TextComponentTranslation("wdl.messages.onGuiClosedInfo.savedEntity.horse");
+			return new ChatComponentTranslation("wdl.messages.onGuiClosedInfo.savedEntity.horse");
 		}
 	}
 

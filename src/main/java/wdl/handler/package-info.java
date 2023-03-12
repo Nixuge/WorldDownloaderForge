@@ -15,8 +15,8 @@
  * Logic shared between both block and entity handlers.
  */
 @ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+// @MethodsReturnNonnullByDefault
 package wdl.handler;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import mcp.MethodsReturnNonnullByDefault;
+// import mcp.MethodsReturnNonnullByDefault;

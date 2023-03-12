@@ -20,8 +20,8 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.math.ChunkPos;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.world.ChunkCoordIntPair;
+import net.minecraft.util.MathHelper;
 import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.RegionFile;
 import wdl.WDL;
@@ -142,7 +142,7 @@ public class GuiSavedChunks extends WDLScreen {
 			}
 		}
 		// Chunks that have been saved already
-		for (ChunkPos pos : wdl.savedChunks) {
+		for (ChunkCoordIntPair pos : wdl.savedChunks) {
 			drawChunk(pos, 0xFF00FF00);
 		}
 
@@ -167,7 +167,7 @@ public class GuiSavedChunks extends WDLScreen {
 		if (mouseY > TOP_MARGIN && mouseY < height - BOTTOM_MARGIN) {
 			int x = displayXToChunkX(mouseX);
 			int z = displayZToChunkZ(mouseY);
-			if (wdl.savedChunks.contains(new ChunkPos(x, z))) {
+			if (wdl.savedChunks.contains(new ChunkCoordIntPair(x, z))) {
 				this.drawString(this.fontRendererObj,
 						I18n.format("wdl.gui.savedChunks.savedNow", x, z),
 						12, 24, 0xFFFFFF);
@@ -285,7 +285,7 @@ public class GuiSavedChunks extends WDLScreen {
 		int now = (int)(System.currentTimeMillis() / 1000);
 		for (int zOff = 0; zOff < REGION_SIZE; zOff++) {
 			for (int xOff = 0; xOff < REGION_SIZE; xOff++) {
-				ChunkPos pos = new ChunkPos(xOff + regionX * REGION_SIZE, zOff + regionZ * REGION_SIZE);
+				ChunkCoordIntPair pos = new ChunkCoordIntPair(xOff + regionX * REGION_SIZE, zOff + regionZ * REGION_SIZE);
 				if (wdl.savedChunks.contains(pos)) {
 					continue;
 				}
@@ -317,7 +317,7 @@ public class GuiSavedChunks extends WDLScreen {
 		}
 	}
 
-	private void drawChunk(ChunkPos pos, int color) {
+	private void drawChunk(ChunkCoordIntPair pos, int color) {
 		int x1 = chunkXToDisplayX(pos.chunkXPos);
 		int z1 = chunkZToDisplayZ(pos.chunkZPos);
 		int x2 = x1 + SCALE - 1;

@@ -14,14 +14,14 @@
 package wdl.gui.widget;
 
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.IChatComponent;
 
 /**
  * A text field that works across versions.
  */
 public class WDLTextField extends ExtTextField {
 	public WDLTextField(FontRenderer fontRenderer,
-			int x, int y, int width, int height, ITextComponent label) {
+			int x, int y, int width, int height, IChatComponent label) {
 		super(fontRenderer, x, y, width, height, label);
 	}
 }

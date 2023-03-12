@@ -17,7 +17,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.resources.I18n;
-import net.minecraft.util.text.TextComponentString;
+import net.minecraft.util.ChatComponentText;
 import wdl.WDL;
 import wdl.WDLPluginChannels;
 import wdl.gui.widget.ButtonDisplayGui;
@@ -53,7 +53,7 @@ public class GuiWDLPermissions extends WDLScreen {
 	 * @param parent
 	 */
 	public GuiWDLPermissions(@Nullable GuiScreen parent, WDL wdl) {
-		super(new TextComponentString("Permission info")); // XXX untranslated
+		super(new ChatComponentText("Permission info")); // XXX untranslated
 		this.parent = parent;
 		this.wdl = wdl;
 	}

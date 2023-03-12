@@ -21,8 +21,8 @@
  * <a href="https://wiki.vg/Block_Actions">this article</a> for info in 1.13.
  */
 @ParametersAreNonnullByDefault
-@MethodsReturnNonnullByDefault
+// @MethodsReturnNonnullByDefault
 package wdl.handler.blockaction;
 
 import javax.annotation.ParametersAreNonnullByDefault;
-import mcp.MethodsReturnNonnullByDefault;
+// import mcp.MethodsReturnNonnullByDefault;

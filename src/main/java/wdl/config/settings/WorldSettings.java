@@ -19,7 +19,7 @@ import java.util.Map;
 
 import net.minecraft.entity.Entity;
 import net.minecraft.util.IStringSerializable;
-import net.minecraft.util.math.MathHelper;
+import net.minecraft.util.MathHelper;
 import wdl.config.BooleanSetting;
 import wdl.config.EnumSetting;
 import wdl.config.IConfiguration;

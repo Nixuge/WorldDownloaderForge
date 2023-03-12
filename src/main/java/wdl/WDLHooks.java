@@ -25,12 +25,12 @@ import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.crash.CrashReport;
 import net.minecraft.crash.CrashReportCategory;
-import net.minecraft.network.play.server.SPacketBlockAction;
-import net.minecraft.network.play.server.SPacketChat;
-import net.minecraft.network.play.server.SPacketCustomPayload;
-import net.minecraft.network.play.server.SPacketMaps;
+import net.minecraft.network.play.server.S24PacketBlockAction;
+import net.minecraft.network.play.server.S02PacketChat;
+import net.minecraft.network.play.server.S3FPacketCustomPayload;
+import net.minecraft.network.play.server.S34PacketMaps;
 import net.minecraft.network.play.server.SPacketUnloadChunk;
-import net.minecraft.util.text.ITextComponent;
+import net.minecraft.util.IChatComponent;
 
 
 /**
@@ -51,11 +51,11 @@ public final class WDLHooks {
 		void onWorldClientTick(WorldClient sender);
 		void onWorldClientRemoveEntityFromWorld(WorldClient sender, int eid);
 		void onNHPCHandleChunkUnload(NetHandlerPlayClient sender, WorldClient world, SPacketUnloadChunk packet);
-		void onNHPCHandleChat(NetHandlerPlayClient sender, SPacketChat packet);
-		void onNHPCHandleMaps(NetHandlerPlayClient sender, SPacketMaps packet);
-		void onNHPCHandleCustomPayload(NetHandlerPlayClient sender, SPacketCustomPayload packet);
-		void onNHPCHandleBlockAction(NetHandlerPlayClient sender, SPacketBlockAction packet);
-		void onNHPCDisconnect(NetHandlerPlayClient sender, ITextComponent reason);
+		void onNHPCHandleChat(NetHandlerPlayClient sender, S02PacketChat packet);
+		void onNHPCHandleMaps(NetHandlerPlayClient sender, S34PacketMaps packet);
+		void onNHPCHandleCustomPayload(NetHandlerPlayClient sender, S3FPacketCustomPayload packet);
+		void onNHPCHandleBlockAction(NetHandlerPlayClient sender, S24PacketBlockAction packet);
+		void onNHPCDisconnect(NetHandlerPlayClient sender, IChatComponent reason);
 		void onCrashReportPopulateEnvironment(CrashReport report);
 		void injectWDLButtons(GuiIngameMenu gui, Collection<GuiButton> buttonList, Consumer<GuiButton> addButton);
 		void handleWDLButtonClick(GuiIngameMenu gui, GuiButton button);
@@ -90,31 +90,31 @@ public final class WDLHooks {
 		}
 
 		@Override
-		public void onNHPCHandleChat(NetHandlerPlayClient sender, SPacketChat packet) {
+		public void onNHPCHandleChat(NetHandlerPlayClient sender, S02PacketChat packet) {
 			bootstrap();
 			listener.onNHPCHandleChat(sender, packet);
 		}
 
 		@Override
-		public void onNHPCHandleMaps(NetHandlerPlayClient sender, SPacketMaps packet) {
+		public void onNHPCHandleMaps(NetHandlerPlayClient sender, S34PacketMaps packet) {
 			bootstrap();
 			listener.onNHPCHandleMaps(sender, packet);
 		}
 
 		@Override
-		public void onNHPCHandleCustomPayload(NetHandlerPlayClient sender, SPacketCustomPayload packet) {
+		public void onNHPCHandleCustomPayload(NetHandlerPlayClient sender, S3FPacketCustomPayload packet) {
 			bootstrap();
 			listener.onNHPCHandleCustomPayload(sender, packet);
 		}
 
 		@Override
-		public void onNHPCHandleBlockAction(NetHandlerPlayClient sender, SPacketBlockAction packet) {
+		public void onNHPCHandleBlockAction(NetHandlerPlayClient sender, S24PacketBlockAction packet) {
 			bootstrap();
 			listener.onNHPCHandleBlockAction(sender, packet);
 		}
 
 		@Override
-		public void onNHPCDisconnect(NetHandlerPlayClient sender, ITextComponent reason) {
+		public void onNHPCDisconnect(NetHandlerPlayClient sender, IChatComponent reason) {
 			bootstrap();
 			listener.onNHPCDisconnect(sender, reason);
 		}
@@ -184,59 +184,59 @@ public final class WDLHooks {
 	}
 
 	/**
-	 * Called when {@link NetHandlerPlayClient#handleChat(SPacketChat)} is
+	 * Called when {@link NetHandlerPlayClient#handleChat(S02PacketChat)} is
 	 * called.
 	 * <br/>
 	 * Should be at the end of the method.
 	 */
 	public static void onNHPCHandleChat(NetHandlerPlayClient sender,
-			SPacketChat packet) {
+			S02PacketChat packet) {
 		listener.onNHPCHandleChat(sender, packet);
 	}
 
 	/**
-	 * Called when {@link NetHandlerPlayClient#handleMaps(SPacketMaps)} is
+	 * Called when {@link NetHandlerPlayClient#handleMaps(S34PacketMaps)} is
 	 * called.
 	 * <br/>
 	 * Should be at the end of the method.
 	 */
 	public static void onNHPCHandleMaps(NetHandlerPlayClient sender,
-			SPacketMaps packet) {
+			S34PacketMaps packet) {
 		listener.onNHPCHandleMaps(sender, packet);
 	}
 
 	/**
 	 * Called when
-	 * {@link NetHandlerPlayClient#handleCustomPayload(SPacketCustomPayload)}
+	 * {@link NetHandlerPlayClient#handleCustomPayload(S3FPacketCustomPayload)}
 	 * is called.
 	 * <br/>
 	 * Should be at the end of the method.
 	 */
 	public static void onNHPCHandleCustomPayload(NetHandlerPlayClient sender,
-			SPacketCustomPayload packet) {
+			S3FPacketCustomPayload packet) {
 		listener.onNHPCHandleCustomPayload(sender, packet);
 	}
 
 	/**
 	 * Called when
-	 * {@link NetHandlerPlayClient#handleBlockAction(SPacketBlockAction)} is
+	 * {@link NetHandlerPlayClient#handleBlockAction(S24PacketBlockAction)} is
 	 * called.
 	 * <br/>
 	 * Should be at the end of the method.
 	 */
 	public static void onNHPCHandleBlockAction(NetHandlerPlayClient sender,
-			SPacketBlockAction packet) {
+			S24PacketBlockAction packet) {
 		listener.onNHPCHandleBlockAction(sender, packet);
 	}
 
 	/**
-	 * Called when {@link NetHandlerPlayClient#onDisconnect(ITextComponent)} is called.
+	 * Called when {@link NetHandlerPlayClient#onDisconnect(IChatComponent)} is called.
 	 * <br/>
 	 * Should be at the start of the method.
 	 *
 	 * @param reason The reason for the disconnect, as passed to onDisconnect.
 	 */
-	public static void onNHPCDisconnect(NetHandlerPlayClient sender, ITextComponent reason) {
+	public static void onNHPCDisconnect(NetHandlerPlayClient sender, IChatComponent reason) {
 		listener.onNHPCDisconnect(sender, reason);
 	}
 
