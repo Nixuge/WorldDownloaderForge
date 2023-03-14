@@ -22,6 +22,7 @@ import wdl.WDLMessages;
 import wdl.WorldBackup;
 import wdl.WorldBackup.IBackupProgressMonitor;
 import wdl.WorldBackup.WorldBackupType;
+import wdl.functions.GeneratorFunctions;
 import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.WDLButton;
 
@@ -56,7 +57,7 @@ public class GuiWDLOverwriteChanges extends GuiTurningCameraBase implements IBac
 			} catch (IOException ex) {
 				WDLMessages.chatMessageTranslated(WDL.serverProps,
 						WDLMessageTypes.ERROR, "wdl.messages.generalError.failedToBackUp", ex);
-				VersionedFunctions.makeBackupFailedToast(ex);
+				GeneratorFunctions.makeBackupFailedToast(ex);
 			} finally {
 				backingUp = false;
 

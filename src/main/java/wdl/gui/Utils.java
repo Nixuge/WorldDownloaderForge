@@ -19,6 +19,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
+import wdl.functions.GuiFunctions;
 import wdl.functions.VersionedFunctions;
 
 public class Utils {
@@ -110,7 +111,7 @@ public class Utils {
 	 * @param right Where to stop drawing (usually, width)
 	 */
 	public static void drawListBackground(int topMargin, int bottomMargin, int top, int left, int bottom, int right) {
-		VersionedFunctions.drawDarkBackground(top, left, bottom, right);
+		GuiFunctions.drawDarkBackground(top, left, bottom, right);
 		drawBorder(topMargin, bottomMargin, top, left, bottom, right);
 	}
 
@@ -130,6 +131,6 @@ public class Utils {
 	 * @param right Where to stop drawing (usually, width)
 	 */
 	public static void drawBorder(int topMargin, int bottomMargin, int top, int left, int bottom, int right) {
-		VersionedFunctions.drawBorder(topMargin, bottomMargin, top, left, bottom, right);
+		GuiFunctions.drawBorder(topMargin, bottomMargin, top, left, bottom, right);
 	}
 }

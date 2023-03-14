@@ -22,6 +22,7 @@ import net.minecraft.util.ChatComponentTranslation;
 import wdl.WDL;
 import wdl.config.IConfiguration;
 import wdl.config.settings.GeneratorSettings;
+import wdl.functions.GeneratorFunctions;
 import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.ButtonDisplayGui;
 import wdl.gui.widget.WDLScreen;
@@ -92,7 +93,7 @@ public class GuiWDLGenerator extends WDLScreen {
 	private GuiScreen makeGeneratorSettingsGui() {
 		GeneratorSettings.Generator generator = config.getValue(GeneratorSettings.GENERATOR);
 		String generatorConfig = config.getValue(GeneratorSettings.GENERATOR_OPTIONS);
-		return VersionedFunctions.makeGeneratorSettingsGui(generator, this, generatorConfig,
+		return GeneratorFunctions.makeGeneratorSettingsGui(generator, this, generatorConfig,
 				value -> config.setValue(GeneratorSettings.GENERATOR_OPTIONS, value));
 	}
 

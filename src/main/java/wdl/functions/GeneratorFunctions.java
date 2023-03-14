@@ -34,15 +34,25 @@ public final class GeneratorFunctions {
 	private GeneratorFunctions() { throw new AssertionError(); }
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#isAvailableGenerator
+	/**
+	 * Returns true if the given generator can be used in this Minecraft version.
+	 * @param generator The generator
+	 * @return True if it is usable.
 	 */
 	public static boolean isAvaliableGenerator(Generator generator) {
 		return generator != Generator.BUFFET;
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#makeGeneratorSettingsGui
+	/**
+	 * Creates a settings GUI for the given world generator (e.g. superflat
+	 * options).
+	 *
+	 * @param generator       The generator.
+	 * @param parent          The GUI to return to when the settings GUI is closed.
+	 * @param generatorConfig The configuration for the generator, which depends on
+	 *                        the generator.
+	 * @param callback        Called with the new generator config.
+	 * @return The new GUI, or the parent if there is no valid GUI.
 	 */
 	public static GuiScreen makeGeneratorSettingsGui(Generator generator, GuiScreen parent,
 			String generatorConfig, Consumer<String> callback) {
@@ -145,22 +155,33 @@ public final class GeneratorFunctions {
 		}
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#makeBackupToast
+	/**
+	 * Makes a backup toast, on versions that support it.
+	 *
+	 * @param name The name of the world
+	 * @param fileSize The size of the file in bytes
 	 */
 	public static void makeBackupToast(String name, long fileSize) {
 		// No toasts in this version
+		// TODO: remove (or adapt w future notifications UI?)
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#makeBackupFailedToast
+	/**
+	 * Makes a backup failed toast, on versions that support it.
+	 *
+	 * @param ex The exception.
 	 */
 	public static void makeBackupFailedToast(IOException ex) {
 		// No toasts in this version
+		// TODO: remove (or adapt w future notifications UI?)
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#VOID_FLAT_CONFIG
+	/**
+	 * A superflat configuration that generates only air.
+	 *
+	 * This should be similar to the "the void" preset present since 1.9 (including the
+	 * "void" biome), but shouldn't include any decoration (the 31x31 platform).  In versions
+	 * without the void biome, another biome (ocean since it's 0, maybe) should be used.
 	 */
 	public static final String VOID_FLAT_CONFIG = "3;minecraft:air;127";
 
@@ -173,8 +194,11 @@ public final class GeneratorFunctions {
 		// }
 	// }
 
-	/* (non-javadoc)
-	 * @see GeneratorFunctions#createGeneratorOptionsTag
+	/**
+	 * Creates the generator options tag,
+	 *
+	 * @param generatorOptions The content.  Either a string or an SNBT representation of the data.
+	 * @return An NBT tag of some type.
 	 */
 	public static NBTTagString createGeneratorOptionsTag(String generatorOptions) {
 		return new NBTTagString(generatorOptions);

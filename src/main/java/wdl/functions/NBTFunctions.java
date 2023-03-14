@@ -28,8 +28,12 @@ import net.minecraft.nbt.NBTTagString;
 public class NBTFunctions {
 	private NBTFunctions() { throw new AssertionError(); }
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#nbtString
+	/**
+	 * Returns a well-formated String version of the tag, suitable for tests and logging.
+	 * This will usually be multiple lines long.
+	 *
+	 * @param tag The tag to use
+	 * @return The string version.
 	 */
 	public static String nbtString(NBTBase tag) {
 		// No equivalent of toFormattedComponent or similar, so just try to make a
@@ -40,8 +44,11 @@ public class NBTFunctions {
 		return result;
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#createFloatListTag
+	/**
+	 * Creates an NBT list based on the given float values.
+	 *
+	 * @param values The varargs array of values.
+	 * @return A new list tag.
 	 */
 	public static NBTTagList createFloatListTag(float... values) {
 		NBTTagList result = new NBTTagList();
@@ -51,8 +58,11 @@ public class NBTFunctions {
 		return result;
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#createDoubleListTag
+	/**
+	 * Creates an NBT list based on the given double values.
+	 *
+	 * @param values The varargs array of values.
+	 * @return A new list tag.
 	 */
 	public static NBTTagList createDoubleListTag(double... values) {
 		NBTTagList result = new NBTTagList();
@@ -62,8 +72,11 @@ public class NBTFunctions {
 		return result;
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#createShortListTag
+	/**
+	 * Creates an NBT list based on the given short values.
+	 *
+	 * @param values The varargs array of values.
+	 * @return A new list tag.
 	 */
 	public static NBTTagList createShortListTag(short... values) {
 		NBTTagList result = new NBTTagList();
@@ -73,8 +86,11 @@ public class NBTFunctions {
 		return result;
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#createStringTag
+	/**
+	 * Creates an NBT string based on the given string.
+	 *
+	 * @param value The string to use.
+	 * @return A new string tag.
 	 */
 	public static NBTTagString createStringTag(String value) {
 		return new NBTTagString(value);

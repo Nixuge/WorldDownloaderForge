@@ -41,6 +41,7 @@ import org.apache.commons.io.IOUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.resources.I18n;
+import wdl.functions.GeneratorFunctions;
 import wdl.functions.VersionedFunctions;
 
 /**
@@ -239,7 +240,7 @@ public class WorldBackup {
 			}
 
 			long size = copyDirectory(worldFolder, destination, monitor);
-			VersionedFunctions.makeBackupToast(worldName, size);
+			GeneratorFunctions.makeBackupToast(worldName, size);
 			return;
 		}
 		case ZIP: {
@@ -254,7 +255,7 @@ public class WorldBackup {
 			}
 
 			long size = zipDirectory(worldFolder, destination, monitor);
-			VersionedFunctions.makeBackupToast(worldName, size);
+			GeneratorFunctions.makeBackupToast(worldName, size);
 			return;
 		}
 		case CUSTOM: {
@@ -276,7 +277,7 @@ public class WorldBackup {
 			}
 
 			long size = runCustomBackup(customCommand, worldFolder, destination, customMonitor);
-			VersionedFunctions.makeBackupToast(worldName, size);
+			GeneratorFunctions.makeBackupToast(worldName, size);
 			return;
 		}
 		}

@@ -45,8 +45,9 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
 import net.minecraft.world.chunk.Chunk;
+import wdl.functions.PacketFunctions;
 import wdl.functions.VersionedFunctions;
-import wdl.functions.VersionedFunctions.ChannelName;
+import wdl.functions.PacketFunctions.ChannelName;
 
 /**
  * World Downloader permission system implemented with Plugin Channels.
@@ -614,7 +615,7 @@ public class WDLPluginChannels {
 		} else {
 			throw new RuntimeException("No request channel has been registered :("); // XXX
 		}
-		C17PacketCustomPayload requestPacket = VersionedFunctions.makePluginMessagePacket(channel, output.toByteArray());
+		C17PacketCustomPayload requestPacket = PacketFunctions.makePluginMessagePacket(channel, output.toByteArray());
 		nmgr.sendPacket(requestPacket);
 	}
 
@@ -638,7 +639,7 @@ public class WDLPluginChannels {
 	private static final String REQUEST_CHANNEL_OLD = "WDL|REQUEST", REQUEST_CHANNEL_NEW = "wdl:request";
 
 	/** All known channels */
-	private static final List<@ChannelName String> WDL_CHANNELS = VersionedFunctions.removeInvalidChannelNames(
+	private static final List<@ChannelName String> WDL_CHANNELS = PacketFunctions.removeInvalidChannelNames(
 			INIT_CHANNEL_NEW, CONTROL_CHANNEL_NEW, REQUEST_CHANNEL_NEW,
 			INIT_CHANNEL_OLD, CONTROL_CHANNEL_OLD, REQUEST_CHANNEL_OLD
 			);
@@ -695,7 +696,7 @@ public class WDLPluginChannels {
 		object.addProperty("State", state);
 		byte[] bytes = object.toString().getBytes(StandardCharsets.UTF_8);
 
-		C17PacketCustomPayload initPacket = VersionedFunctions.makePluginMessagePacket(channel, bytes);
+		C17PacketCustomPayload initPacket = PacketFunctions.makePluginMessagePacket(channel, bytes);
 
 		nmgr.sendPacket(initPacket);
 
@@ -723,7 +724,7 @@ public class WDLPluginChannels {
 		// Register the WDL messages.
 		byte[] registerBytes = String.join("\0", WDL_CHANNELS).getBytes();
 
-		C17PacketCustomPayload registerPacket = VersionedFunctions.makePluginMessagePacket(VersionedFunctions.getRegisterChannel(), registerBytes);
+		C17PacketCustomPayload registerPacket = PacketFunctions.makePluginMessagePacket(PacketFunctions.getRegisterChannel(), registerBytes);
 		minecraft.getNetHandler().getNetworkManager().sendPacket(registerPacket);
 
 		// Send the init message.

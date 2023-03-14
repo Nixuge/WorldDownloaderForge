@@ -13,11 +13,22 @@
  */
 package wdl.functions;
 
+import java.lang.annotation.Documented;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Retention;
+import java.lang.annotation.RetentionPolicy;
+import java.lang.annotation.Target;
+
+import javax.annotation.MatchesPattern;
+import javax.annotation.RegEx;
+import javax.annotation.meta.TypeQualifierNickname;
+
+import com.google.common.collect.ImmutableList;
+
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
 import net.minecraft.network.play.server.S3FPacketCustomPayload;
-import wdl.functions.VersionedFunctions.ChannelName;
 
 /**
  * Contains functions related to packets. This version is used between Minecraft
@@ -26,40 +37,57 @@ import wdl.functions.VersionedFunctions.ChannelName;
 public final class PacketFunctions {
 	private PacketFunctions() { throw new AssertionError(); }
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#PLUGIN_CHANNEL_REGEX
-	 *
+	/**
+	 * A regex that indicates whether a name is valid for a plugin channel.
+	 * In 1.13, channels are namespaced identifiers; in 1.12 they are not.
 	 * Note: the max length was shorter in some earlier version (before 1.9).
 	 */
+	@RegEx
 	public static final String CHANNEL_NAME_REGEX = ".{1,20}";
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#makePluginMessagePacket
+	/**
+	 * Marks a parameter as requiring a valid channel name for a plugin message.
+	 */
+	@Documented
+	@TypeQualifierNickname @MatchesPattern(CHANNEL_NAME_REGEX)
+	@Retention(RetentionPolicy.RUNTIME)
+	@Target({ElementType.TYPE_USE})
+	public static @interface ChannelName { }
+
+	/**
+	 * Creates a plugin message packet.
+	 * @param channel The channel to send on.
+	 * @param bytes The payload.
+	 * @return The new packet.
 	 */
 	public static C17PacketCustomPayload makePluginMessagePacket(@ChannelName String channel, byte[] bytes) {
 		return new C17PacketCustomPayload(channel, new PacketBuffer(Unpooled.copiedBuffer(bytes)));
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#makeServerPluginMessagePacket
-	 */
-	public static S3FPacketCustomPayload makeServerPluginMessagePacket(@ChannelName String channel, byte[] bytes) {
-		return new S3FPacketCustomPayload(channel, new PacketBuffer(Unpooled.copiedBuffer(bytes)));
-	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#getRegisterChannel
+	/**
+	 * Gets the name of the channel that is used to register plugin messages.
+	 * @return The channel name.
 	 */
 	@ChannelName
 	public static String getRegisterChannel() {
 		return "REGISTER";
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#getUnregisterChannel
+		/**
+	 * Creates a list of channel names based on the given list, but with names that
+	 * are not valid for this version removed.
+	 *
+	 * @param names The names list.
+	 * @return A sanitized list of names.
 	 */
-	@ChannelName
-	public static String getUnregisterChannel() {
-		return "UNREGISTER";
+	public static ImmutableList<@ChannelName String> removeInvalidChannelNames(String... names) {
+		ImmutableList.Builder<@ChannelName String> list = ImmutableList.builder();
+		for (String name : names) {
+			if (name.matches(CHANNEL_NAME_REGEX)) {
+				list.add(name);
+			}
+		}
+		return list.build();
 	}
 }

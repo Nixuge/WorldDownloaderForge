@@ -36,16 +36,24 @@ public final class MapFunctions {
 	private MapFunctions() { throw new AssertionError(); }
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	/* (non-javadoc)
-	 * {@see VersionedFunctions#getMapData}
+	/**
+	 * Gets the map data associated with the given packet.
+	 *
+	 * @param world The client world.
+	 * @param mapPacket The packet.
+	 * @return The map data, or null if the underlying function returns null.
 	 */
 	@Nullable
 	public static MapData getMapData(World world, S34PacketMaps mapPacket) {
 		return ItemMap.loadMapData(mapPacket.getMapId(), world);
 	}
 
-	/* (non-javadoc)
-	 * {@see VersionedFunctions#getMapID}
+	/**
+	 * Gets the ID of the map associated with the given item stack.
+	 * Assumes that the item is a map in the first place.
+	 *
+	 * @param stack The map item stack.
+	 * @return The map ID
 	 */
 	public static int getMapID(ItemStack stack) {
 		// Map ID is based on its damage value, yay!
@@ -53,16 +61,19 @@ public final class MapFunctions {
 		return stack.getMetadata();
 	}
 
-	/* (non-javadoc)
-	 * {@see VersionedFunctions#isMapDimensionNull}
+	/**
+	 * Returns true if the map has a null dimension.  This can happen in 1.13.1 and later.
 	 */
 	public static boolean isMapDimensionNull(MapData map) {
 		return false; // A primitive byte can't be null
 	}
 
 	private static boolean useForgeMethod = false;
-	/* (non-javadoc)
-	 * {@see VersionedFunctions#setMapDimension}
+	
+	/**
+	 * Sets the map's dimension to the given dimension.  In some versions,
+	 * the {@link MapData#dimension} field is a byte, while in other ones it is
+	 * a WorldProvider (which might start out null).
 	 */
 	public static void setMapDimension(MapData map, WorldProvider dim) {
 		if (!useForgeMethod) {

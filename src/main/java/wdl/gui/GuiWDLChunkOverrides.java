@@ -28,6 +28,7 @@ import net.minecraft.util.ChatComponentText;
 import wdl.WDL;
 import wdl.WDLPluginChannels;
 import wdl.WDLPluginChannels.ChunkRange;
+import wdl.functions.GuiFunctions;
 import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.ButtonDisplayGui;
 import wdl.gui.widget.WDLButton;
@@ -225,7 +226,7 @@ public class GuiWDLChunkOverrides extends WDLScreen {
 
         @Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		VersionedFunctions.drawDarkBackground(0, 0, height, width);
+		GuiFunctions.drawDarkBackground(0, 0, height, width);
 
 		// Draw the current request range.
 		if (mode == Mode.REQUESTING) {

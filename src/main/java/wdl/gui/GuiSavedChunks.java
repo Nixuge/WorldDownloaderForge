@@ -26,6 +26,7 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.RegionFile;
 import wdl.WDL;
 import wdl.config.settings.MiscSettings;
+import wdl.functions.GuiFunctions;
 import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.ButtonDisplayGui;
 import wdl.gui.widget.WDLScreen;
@@ -126,7 +127,7 @@ public class GuiSavedChunks extends WDLScreen {
 
 	@Override
 	public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-		VersionedFunctions.drawDarkBackground(0, 0, height, width);
+		GuiFunctions.drawDarkBackground(0, 0, height, width);
 
 		// Old chunks
 		int minX = MathHelper.floor_double(displayXToChunkX(0) / 32.0);

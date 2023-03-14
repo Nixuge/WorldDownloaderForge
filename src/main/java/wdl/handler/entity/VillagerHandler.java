@@ -27,7 +27,7 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.village.MerchantRecipeList;
 import wdl.ReflectionUtils;
-import wdl.functions.VersionedFunctions;
+import wdl.functions.HandlerFunctions;
 import wdl.handler.HandlerException;
 
 public class VillagerHandler extends EntityHandler<EntityVillager, ContainerMerchant> {
@@ -119,11 +119,11 @@ public class VillagerHandler extends EntityHandler<EntityVillager, ContainerMerc
 	 * @throws HandlerException when a known issue occurs (bad data).  Contains translation info.
 	 */
 	public static int getCareer(String i18nKey, int profession) throws HandlerException {
-		if (!VersionedFunctions.VANILLA_VILLAGER_CAREERS.containsKey(profession)) {
+		if (!HandlerFunctions.VANILLA_VILLAGER_CAREERS.containsKey(profession)) {
 			throw new HandlerException("wdl.messages.onGuiClosedWarning.villagerCareer.unknownProfession", profession);
 		}
 
-		BiMap<String, Integer> careerData = VersionedFunctions.VANILLA_VILLAGER_CAREERS.get(profession);
+		BiMap<String, Integer> careerData = HandlerFunctions.VANILLA_VILLAGER_CAREERS.get(profession);
 
 		if (!careerData.containsKey(i18nKey)) {
 			throw new HandlerException("wdl.messages.onGuiClosedWarning.villagerCareer.unknownTitle", i18nKey, profession);

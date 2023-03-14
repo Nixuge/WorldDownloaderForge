@@ -116,16 +116,13 @@ public final class HandlerFunctions {
 		}
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#createNewBlockEntity
-	 */
-	@Nullable
-	public static TileEntity createNewBlockEntity(World world, BlockContainer block, IBlockState state) {
-		return block.createNewTileEntity(world, block.getMetaFromState(state));
-	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#getSaveHandler
+	/**
+	 * Gets the SaveHandler for the world with the given name.
+	 *
+	 * @param minecraft The Minecraft instance
+	 * @param worldName The name of the world.
+	 * @return The SaveHandler.
 	 */
 	public static SaveHandler getSaveHandler(Minecraft minecraft, String worldName) {
 		// False => Don't save player data.  This is fine for WDL since
@@ -133,9 +130,13 @@ public final class HandlerFunctions {
 		return (SaveHandler)minecraft.getSaveLoader().getSaveLoader(worldName, false);
 	}
 
-	// VILLAGED REMOVED
-	/* (non-javadoc)
-	 * @see VersionedFunctions#VANILLA_VILLAGER_CAREERS
+	// TODO: ADD BACK VILLAGERS CAREERS DATA
+	/**
+	 * A map mapping villager professions to a map from each career's I18n name to
+	 * the career's ID.
+	 *
+	 * @see https://minecraft.gamepedia.com/Villager#Professions_and_careers
+	 * @see EntityVillager#getDisplayName
 	 */
 	public static final Map<Integer, BiMap<String, Integer>> VANILLA_VILLAGER_CAREERS = new HashMap<>();
 	static {

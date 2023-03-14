@@ -35,6 +35,7 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.storage.MapData;
+import wdl.functions.MapFunctions;
 import wdl.functions.VersionedFunctions;
 
 /**
@@ -243,7 +244,7 @@ public final class MapDataHandler {
 		if (stack.getItem() != Items.filled_map) {
 			return false;
 		}
-		int id = VersionedFunctions.getMapId(stack);
+		int id = MapFunctions.getMapID(stack);
 
 		return id == mapID;
 	}
@@ -295,12 +296,12 @@ public final class MapDataHandler {
 		// 		assert confirmedOwner.worldObj != null;
 		// 		WorldProvider dim = confirmedOwner.worldObj.provider;
 		// 		assert dim != null;
-		// 		VersionedFunctions.setMapDimension(map, dim);
-		// 		VersionedFunctions.setMapDimension(map, dim);
+		// 		MapFunctions.setMapDimension(map, dim);
+		// 		MapFunctions.setMapDimension(map, dim);
 		// 		this.dim = dim;
-		// 	} else if (VersionedFunctions.isMapDimensionNull(map)) {
+		// 	} else if (MapFunctions.isMapDimensionNull(map)) {
 		// 		// Ensure that some dimension is set, so that the game doesn't crash.
-		// 		VersionedFunctions.setMapDimension(map, WorldProvider.OVERWORLD);
+		// 		MapFunctions.setMapDimension(map, WorldProvider.OVERWORLD);
 		// 		// The dimension wasn't confirmed, so don't notify this in chat
 		// 	}
 		// }

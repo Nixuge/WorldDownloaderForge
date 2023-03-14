@@ -60,6 +60,7 @@ import wdl.api.IWorldLoadListener;
 import wdl.api.WDLApi;
 import wdl.api.WDLApi.ModInfo;
 import wdl.config.settings.GeneratorSettings;
+import wdl.functions.MapFunctions;
 import wdl.functions.VersionedFunctions;
 import wdl.gui.GuiTurningCameraBase;
 import wdl.gui.GuiWDL;
@@ -647,7 +648,7 @@ public class WDLEvents {
 
 				if (ENABLE_PROFILER) PROFILER.startSection("wdl.onMapDataLoaded");
 
-				MapData mapData = VersionedFunctions.getMapData(wdl.worldClient, packet);
+				MapData mapData = MapFunctions.getMapData(wdl.worldClient, packet);
 
 				if (mapData != null) {
 					if (ENABLE_PROFILER) PROFILER.startSection("Core");

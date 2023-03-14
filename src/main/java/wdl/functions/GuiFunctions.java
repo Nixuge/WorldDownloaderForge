@@ -39,16 +39,27 @@ public final class GuiFunctions {
 
 	private static final Logger LOGGER = LogManager.getLogger();
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#makePlayer
+	/**
+	 * Creates a new instance of {@link EntityPlayerSP}.
+	 *
+	 * @param minecraft The minecraft instance
+	 * @param world The world
+	 * @param nhpc The connection
+	 * @param base The original player to copy other data from
 	 */
 	public static EntityPlayerSP makePlayer(Minecraft minecraft, World world, NetHandlerPlayClient nhpc, EntityPlayerSP base) {
 		return new EntityPlayerSP(minecraft, world, nhpc,
 				base.getStatFileWriter());
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#drawDarkBackground
+	/**
+	 * Draws a dark background, similar to {@link GuiScreen#drawBackground(int)} but darker.
+	 * Same appearance as the background in lists.
+	 *
+	 * @param top Where to start drawing (usually, 0)
+	 * @param left Where to start drawing (usually, 0)
+	 * @param bottom Where to stop drawing (usually, height).
+	 * @param right Where to stop drawing (usually, width)
 	 */
 	public static void drawDarkBackground(int top, int left, int bottom, int right) {
 		GlStateManager.disableLighting();
@@ -75,8 +86,20 @@ public final class GuiFunctions {
 		t.draw();
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#drawBorder
+	/**
+	 * Draws the top and bottom borders found on gui lists (but no background).
+	 * <br/>
+	 * Based off of
+	 * {@link net.minecraft.client.gui.GuiSlot#overlayBackground(int, int, int, int)}.
+	 *
+	 * Note that there is an additional 4-pixel padding on the margins for the gradient.
+	 *
+	 * @param topMargin Amount of space to give for the upper box.
+	 * @param bottomMargin Amount of space to give for the lower box.
+	 * @param top Where to start drawing (usually, 0)
+	 * @param left Where to start drawing (usually, 0)
+	 * @param bottom Where to stop drawing (usually, height).
+	 * @param right Where to stop drawing (usually, width)
 	 */
 	public static void drawBorder(int topMargin, int bottomMargin, int top, int left, int bottom, int right) {
 		GlStateManager.disableLighting();
@@ -173,8 +196,9 @@ public final class GuiFunctions {
 		GlStateManager.disableBlend();
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#setClipboardString
+	/**
+	 * Copies the given text into the system clipboard.
+	 * @param text The text to copy
 	 */
 	public static void setClipboardString(String text) {
 		GuiScreen.setClipboardString(text);

@@ -29,6 +29,7 @@ import wdl.config.CyclableSetting;
 import wdl.config.IConfiguration;
 import wdl.config.Setting;
 import wdl.config.StringSetting;
+import wdl.functions.GeneratorFunctions;
 import wdl.functions.VersionedFunctions;
 
 /**
@@ -50,7 +51,7 @@ public final class GeneratorSettings {
 	public static final Setting<String> GENERATOR_OPTIONS = new OptionSetting("GeneratorOptions");
 
 	public enum Generator implements IStringSerializable {
-		VOID("void", "flat", 0, VersionedFunctions.VOID_FLAT_CONFIG),
+		VOID("void", "flat", 0, GeneratorFunctions.VOID_FLAT_CONFIG),
 		DEFAULT("default", "default", 1, ""),
 		FLAT("flat", "flat", 0, ""),
 		LARGE_BIOMES("largeBiomes", "largeBiomes", 0, ""),
@@ -97,7 +98,7 @@ public final class GeneratorSettings {
 			this.key = key;
 
 			this.generators = Arrays.stream(Generator.values())
-					.filter(VersionedFunctions::isAvaliableGenerator)
+					.filter(GeneratorFunctions::isAvaliableGenerator)
 					.collect(Collectors.toList());
 		}
 

@@ -24,6 +24,7 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.IChatComponent;
 import wdl.WDL;
+import wdl.functions.GuiFunctions;
 import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.WDLScreen;
 
@@ -85,7 +86,7 @@ public abstract class GuiTurningCameraBase extends WDLScreen {
 	@OverridingMethodsMustInvokeSuper
 	public void initGui() {
 		if (!initializedCamera) {
-			this.cam = VersionedFunctions.makePlayer(wdl.minecraft, wdl.worldClient, wdl.player.sendQueue, wdl.player);
+			this.cam = GuiFunctions.makePlayer(wdl.minecraft, wdl.worldClient, wdl.player.sendQueue, wdl.player);
 			this.cam.setLocationAndAngles(wdl.player.posX, wdl.player.posY,
 					wdl.player.posZ, wdl.player.rotationYaw, 0.0F);
 			this.yaw = wdl.player.rotationYaw;

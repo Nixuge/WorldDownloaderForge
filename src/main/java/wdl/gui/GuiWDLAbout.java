@@ -20,6 +20,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.Language;
 import wdl.VersionConstants;
 import wdl.WDL;
+import wdl.functions.GuiFunctions;
 import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.WDLButton;
 import wdl.gui.widget.ButtonDisplayGui;
@@ -63,7 +64,7 @@ public class GuiWDLAbout extends WDLScreen {
 				I18n.format("wdl.gui.about.debugInfo")) {
 			public @Override void performAction() {
 				// Copy debug info
-				VersionedFunctions.setClipboardString(wdl.getDebugInfo());
+				GuiFunctions.setClipboardString(wdl.getDebugInfo());
 				// Change text to "copied" once clicked
 				setMessage(I18n.format("wdl.gui.about.debugInfo.copied"));
 			}
