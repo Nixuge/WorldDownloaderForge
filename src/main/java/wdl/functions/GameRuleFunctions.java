@@ -36,8 +36,12 @@ public final class GameRuleFunctions {
 		INTEGER,
 		BOOLEAN;
 	}
-	/* (non-javadoc)
-	 * @see VersionedFunctions#getRuleType
+
+	/**
+	 * Checks if the given game rule is of the given type.
+	 * @param rules The rule collection
+	 * @param rule The name of the rule
+	 * @return The type, or null if no info could be found.
 	 */
 	@Nullable
 	public static GameRuleType getRuleType(GameRules rules, String rule) {
@@ -50,16 +54,22 @@ public final class GameRuleFunctions {
 		return null;
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#getRuleValue
+	/**
+	 * Gets the value of a game rule.
+	 * @param rules The rule collection
+	 * @param rule The name of the rule
+	 * @return The value, or null if no info could be found.
 	 */
 	@Nullable
 	public static String getRuleValue(GameRules rules, String rule) { 
 		return rules.hasRule(rule) ? rules.getString(rule) : null;
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#setRuleValue
+	/**
+	 * Sets the given rule to the given value.  If the rule doesn't exist, throws an exception.
+	 * @param rules The rules object.
+	 * @param rule The rule's name
+	 * @param value The new value
 	 */
 	public static void setRuleValue(GameRules rules, String rule, String value) {
 		if (!rules.hasRule(rule)) {
@@ -68,8 +78,10 @@ public final class GameRuleFunctions {
 		rules.setOrCreateGameRule(rule, value);
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#getGameRules
+	/**
+	 * Gets a collection of gamerules and their values.
+	 * @param rules The rules object.
+	 * @return A map of all rule names to their values.
 	 */
 	public static Map<String, String> getGameRules(GameRules rules) {
 		return Collections.unmodifiableMap(

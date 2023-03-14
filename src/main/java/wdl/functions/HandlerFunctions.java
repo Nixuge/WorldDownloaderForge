@@ -42,8 +42,10 @@ import net.minecraft.world.storage.SaveHandler;
 public final class HandlerFunctions {
 	private HandlerFunctions() { throw new AssertionError(); }
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#hasSkyLight
+	/**
+	 * Returns true if the given world has skylight data.
+	 *
+	 * @return a boolean
 	 */
 	public static boolean hasSkyLight(World world) {
 		// 1.10-: use isNether (hasNoSky)

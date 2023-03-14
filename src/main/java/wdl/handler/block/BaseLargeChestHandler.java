@@ -13,8 +13,6 @@
  */
 package wdl.handler.block;
 
-import static wdl.functions.VersionedFunctions.*;
-
 import java.util.function.BiConsumer;
 
 import javax.annotation.Nullable;

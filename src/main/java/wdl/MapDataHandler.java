@@ -59,6 +59,20 @@ import wdl.functions.MapFunctions;
  * <li>frames (indicated on maps, but insignificant since it's just generated at runtime)</li>
  * <li>playersArrayList and playersHashMap are not known, but they don't matter</li>
  * </ul>
+ * 
+ * Important note:
+ * Vec4b mappings are an absolute mess in 1.8.9, 
+ * so here they are:
+ * 
+ * private byte field_176117_a -> type
+ * private byte field_176115_b -> x
+ * private byte field_176116_c -> y
+ * private byte field_176114_d -> rotation
+ * 
+ * public byte func_176110_a() -> getType()
+ * public byte func_176112_b() -> getX()
+ * public byte func_176113_c() -> getY()
+ * public byte func_176111_d() -> getRotation()
  */
 public final class MapDataHandler {
 	private MapDataHandler() { throw new AssertionError(); }
