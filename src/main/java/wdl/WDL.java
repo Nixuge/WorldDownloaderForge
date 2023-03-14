@@ -43,7 +43,7 @@ import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 
-
+import me.nixuge.worlddownloader.McMod;
 import net.minecraft.block.Block;
 import net.minecraft.block.BlockAir;
 import net.minecraft.block.BlockBed;
@@ -296,6 +296,7 @@ public class WDL {
 		}
 		if (INSTANCE == null) {
 			INSTANCE = new WDL(Minecraft.getMinecraft());
+			McMod.wdl = INSTANCE;
 		}
 	}
 	private WDL(Minecraft minecraft) {
@@ -1486,14 +1487,6 @@ public class WDL {
 
 				return name;
 			} 
-			// else if (minecraft.isConnectedToRealms()) {
-			// 	String realmName = getRealmName();
-			// 	if (realmName != null) {
-			// 		return realmName;
-			// 	} else {
-			// 		LOGGER.warn("getServerName: getRealmName returned null!");
-			// 	}
-			// } 
 			else {
 				LOGGER.warn("getServerName: Not connected to either a real server or realms!");
 			}

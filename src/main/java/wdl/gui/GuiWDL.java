@@ -53,15 +53,15 @@ public class GuiWDL extends WDLScreen {
 			 * Constructor.
 			 *
 			 * @param key
-			 *            The I18n key, which will have the base for this GUI
-			 *            prepended.
+			 *                   The I18n key, which will have the base for this GUI
+			 *                   prepended.
 			 * @param openFunc
-			 *            Supplier that constructs a GuiScreen to open based off
-			 *            of this screen (the one to open when that screen is
-			 *            closed) and the WDL instance
+			 *                   Supplier that constructs a GuiScreen to open based off
+			 *                   of this screen (the one to open when that screen is
+			 *                   closed) and the WDL instance
 			 * @param needsPerms
-			 *            Whether the player needs download permission to use
-			 *            this button.
+			 *                   Whether the player needs download permission to use
+			 *                   this button.
 			 */
 			public ButtonEntry(String key, BiFunction<GuiScreen, WDL, GuiScreen> openFunc, boolean needsPerms) {
 				this.button = this.addButton(new ButtonDisplayGui(0, 0, 200, 20,
@@ -111,12 +111,25 @@ public class GuiWDL extends WDLScreen {
 	private final IConfiguration config;
 
 	private WDLTextField worldname;
+	private boolean isServer;
 
-	public GuiWDL(@Nullable GuiScreen parent, WDL wdl) {
+	public GuiWDL(@Nullable GuiScreen parent, @Nullable WDL wdl) {
 		super(new ChatComponentTranslation("wdl.gui.wdl.title", WDL.baseFolderName));
 		this.parent = parent;
 		this.wdl = wdl;
 		this.config = WDL.serverProps;
+		this.isServer = getIsServer();
+	}
+
+	public boolean getIsServer() {
+		if (wdl == null)
+			return false;
+
+		try {
+			return (wdl != null && wdl.minecraft.getCurrentServerData() != null);
+		} catch (Exception e) {
+			return false;
+		}
 	}
 
 	/**
@@ -124,12 +137,18 @@ public class GuiWDL extends WDLScreen {
 	 */
 	@Override
 	public void initGui() {
+		// Done button
+		this.addButton(new ButtonDisplayGui(this.width / 2 - 100, this.height - 29,
+				200, 20, parent));
+			
+		if (isServer)
+			initGuiServer();
+	}
+
+	public void initGuiServer() {
 		this.worldname = this.addTextField(new WDLTextField(this.fontRendererObj,
 				this.width / 2 - 155, 19, 150, 18, new ChatComponentTranslation("wdl.gui.wdl.worldname")));
 		this.worldname.setText(this.config.getValue(MiscSettings.SERVER_NAME));
-
-		this.addButton(new ButtonDisplayGui(this.width / 2 - 100, this.height - 29,
-				200, 20, parent));
 
 		this.addList(new GuiWDLButtonList());
 	}
@@ -159,10 +178,34 @@ public class GuiWDL extends WDLScreen {
 
 		super.drawScreen(mouseX, mouseY, partialTicks);
 
+		if (this.worldname != null)
+			drawScreenServer();
+		else 
+			drawScreenElse();
+	}
+
+	public void drawScreenServer() {
 		String name = I18n.format("wdl.gui.wdl.worldname");
 		this.drawString(this.fontRendererObj, name, this.worldname.xPosition
 				- this.fontRendererObj.getStringWidth(name + " "), 26, 0xFFFFFF);
 
 		Utils.drawGuiInfoBox(displayedTooltip, width, height, 48);
+	}
+
+	public void drawScreenElse() {
+		String[] strings = {
+				"Looks like you're trying to access the WorldDownloader config",
+				"outside of a server.",
+				"Please use this config only when connected to a server."
+		};
+		for (int i = 0; i < strings.length; i++) {
+			String text = strings[i];
+			this.drawCenteredString(
+					this.fontRendererObj,
+					text,
+					this.width / 2,
+					((this.height / 2) - 40 + (15 * i)),
+					0xFFFFFF);
+		}
 	}
 }
