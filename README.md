@@ -36,6 +36,9 @@ I had to manually (w ctrl+f) replace ~600 lines with errors to go from liteloade
 - NPCs aren't saved, don't know yet if it's possible to fix but will see later
 - Some crashes when clicking on some buttons (about->copy info button)
 - Not sure if the saved chunks map is working, to check
+- LiquidBounce's "Reconnect" cause the server name to be empty, & things not work correctly
+- Outer chunks from previous maps are still present when saving over a folder,
+- - TODO: remove the folder's chunks (& eventually other data) to fix that
 
 # Todo
 - Better UI (If possible notifications-based like some clients)
