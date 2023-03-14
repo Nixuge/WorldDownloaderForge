@@ -86,17 +86,17 @@ public class APIImpl implements WDLApi.APIInstance {
 					+ wdlMods.get(id) + " (tried to register "
 					+ info + " over it)");
 		}
-		if (!mod.isValidEnvironment(VersionConstants.getModVersion())) {
+		if (!mod.isValidEnvironment(VersionConstants.getModFullVersion())) {
 			String errorMessage = mod
 					.getEnvironmentErrorMessage(VersionConstants
-							.getModVersion());
+							.getModFullVersion());
 			if (errorMessage != null) {
 				throw new IllegalArgumentException(errorMessage);
 			} else {
 				throw new IllegalArgumentException("Environment for " + info
 						+ " is incorrect!  Perhaps it is for a different"
 						+ " version of WDL?  You are running "
-						+ VersionConstants.getModVersion() + ".");
+						+ VersionConstants.getModFullVersion() + ".");
 			}
 		}
 
@@ -202,7 +202,7 @@ public class APIImpl implements WDLApi.APIInstance {
 
 		@Override
 		public IChatComponent getDescription() {
-			return new ChatComponentTranslation("Messages for " + mod.getDisplayName()); // XXX Not translated
+			return new ChatComponentTranslation("Messages for " + mod.getDisplayName());
 		}
 	}
 

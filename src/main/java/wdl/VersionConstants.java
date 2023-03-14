@@ -85,19 +85,16 @@ public class VersionConstants {
 	 *
 	 * @return A version string, eg <samp>4.0.0.0</samp>
 	 */
-	public static String getModVersion() {
-		// TODO: Automatically generate this somehow
+	public static String getModFullVersion() {
 		return McMod.getFullConfigString();
 	}
 
 	public static String getOriginalModVersion() {
-		// TODO: Automatically generate this somehow
 		return McMod.ORIGINAL_VERSION;
 	}
 
 
 	public static String getForgeModVersion() {
-		// TODO: Automatically generate this somehow
 		return McMod.VERSION;
 	}
 

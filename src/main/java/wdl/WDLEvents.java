@@ -42,7 +42,6 @@ import net.minecraft.network.play.server.S24PacketBlockAction;
 import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S3FPacketCustomPayload;
 import net.minecraft.network.play.server.S34PacketMaps;
-// import net.minecraft.network.play.server.SPacketUnloadChunk;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.tileentity.TileEntityEnderChest;
@@ -605,28 +604,7 @@ public class WDLEvents {
 						"WDL mod: exception in onWorldRemoveEntityFromWorld event");
 			}
 		}
-		// @Override
-		// public void onNHPCHandleChunkUnload(NetHandlerPlayClient sender,
-		// 		WorldClient world, SPacketUnloadChunk packet) {
-		// 	try {
-		// 		if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
-		// 			return;
-		// 		}
 
-		// 		if (!WDL.downloading) { return; }
-
-		// 		if (ENABLE_PROFILER) PROFILER.startSection("wdl.onChunkNoLongerNeeded");
-		// 		Chunk chunk = world.getChunkFromChunkCoords(packet.getX(), packet.getZ());
-
-		// 		if (ENABLE_PROFILER) PROFILER.startSection("Core");
-		// 		wdlEvents.onChunkNoLongerNeeded(chunk);
-		// 		if (ENABLE_PROFILER) PROFILER.endSection();  // "Core"
-
-		// 		if (ENABLE_PROFILER) PROFILER.endSection();  // "wdl.onChunkNoLongerNeeded"
-		// 	} catch (Throwable e) {
-		// 		wdl.crashed(e, "WDL mod: exception in onNHPCHandleChunkUnload event");
-		// 	}
-		// }
 		@Override
 		public void onNHPCHandleChat(NetHandlerPlayClient sender,
 				S02PacketChat packet) {

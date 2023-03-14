@@ -195,7 +195,7 @@ public class GuiSavedChunks extends WDLScreen {
 		}
 
 		if (wdl.chunkLoader == null) {
-			// XXX Untranslated, temporary strings
+			// XXX Untranslated, temporary strings - this needs to be remade anyways
 			this.drawCenteredString(fontRendererObj, "Start download to see information about saved chunks, from now and earlier.", width / 2, height / 2 - fontRendererObj.FONT_HEIGHT, 0xFFFFFF);
 			this.drawCenteredString(fontRendererObj, "In the future, this GUI will work even when downloading hasn't been started.", width / 2, height / 2, 0xFFFFFF);
 		}

@@ -62,7 +62,7 @@ public class GithubInfoGrabber {
 
 	static {
 		String mcVersion = VersionConstants.getMinecraftVersionInfo();
-		String wdlVersion = VersionConstants.getModVersion();
+		String wdlVersion = VersionConstants.getModFullVersion();
 
 		USER_AGENT = String.format("World Downloader mod by Pokechu22 "
 				+ "(Minecraft %s; WDL %s) ", mcVersion, wdlVersion);

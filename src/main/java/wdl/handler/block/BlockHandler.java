@@ -178,12 +178,10 @@ public abstract class BlockHandler<B extends TileEntity, C extends Container> ex
 	@Nullable
 	public static <B extends TileEntity, C extends Container> BlockHandler<B, C> getHandler(Class<B> blockEntityClass, Class<C> containerClass) {
 		for (Object hObj : VersionedFunctions.BLOCK_HANDLERS) {
-			//TODO: ABSOLUTELY UNSURE ABOUT THAT
-			// VSCODE NOT THROWING ERRORS BUT TO CHECK!!!
-			BlockHandler<?, ?> h = (BlockHandler<?, ?>)hObj;
+			BlockHandler<B, C> h = (BlockHandler<B, C>)hObj;
 			if (h.getBlockEntityClass().equals(blockEntityClass) &&
 					h.getContainerClass().equals(containerClass)) {
-				return (BlockHandler<B, C>)h;
+				return h;
 			}
 		}
 

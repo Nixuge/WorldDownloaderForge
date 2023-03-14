@@ -378,7 +378,6 @@ public class EntityUtils {
 		}
 
 		public String getDescription() {
-			// XXX this should be translated
 			return descriptionKey;
 		}
 	}

@@ -103,7 +103,7 @@ public class GuiWDLChunkOverrides extends WDLScreen {
 	private int lastTickX, lastTickY;
 
 	public GuiWDLChunkOverrides(@Nullable GuiScreen parent, WDL wdl) {
-		super(new ChatComponentText("Chunk overrides")); // XXX Untranslated
+		super(new ChatComponentText("Chunk overrides"));
 		this.parent = parent;
 		this.wdl = wdl;
 

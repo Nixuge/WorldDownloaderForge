@@ -51,7 +51,7 @@ public class GuiWDLPermissionRequest extends WDLScreen {
 	private WDLButton submitButton;
 
 	public GuiWDLPermissionRequest(@Nullable GuiScreen parent, WDL wdl) {
-		super(new ChatComponentText("Permission request")); // XXX untranslated
+		super(new ChatComponentText("Permission request"));
 		this.parent = parent;
 		this.wdl = wdl;
 	}

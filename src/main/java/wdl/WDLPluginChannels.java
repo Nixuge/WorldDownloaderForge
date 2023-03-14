@@ -691,7 +691,7 @@ public class WDLPluginChannels {
 		JsonObject object = new JsonObject();
 		object.addProperty("X-RTFM", "https://wiki.vg/Plugin_channels/World_downloader");
 		object.addProperty("X-UpdateNote", UPDATE_NOTE);
-		object.addProperty("Version", VersionConstants.getModVersion());
+		object.addProperty("Version", VersionConstants.getModFullVersion());
 		object.addProperty("State", state);
 		byte[] bytes = object.toString().getBytes(StandardCharsets.UTF_8);
 

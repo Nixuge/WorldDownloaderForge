@@ -130,7 +130,7 @@ public class GuiWDLUpdates extends WDLScreen {
 
 			@Override
 			public boolean isSelected() {
-				String currentTag = "v" + VersionConstants.getModVersion();
+				String currentTag = "v" + VersionConstants.getModFullVersion();
 				return currentTag.equals(this.release.tag);
 			}
 		}

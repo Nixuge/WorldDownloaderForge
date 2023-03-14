@@ -241,7 +241,7 @@ public class WDLUpdateChecker extends Thread {
 				return;
 			}
 
-			String version = VersionConstants.getModVersion();
+			String version = VersionConstants.getModFullVersion();
 			String currentTag = "v" + version;
 			for (int i = 0; i < releases.size(); i++) {
 				Release release = releases.get(i);

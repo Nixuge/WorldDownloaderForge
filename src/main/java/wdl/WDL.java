@@ -867,7 +867,6 @@ public class WDL {
 	 */
 	@SuppressWarnings("unchecked")
 	public List<Chunk> getChunkList() {
-		// TODO: CHECK IF WORKING
 		// List obj = ReflectionUtils.findAndGetPrivateField(
 		// 		worldClient.getChunkProvider(),
 		// 		ChunkProviderClient.class,
@@ -1610,24 +1609,6 @@ public class WDL {
 	}
 
 	/**
-	 * Called when the given chunk is unloaded, to free memory.
-	 *
-	 * @param pos Location of the chunk
-	 */
-	public void unloadChunk(ChunkCoordIntPair pos) {
-		Map<BlockPos, TileEntity> m = newTileEntities.get(pos);
-		if (m != null) {
-			m.clear();
-		}
-		newTileEntities.remove(pos);
-		// The entity has been saved, so there's no easy way to remove it from the already saved file.
-		// TODO: In the future it might be worth rewriting existing chunks for this, but that seems
-		// like a fair bit of work for the moment.
-		newEntities.get(pos).forEach(e -> entityPositions.remove(e.getUniqueID()));
-		newEntities.removeAll(pos);
-	}
-
-	/**
 	 * Runs a sanity check. Even if the check fails, processing continues, but
 	 * the user is warned in chat.
 	 *
@@ -1714,7 +1695,7 @@ public class WDL {
 		}
 		CrashReportCategory core = report.makeCategoryDepth(
 				"World Downloader Mod - Core", stSize);
-		core.addCrashSection("WDL version", VersionConstants.getModVersion());
+		core.addCrashSection("WDL version", VersionConstants.getModFullVersion());
 		core.addCrashSection("Minecraft version", VersionConstants.getMinecraftVersionInfo());
 		core.addCrashSection("Expected version", VersionConstants.getExpectedVersion());
 		core.addCrashSection("Protocol version", VersionConstants.getProtocolVersion());

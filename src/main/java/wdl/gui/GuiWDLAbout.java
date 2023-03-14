@@ -72,7 +72,7 @@ public class GuiWDLAbout extends WDLScreen {
 		this.addButton(new ButtonDisplayGui((this.width / 2) - 100, this.height - 29,
 				200, 20, parent));
 
-		String wdlVersion = VersionConstants.getModVersion();
+		String wdlVersion = VersionConstants.getModFullVersion();
 
 		String mcVersion = VersionConstants.getMinecraftVersionInfo();
 
