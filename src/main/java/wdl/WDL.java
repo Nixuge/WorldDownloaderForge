@@ -961,13 +961,16 @@ public class WDL {
 		}
 	
 		ExtendedBlockStorage[] array = c.getBlockStorageArray();
+		if (array.length == 0) {
+			return true;
+		}
 		for (int i = 1; i < array.length; i++) {
 			if (array[i] != null && (!array[i].isEmpty())) {
 				return false;
 			}
 		}
 
-		if (!array[0].isEmpty()) {
+		if (array[0] != null && !array[0].isEmpty()) {
 			// All-air empty chunks sometimes are sent with a bottom section;
 			// handle that and a few other special cases.
 			for (int y = 0; y < 16; y++) {
