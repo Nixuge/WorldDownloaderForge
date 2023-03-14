@@ -21,7 +21,6 @@ import net.minecraft.client.resources.Language;
 import wdl.VersionConstants;
 import wdl.WDL;
 import wdl.functions.GuiFunctions;
-import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.WDLButton;
 import wdl.gui.widget.ButtonDisplayGui;
 import wdl.gui.widget.WDLScreen;

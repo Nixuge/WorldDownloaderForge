@@ -23,7 +23,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatComponentText;
 import wdl.VersionConstants;
 import wdl.WDL;
-import wdl.functions.VersionedFunctions;
+import wdl.functions.GuiFunctions;
 import wdl.gui.widget.WDLButton;
 import wdl.gui.widget.ButtonDisplayGui;
 import wdl.gui.widget.GuiList;
@@ -302,7 +302,7 @@ public class GuiWDLUpdates extends WDLScreen {
 					this.width / 2 - 155, 18, 150, 20,
 					I18n.format("wdl.gui.updates.update.viewOnline")) {
 				public @Override void performAction() {
-					VersionedFunctions.openLink(release.URL);
+					GuiFunctions.openLink(release.URL);
 				}
 			});
 			if (release.hiddenInfo != null) {
@@ -310,7 +310,7 @@ public class GuiWDLUpdates extends WDLScreen {
 						this.width / 2 + 5, 18, 150, 20,
 						I18n.format("wdl.gui.updates.update.viewForumPost")) {
 					public @Override void performAction() {
-						VersionedFunctions.openLink(release.hiddenInfo.post);
+						GuiFunctions.openLink(release.hiddenInfo.post);
 					}
 				});
 			}

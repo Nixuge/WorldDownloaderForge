@@ -25,7 +25,6 @@ import net.minecraft.util.Vec3;
 import net.minecraft.util.IChatComponent;
 import wdl.WDL;
 import wdl.functions.GuiFunctions;
-import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.WDLScreen;
 
 /**

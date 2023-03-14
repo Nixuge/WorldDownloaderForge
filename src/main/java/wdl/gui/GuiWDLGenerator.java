@@ -23,7 +23,6 @@ import wdl.WDL;
 import wdl.config.IConfiguration;
 import wdl.config.settings.GeneratorSettings;
 import wdl.functions.GeneratorFunctions;
-import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.ButtonDisplayGui;
 import wdl.gui.widget.WDLScreen;
 import wdl.gui.widget.WDLTextField;

@@ -13,8 +13,6 @@
  */
 package wdl.handler.block;
 
-import static wdl.functions.VersionedFunctions.customName;
-
 import java.util.function.BiConsumer;
 
 import net.minecraft.inventory.ContainerFurnace;
@@ -42,7 +40,7 @@ public class FurnaceHandler extends BlockHandler<TileEntityFurnace, ContainerFur
 		saveContainerItems(container, blockEntity, 0);
 		saveInventoryFields(furnaceInventory, blockEntity);
 		if (title != null) {
-			blockEntity.setCustomInventoryName(customName(title));
+			blockEntity.setCustomInventoryName(title);
 		}
 		saveMethod.accept(clickedPos, blockEntity);
 		return new ChatComponentTranslation("wdl.messages.onGuiClosedInfo.savedTileEntity.furnace");

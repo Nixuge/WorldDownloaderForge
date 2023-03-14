@@ -23,7 +23,6 @@ import wdl.WorldBackup;
 import wdl.WorldBackup.IBackupProgressMonitor;
 import wdl.WorldBackup.WorldBackupType;
 import wdl.functions.GeneratorFunctions;
-import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.WDLButton;
 
 /**

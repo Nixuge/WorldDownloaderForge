@@ -13,8 +13,6 @@
  */
 package wdl.handler.block;
 
-import static wdl.functions.VersionedFunctions.customName;
-
 import java.util.function.BiConsumer;
 
 import net.minecraft.inventory.ContainerDispenser;
@@ -42,7 +40,7 @@ public class DispenserHandler extends BlockHandler<TileEntityDispenser, Containe
 		saveContainerItems(container, blockEntity, 0);
 		saveMethod.accept(clickedPos, blockEntity);
 		if (title != null) {
-			blockEntity.setCustomName(customName(title));
+			blockEntity.setCustomName(title);
 		}
 		return new ChatComponentTranslation("wdl.messages.onGuiClosedInfo.savedTileEntity.dispenser");
 	}

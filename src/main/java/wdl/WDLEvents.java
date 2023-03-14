@@ -61,7 +61,6 @@ import wdl.api.WDLApi;
 import wdl.api.WDLApi.ModInfo;
 import wdl.config.settings.GeneratorSettings;
 import wdl.functions.MapFunctions;
-import wdl.functions.VersionedFunctions;
 import wdl.gui.GuiTurningCameraBase;
 import wdl.gui.GuiWDL;
 import wdl.gui.GuiWDLAbout;

@@ -27,7 +27,6 @@ import net.minecraft.world.chunk.storage.RegionFile;
 import wdl.WDL;
 import wdl.config.settings.MiscSettings;
 import wdl.functions.GuiFunctions;
-import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.ButtonDisplayGui;
 import wdl.gui.widget.WDLScreen;
 

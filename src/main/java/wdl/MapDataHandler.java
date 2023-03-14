@@ -36,7 +36,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.storage.MapData;
 import wdl.functions.MapFunctions;
-import wdl.functions.VersionedFunctions;
 
 /**
  * Attempts to reconstruct information about a MapData that isn't present.

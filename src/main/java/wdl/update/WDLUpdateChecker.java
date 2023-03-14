@@ -28,7 +28,7 @@ import wdl.WDL;
 import wdl.WDLMessageTypes;
 import wdl.WDLMessages;
 import wdl.config.settings.MiscSettings;
-import wdl.functions.VersionedFunctions;
+import wdl.functions.ChatFunctions;
 import wdl.update.Release.HashData;
 
 /**
@@ -191,20 +191,20 @@ public class WDLUpdateChecker extends Thread {
 						"wdl.intro.success");
 				ChatComponentTranslation mcfThread = new ChatComponentTranslation(
 						"wdl.intro.forumsLink");
-				mcfThread.setChatStyle(VersionedFunctions.createLinkFormatting(FORUMS_THREAD_USAGE_LINK));
+				mcfThread.setChatStyle(ChatFunctions.createLinkFormatting(FORUMS_THREAD_USAGE_LINK));
 				ChatComponentTranslation wikiLink = new ChatComponentTranslation(
 						"wdl.intro.wikiLink");
-				wikiLink.setChatStyle(VersionedFunctions.createLinkFormatting(WIKI_LINK));
+				wikiLink.setChatStyle(ChatFunctions.createLinkFormatting(WIKI_LINK));
 				ChatComponentTranslation usage = new ChatComponentTranslation(
 						"wdl.intro.usage", mcfThread, wikiLink);
 				ChatComponentTranslation githubRepo = new ChatComponentTranslation(
 						"wdl.intro.githubRepo");
-				githubRepo.setChatStyle(VersionedFunctions.createLinkFormatting(GITHUB_LINK));
+				githubRepo.setChatStyle(ChatFunctions.createLinkFormatting(GITHUB_LINK));
 				ChatComponentTranslation contribute = new ChatComponentTranslation(
 						"wdl.intro.contribute", githubRepo);
 				ChatComponentTranslation redistributionList = new ChatComponentTranslation(
 						"wdl.intro.redistributionList");
-				redistributionList.setChatStyle(VersionedFunctions.createLinkFormatting(REDISTRIBUTION_LINK));
+				redistributionList.setChatStyle(ChatFunctions.createLinkFormatting(REDISTRIBUTION_LINK));
 				ChatComponentTranslation warning = new ChatComponentTranslation(
 						"wdl.intro.warning");
 				warning.getChatStyle().setColor(EnumChatFormatting.DARK_RED).setBold(true);
@@ -215,7 +215,7 @@ public class WDLUpdateChecker extends Thread {
 						"wdl.intro.stolen", warning, redistributionList, illegally);
 				ChatComponentTranslation smr = new ChatComponentTranslation(
 						"wdl.intro.stopModReposts");
-				smr.setChatStyle(VersionedFunctions.createLinkFormatting(SMR_LINK));
+				smr.setChatStyle(ChatFunctions.createLinkFormatting(SMR_LINK));
 				ChatComponentTranslation stolenBeware = new ChatComponentTranslation(
 						"wdl.intro.stolenBeware", smr);
 
@@ -269,7 +269,7 @@ public class WDLUpdateChecker extends Thread {
 
 				ChatComponentTranslation updateLink = new ChatComponentTranslation(
 						"wdl.messages.updates.newRelease.updateLink");
-				updateLink.setChatStyle(VersionedFunctions.createLinkFormatting(recomendedRelease.URL));
+				updateLink.setChatStyle(ChatFunctions.createLinkFormatting(recomendedRelease.URL));
 
 				// Show the new version available message, and give a link.
 				WDLMessages.chatMessageTranslated(WDL.serverProps,
@@ -281,7 +281,7 @@ public class WDLUpdateChecker extends Thread {
 			if (VersionConstants.isUntestedVersion()) {
 				ChatComponentTranslation githubIssues = new ChatComponentTranslation(
 						"wdl.intro.githubRepo");
-				githubIssues.setChatStyle(VersionedFunctions.createLinkFormatting(GITHUB_ISSUES_LINK));
+				githubIssues.setChatStyle(ChatFunctions.createLinkFormatting(GITHUB_ISSUES_LINK));
 				WDLMessages.chatMessageTranslated(WDL.serverProps,
 						WDLMessageTypes.UPDATES, "wdl.messages.updates.untestedVersion",
 						VersionConstants.getMinecraftVersion(), githubIssues);
@@ -335,7 +335,7 @@ public class WDLUpdateChecker extends Thread {
 			if (failed.size() > 0) {
 				ChatComponentTranslation mcfThread = new ChatComponentTranslation(
 						"wdl.intro.forumsLink");
-				mcfThread.setChatStyle(VersionedFunctions.createLinkFormatting(FORUMS_THREAD_USAGE_LINK));
+				mcfThread.setChatStyle(ChatFunctions.createLinkFormatting(FORUMS_THREAD_USAGE_LINK));
 				WDLMessages.chatMessageTranslated(WDL.serverProps,
 						WDLMessageTypes.UPDATES, "wdl.messages.updates.badHashesFound", mcfThread);
 			}

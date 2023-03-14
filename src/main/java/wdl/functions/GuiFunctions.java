@@ -204,8 +204,10 @@ public final class GuiFunctions {
 		GuiScreen.setClipboardString(text);
 	}
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#openLink
+	/**
+	 * Opens a link using the default browser.
+	 * @param url The URL to open.
+	 * @see GuiScreen#openWebLink()
 	 */
 	public static void openLink(String url) {
 		try {

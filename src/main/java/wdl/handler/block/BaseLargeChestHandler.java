@@ -135,8 +135,8 @@ abstract class BaseLargeChestHandler<B extends TileEntityChest> extends BlockHan
 		if (displayName != null) {
 			// This is NOT server-accurate.  But making it correct is not easy.
 			// Only one of the chests needs to have the name.
-			chest1.setCustomName(customName(displayName));
-			chest2.setCustomName(customName(displayName));
+			chest1.setCustomName(displayName);
+			chest2.setCustomName(displayName);
 		}
 
 		// Note that the only type of chest we know of is TileEntityChest in 1.12, so

@@ -28,7 +28,6 @@ import com.google.common.collect.ImmutableList;
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
-import net.minecraft.network.play.server.S3FPacketCustomPayload;
 
 /**
  * Contains functions related to packets. This version is used between Minecraft

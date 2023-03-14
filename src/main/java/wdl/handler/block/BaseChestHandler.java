@@ -13,8 +13,6 @@
  */
 package wdl.handler.block;
 
-import static wdl.functions.VersionedFunctions.customName;
-
 import java.util.function.BiConsumer;
 
 import javax.annotation.Nullable;
@@ -66,7 +64,7 @@ public class BaseChestHandler<B extends TileEntityChest> extends BaseLargeChestH
 			@Nullable String displayName) throws HandlerException {
 		saveContainerItems(container, blockEntity, 0);
 		if (displayName != null) {
-			blockEntity.setCustomName(customName(displayName));
+			blockEntity.setCustomName(displayName);
 		}
 		saveMethod.accept(clickedPos, blockEntity);
 	}

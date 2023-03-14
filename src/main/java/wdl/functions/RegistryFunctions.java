@@ -24,14 +24,17 @@ import net.minecraft.world.biome.BiomeGenBase;
 public final class RegistryFunctions {
 	private RegistryFunctions() { throw new AssertionError(); }
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#getBlockId
+	/**
+	 * Gets the numeric ID for the given block.
+	 * @return A numeric ID, the meaning and value of which is unspecified.
 	 */
 	public static final int getBlockId(Block block) {
 		return Block.getIdFromBlock(block);
 	}
-	/* (non-javadoc)
-	 * @see VersionedFunctions#getBiomeId
+	
+	/**
+	 * Gets the numeric ID for the given biome.
+	 * @return A numeric ID, the meaning and value of which is unspecified.
 	 */
 	public static final int getBiomeId(BiomeGenBase biome) {
 		return biome.biomeID;

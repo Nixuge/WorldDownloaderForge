@@ -29,7 +29,6 @@ import wdl.WDL;
 import wdl.WDLPluginChannels;
 import wdl.WDLPluginChannels.ChunkRange;
 import wdl.functions.GuiFunctions;
-import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.ButtonDisplayGui;
 import wdl.gui.widget.WDLButton;
 import wdl.gui.widget.WDLScreen;

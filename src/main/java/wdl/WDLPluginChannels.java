@@ -46,7 +46,6 @@ import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
 import net.minecraft.world.chunk.Chunk;
 import wdl.functions.PacketFunctions;
-import wdl.functions.VersionedFunctions;
 import wdl.functions.PacketFunctions.ChannelName;
 
 /**
