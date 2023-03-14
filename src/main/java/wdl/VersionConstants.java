@@ -13,6 +13,7 @@
  */
 package wdl;
 
+import me.nixuge.worlddownloader.McMod;
 import net.minecraft.client.ClientBrandRetriever;
 import net.minecraft.client.Minecraft;
 import net.minecraft.realms.RealmsSharedConstants;
@@ -86,7 +87,7 @@ public class VersionConstants {
 	 */
 	public static String getModVersion() {
 		// TODO: Automatically generate this somehow
-		return "4.1.1.1-SNAPSHOT";
+		return McMod.getFullConfigString();
 	}
 
 	/**
