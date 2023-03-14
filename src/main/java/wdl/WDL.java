@@ -117,7 +117,7 @@ public class WDL {
 	 *
 	 * @see GithubInfoGrabber
 	 */
-	public static final String GITHUB_REPO = "Pokechu22/WorldDownloader";
+	public static final String GITHUB_REPO = "Nixuge/WorldDownloaderForge";
 
 	// TODO: This class needs to be split into smaller classes. There is way too
 	// much different stuff in here.
@@ -999,6 +999,9 @@ public class WDL {
 	 */
 	private void loadServerProps() {
 		baseFolderName = getBaseFolderName();
+		if (baseFolderName == null || baseFolderName == "") {
+			throw new RuntimeException("baseFolderName is empty ! This can cause numerous weird issues, like the mod zipping your whole .minecraft, so the mod crashed on purpose. Please report this on Github.");
+		}
 		serverProps = new Configuration(globalProps);
 
 		File savesFolder = new File(minecraft.mcDataDir, "saves");
@@ -1482,10 +1485,12 @@ public class WDL {
 		try {
 			if (minecraft.getCurrentServerData() != null) {
 				String name = minecraft.getCurrentServerData().serverName;
-
-				if (name.equals(I18n.format("selectServer.defaultName"))) {
+				// Fix for LiquidBounce's (& probably other clients) "Reconnect"
+				if (name == null || name == "" || 
+					name.equals(I18n.format("selectServer.defaultName"))) {
 					// Direct connection using domain name or IP (and port)
 					name = minecraft.getCurrentServerData().serverIP;
+					name = name.replace(":25565", "");
 				}
 
 				return name;

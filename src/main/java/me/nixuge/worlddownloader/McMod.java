@@ -19,6 +19,7 @@ public class McMod {
     public static final String MOD_ID = "worlddownloader";
     public static final String NAME = "World Downloader";
     public static final String VERSION = "1.0.1";
+    public static final String ORIGINAL_VERSION = "4.1.1.1-SNAPSHOT";
     public static WDL wdl;
 
     @Getter
@@ -29,6 +30,6 @@ public class McMod {
     private String configDirectory;
 
     public static String getFullConfigString() {
-        return VERSION + " (Nixuge/WorldDownloaderForge), 4.1.1.1-SNAPSHOT (Pokechu22/WorldDownloader)";
+        return VERSION + " (Nixuge/WorldDownloaderForge), " + ORIGINAL_VERSION + " (Pokechu22/WorldDownloader)";
     }
 }

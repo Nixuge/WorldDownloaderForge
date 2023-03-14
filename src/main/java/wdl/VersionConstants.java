@@ -90,6 +90,20 @@ public class VersionConstants {
 		return McMod.getFullConfigString();
 	}
 
+	public static String getOriginalModVersion() {
+		// TODO: Automatically generate this somehow
+		return McMod.ORIGINAL_VERSION;
+	}
+
+
+	public static String getForgeModVersion() {
+		// TODO: Automatically generate this somehow
+		return McMod.VERSION;
+	}
+
+
+	
+
 	/**
 	 * Checks if this version is one of the older, untested versions.
 	 *

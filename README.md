@@ -33,15 +33,24 @@ I had to manually (w ctrl+f) replace ~600 lines with errors to go from liteloade
 ### Don't except this to be bug free and/or perform well (for now).
 
 # Known issues
+- Villagers' data isn't saved at all
 - NPCs aren't saved, don't know yet if it's possible to fix but will see later
 - Some crashes when clicking on some buttons (about->copy info button)
-- Not sure if the saved chunks map is working, to check
-- LiquidBounce's "Reconnect" cause the server name to be empty, & things not work correctly
 - Outer chunks from previous maps are still present when saving over a folder,
 - - TODO: remove the folder's chunks (& eventually other data) to fix that
+- Localization isn't working properly
+- "Crashlog" on launch, see next known issue
+- Crashlog maker crashes (lol)
+- Updater broken, need to make it use Nixuge/WorldDownloaderForge properly
 
 # Todo
 - Better UI (If possible notifications-based like some clients)
 - More settings (eg. freeze entities)
 - Better name parsing (to implement)
+- Some kind of way to script the name of the map to save
 - Some kind of script on map save
+- Command Support (would be nice w Notifications)
+- As this version of the mod will mostly be used for server archive, make the Saved Chunks map display chunks currently being saved instead of already saved ones instead of having it display already saved chunks from Singleplayer
+- Cleanup the updater as this is now 1.8.9 only
+- IF I keep the old UI system, have a "dropdown list" for choice buttons instead of it just rolling choices one by one when you click on the button
+- Add back tests

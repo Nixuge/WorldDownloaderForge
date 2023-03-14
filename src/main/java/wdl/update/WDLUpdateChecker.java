@@ -95,8 +95,8 @@ public class WDLUpdateChecker extends Thread {
 		if (releases == null || releases.isEmpty()) {
 			return null;
 		}
-
-		String version = "v" + VersionConstants.getModVersion();
+		///
+		String version = "v" + VersionConstants.getForgeModVersion();
 		if (isSnapshot(version)) {
 			// Running a snapshot version?  Check if a full version was released.
 			String realVersion = getRealVersion(version);
