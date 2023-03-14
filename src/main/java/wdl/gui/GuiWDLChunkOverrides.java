@@ -28,10 +28,10 @@ import net.minecraft.util.ChatComponentText;
 import wdl.WDL;
 import wdl.WDLPluginChannels;
 import wdl.WDLPluginChannels.ChunkRange;
+import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.ButtonDisplayGui;
 import wdl.gui.widget.WDLButton;
 import wdl.gui.widget.WDLScreen;
-import wdl.versioned.VersionedFunctions;
 
 /**
  * A GUI that lists and allows requesting chunk overrides.

@@ -11,7 +11,7 @@
  *
  * Do not redistribute (in modified or unmodified form) without prior permission.
  */
-package wdl.versioned;
+package wdl.functions;
 
 import java.io.IOException;
 import java.util.function.Consumer;
@@ -30,21 +30,21 @@ import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.nbt.NBTTagString;
 import wdl.config.settings.GeneratorSettings.Generator;
 
-final class GeneratorFunctions {
+public final class GeneratorFunctions {
 	private GeneratorFunctions() { throw new AssertionError(); }
 	private static final Logger LOGGER = LogManager.getLogger();
 
 	/* (non-javadoc)
 	 * @see VersionedFunctions#isAvailableGenerator
 	 */
-	static boolean isAvaliableGenerator(Generator generator) {
+	public static boolean isAvaliableGenerator(Generator generator) {
 		return generator != Generator.BUFFET;
 	}
 
 	/* (non-javadoc)
 	 * @see VersionedFunctions#makeGeneratorSettingsGui
 	 */
-	static GuiScreen makeGeneratorSettingsGui(Generator generator, GuiScreen parent,
+	public static GuiScreen makeGeneratorSettingsGui(Generator generator, GuiScreen parent,
 			String generatorConfig, Consumer<String> callback) {
 		switch (generator) {
 		case FLAT:
@@ -148,21 +148,21 @@ final class GeneratorFunctions {
 	/* (non-javadoc)
 	 * @see VersionedFunctions#makeBackupToast
 	 */
-	static void makeBackupToast(String name, long fileSize) {
+	public static void makeBackupToast(String name, long fileSize) {
 		// No toasts in this version
 	}
 
 	/* (non-javadoc)
 	 * @see VersionedFunctions#makeBackupFailedToast
 	 */
-	static void makeBackupFailedToast(IOException ex) {
+	public static void makeBackupFailedToast(IOException ex) {
 		// No toasts in this version
 	}
 
 	/* (non-javadoc)
 	 * @see VersionedFunctions#VOID_FLAT_CONFIG
 	 */
-	static final String VOID_FLAT_CONFIG = "3;minecraft:air;127";
+	public static final String VOID_FLAT_CONFIG = "3;minecraft:air;127";
 
 	// static {
 		// Make sure that the void biome exists
@@ -176,7 +176,7 @@ final class GeneratorFunctions {
 	/* (non-javadoc)
 	 * @see GeneratorFunctions#createGeneratorOptionsTag
 	 */
-	static NBTTagString createGeneratorOptionsTag(String generatorOptions) {
+	public static NBTTagString createGeneratorOptionsTag(String generatorOptions) {
 		return new NBTTagString(generatorOptions);
 	}
 }

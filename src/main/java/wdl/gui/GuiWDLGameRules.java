@@ -24,14 +24,14 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.GameRules;
 import wdl.WDL;
+import wdl.functions.GameRuleFunctions.GameRuleType;
+import wdl.functions.GameRuleFunctions;
 import wdl.gui.widget.ButtonDisplayGui;
 import wdl.gui.widget.GuiList;
 import wdl.gui.widget.GuiList.GuiListEntry;
 import wdl.gui.widget.GuiNumericTextField;
 import wdl.gui.widget.WDLButton;
 import wdl.gui.widget.WDLScreen;
-import wdl.versioned.VersionedFunctions;
-import wdl.versioned.VersionedFunctions.GameRuleType;
 
 public class GuiWDLGameRules extends WDLScreen {
 	/**
@@ -57,7 +57,7 @@ public class GuiWDLGameRules extends WDLScreen {
 					GuiWDLGameRules.this.height - 32, 24);
 			List<RuleEntry> entries = this.getEntries();
 			for (String rule : vanillaGameRules.keySet()) {
-				GameRuleType type = VersionedFunctions.getRuleType(rules, rule);
+				GameRuleType type = GameRuleFunctions.getRuleType(rules, rule);
 				if (type == null) continue;
 				switch (type) {
 				case INTEGER:
@@ -217,7 +217,7 @@ public class GuiWDLGameRules extends WDLScreen {
 	 */
 	@Nullable
 	private String getRule(@Nonnull String ruleName) {
-		return VersionedFunctions.getRuleValue(rules, ruleName);
+		return GameRuleFunctions.getRuleValue(rules, ruleName);
 	}
 
 	/**
@@ -230,7 +230,7 @@ public class GuiWDLGameRules extends WDLScreen {
 	 *            {@link #clearRule(String)}.
 	 */
 	private void setRule(@Nonnull String ruleName, @Nonnull String value) {
-		VersionedFunctions.setRuleValue(rules, ruleName, value);
+		GameRuleFunctions.setRuleValue(rules, ruleName, value);
 	}
 
 	/**
@@ -263,7 +263,7 @@ public class GuiWDLGameRules extends WDLScreen {
 		// We're not currently modifying the rules on worldClient itself, so they can be considered
 		// to be the defaults... probably.
 		GameRules defaultRules = this.wdl.worldClient.getGameRules();
-		this.vanillaGameRules = VersionedFunctions.getGameRules(defaultRules);
+		this.vanillaGameRules = GameRuleFunctions.getGameRules(defaultRules);
 	}
 
 	@Override

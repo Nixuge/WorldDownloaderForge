@@ -11,7 +11,7 @@
  *
  * Do not redistribute (in modified or unmodified form) without prior permission.
  */
-package wdl.versioned;
+package wdl.functions;
 
 import java.util.Arrays;
 import java.util.Collections;
@@ -22,20 +22,25 @@ import java.util.stream.Collectors;
 import javax.annotation.Nullable;
 
 import net.minecraft.world.GameRules;
-import wdl.versioned.VersionedFunctions.GameRuleType;
 
 /**
  * Contains functions related to gamerules. This version of the class is used
  * between Minecraft 1.8 and Minecraft 1.12.2.
  */
-final class GameRuleFunctions {
+
+
+public final class GameRuleFunctions {
 	private GameRuleFunctions() { throw new AssertionError(); }
 
+	public enum GameRuleType {
+		INTEGER,
+		BOOLEAN;
+	}
 	/* (non-javadoc)
 	 * @see VersionedFunctions#getRuleType
 	 */
 	@Nullable
-	static GameRuleType getRuleType(GameRules rules, String rule) {
+	public static GameRuleType getRuleType(GameRules rules, String rule) {
 		if (rules.areSameType(rule, GameRules.ValueType.NUMERICAL_VALUE)) {
 			return GameRuleType.INTEGER;
 		}
@@ -49,14 +54,14 @@ final class GameRuleFunctions {
 	 * @see VersionedFunctions#getRuleValue
 	 */
 	@Nullable
-	static String getRuleValue(GameRules rules, String rule) { 
+	public static String getRuleValue(GameRules rules, String rule) { 
 		return rules.hasRule(rule) ? rules.getString(rule) : null;
 	}
 
 	/* (non-javadoc)
 	 * @see VersionedFunctions#setRuleValue
 	 */
-	static void setRuleValue(GameRules rules, String rule, String value) {
+	public static void setRuleValue(GameRules rules, String rule, String value) {
 		if (!rules.hasRule(rule)) {
 			throw new IllegalArgumentException("No rule named " + rule + " exists in " + rules + " (setting to " + value + ", rules list is " + getGameRules(rules) + ")");
 		}
@@ -66,7 +71,7 @@ final class GameRuleFunctions {
 	/* (non-javadoc)
 	 * @see VersionedFunctions#getGameRules
 	 */
-	static Map<String, String> getGameRules(GameRules rules) {
+	public static Map<String, String> getGameRules(GameRules rules) {
 		return Collections.unmodifiableMap(
 				Arrays.stream(rules.getRules())
 				.collect(Collectors.toMap(

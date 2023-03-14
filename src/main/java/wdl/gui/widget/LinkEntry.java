@@ -3,7 +3,7 @@ package wdl.gui.widget;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.GuiListExtended.IGuiListEntry;
-import wdl.versioned.VersionedFunctions;
+import wdl.functions.VersionedFunctions;
 
 /**
  * {@link IGuiListEntry} that displays a single clickable link.

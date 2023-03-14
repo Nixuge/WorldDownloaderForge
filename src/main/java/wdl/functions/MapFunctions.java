@@ -11,7 +11,7 @@
  *
  * Do not redistribute (in modified or unmodified form) without prior permission.
  */
-package wdl.versioned;
+package wdl.functions;
 
 import javax.annotation.Nullable;
 
@@ -32,7 +32,7 @@ import net.minecraft.world.storage.MapData;
  * In 1.12.2 and earlier, loadMapData takes an int and the dimension field is a
  * byte.
  */
-final class MapFunctions {
+public final class MapFunctions {
 	private MapFunctions() { throw new AssertionError(); }
 	private static final Logger LOGGER = LogManager.getLogger();
 
@@ -40,14 +40,14 @@ final class MapFunctions {
 	 * {@see VersionedFunctions#getMapData}
 	 */
 	@Nullable
-	static MapData getMapData(World world, S34PacketMaps mapPacket) {
+	public static MapData getMapData(World world, S34PacketMaps mapPacket) {
 		return ItemMap.loadMapData(mapPacket.getMapId(), world);
 	}
 
 	/* (non-javadoc)
 	 * {@see VersionedFunctions#getMapID}
 	 */
-	static int getMapID(ItemStack stack) {
+	public static int getMapID(ItemStack stack) {
 		// Map ID is based on its damage value, yay!
 		// See ItemMap.getMapData
 		return stack.getMetadata();
@@ -56,7 +56,7 @@ final class MapFunctions {
 	/* (non-javadoc)
 	 * {@see VersionedFunctions#isMapDimensionNull}
 	 */
-	static boolean isMapDimensionNull(MapData map) {
+	public static boolean isMapDimensionNull(MapData map) {
 		return false; // A primitive byte can't be null
 	}
 
@@ -64,7 +64,7 @@ final class MapFunctions {
 	/* (non-javadoc)
 	 * {@see VersionedFunctions#setMapDimension}
 	 */
-	static void setMapDimension(MapData map, WorldProvider dim) {
+	public static void setMapDimension(MapData map, WorldProvider dim) {
 		if (!useForgeMethod) {
 			try {
 				setMapDimensionVanilla(map, dim.getDimensionId());

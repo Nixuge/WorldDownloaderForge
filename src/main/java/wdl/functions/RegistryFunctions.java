@@ -11,18 +11,29 @@
  *
  * Do not redistribute (in modified or unmodified form) without prior permission.
  */
-/**
- * Version-specific code. {@link VersionedFunctions} contains a number of
- * version-specific methods, and the various interfaces declared in this package
- * are inherited by it to load the right methods. The wrong versions are
- * excluded from compilation in the buildscript.
- *
- * Note that this is not the only location that uses version-specific code; for instance,
- * {@link wdl.WDLChunkLoader} also uses it.
- */
-// @MethodsReturnNonnullByDefault
-@ParametersAreNonnullByDefault
-package wdl.versioned;
+package wdl.functions;
 
-// import mcp.MethodsReturnNonnullByDefault;
-import javax.annotation.ParametersAreNonnullByDefault;
+import net.minecraft.block.Block;
+import net.minecraft.world.biome.BiomeGenBase;
+
+/**
+ * Contains functions that interact with registries.
+ *
+ * This version is used in versions before 1.13.1, including 1.13.0.
+ */
+public final class RegistryFunctions {
+	private RegistryFunctions() { throw new AssertionError(); }
+
+	/* (non-javadoc)
+	 * @see VersionedFunctions#getBlockId
+	 */
+	public static final int getBlockId(Block block) {
+		return Block.getIdFromBlock(block);
+	}
+	/* (non-javadoc)
+	 * @see VersionedFunctions#getBiomeId
+	 */
+	public static final int getBiomeId(BiomeGenBase biome) {
+		return biome.biomeID;
+	}
+}

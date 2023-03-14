@@ -11,9 +11,7 @@
  *
  * Do not redistribute (in modified or unmodified form) without prior permission.
  */
-package wdl.versioned;
-
-import java.util.Map;
+package wdl.functions;
 
 import net.minecraft.client.settings.GameSettings;
 import net.minecraft.client.renderer.EntityRenderer;
@@ -21,36 +19,29 @@ import net.minecraft.client.renderer.EntityRenderer;
 /**
  * Functions that help deal with things that vary in type between versions.
  */
-final class TypeFunctions {
+public final class TypeFunctions {
 	private TypeFunctions() { throw new AssertionError(); }
 
 
-	/* (non-javadoc)
-	 * @see VersionedFunctions#getChunksToSaveClass
-	 */
-	@SuppressWarnings("rawtypes")
-	static Class<Map> getChunksToSaveClass() {
-		return Map.class;
-	}
 
 	/* (non-javadoc)
 	 * @see VersionedFunctions#customName
 	 */
-	static String customName(String name) {
+	public static String customName(String name) {
 		return name;
 	}
 
 	/* (non-javadoc)
 	 * @see VersionedFunctions#createNewGameSettings
 	 */
-	static GameSettings createNewGameSettings() {
+	public static GameSettings createNewGameSettings() {
 		return new GameSettings();
 	}
 
 	/* (non-javadoc)
 	 * @see VersionedFunctions#getGameRendererClass
 	 */
-	static Class<EntityRenderer> getGameRendererClass() {
+	public static Class<EntityRenderer> getGameRendererClass() {
 		return EntityRenderer.class;
 	}
 }

@@ -29,7 +29,7 @@ import wdl.config.CyclableSetting;
 import wdl.config.IConfiguration;
 import wdl.config.Setting;
 import wdl.config.StringSetting;
-import wdl.versioned.VersionedFunctions;
+import wdl.functions.VersionedFunctions;
 
 /**
  * Contains various settings and enums for the world generator.

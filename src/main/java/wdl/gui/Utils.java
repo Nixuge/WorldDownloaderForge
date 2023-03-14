@@ -19,7 +19,7 @@ import javax.annotation.Nullable;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.Gui;
-import wdl.versioned.VersionedFunctions;
+import wdl.functions.VersionedFunctions;
 
 public class Utils {
 	private static final Minecraft mc = Minecraft.getMinecraft();

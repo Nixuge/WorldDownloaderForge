@@ -26,9 +26,9 @@ import net.minecraft.world.chunk.Chunk;
 import net.minecraft.world.chunk.storage.RegionFile;
 import wdl.WDL;
 import wdl.config.settings.MiscSettings;
+import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.ButtonDisplayGui;
 import wdl.gui.widget.WDLScreen;
-import wdl.versioned.VersionedFunctions;
 
 /**
  * A GUI that shows chunks that have been already saved.

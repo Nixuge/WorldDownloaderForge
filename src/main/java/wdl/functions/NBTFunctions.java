@@ -11,7 +11,7 @@
  *
  * Do not redistribute (in modified or unmodified form) without prior permission.
  */
-package wdl.versioned;
+package wdl.functions;
 
 import net.minecraft.nbt.NBTTagDouble;
 import net.minecraft.nbt.NBTTagFloat;
@@ -24,13 +24,14 @@ import net.minecraft.nbt.NBTTagString;
  * 1.15 hides some NBT constructors, which is why most of these functions exist.
  * This file exists in prior versions to deal with formatting of NBT as a string.
  */
-class NBTFunctions {
+//TODO: remove the 1.15 stuff
+public class NBTFunctions {
 	private NBTFunctions() { throw new AssertionError(); }
 
 	/* (non-javadoc)
 	 * @see VersionedFunctions#nbtString
 	 */
-	static String nbtString(NBTBase tag) {
+	public static String nbtString(NBTBase tag) {
 		// No equivalent of toFormattedComponent or similar, so just try to make a
 		// decent multi-line string
 		String result = tag.toString();
@@ -42,7 +43,7 @@ class NBTFunctions {
 	/* (non-javadoc)
 	 * @see VersionedFunctions#createFloatListTag
 	 */
-	static NBTTagList createFloatListTag(float... values) {
+	public static NBTTagList createFloatListTag(float... values) {
 		NBTTagList result = new NBTTagList();
 		for (float value : values) {
 			result.appendTag(new NBTTagFloat(value));
@@ -53,7 +54,7 @@ class NBTFunctions {
 	/* (non-javadoc)
 	 * @see VersionedFunctions#createDoubleListTag
 	 */
-	static NBTTagList createDoubleListTag(double... values) {
+	public static NBTTagList createDoubleListTag(double... values) {
 		NBTTagList result = new NBTTagList();
 		for (double value : values) {
 			result.appendTag(new NBTTagDouble(value));
@@ -64,7 +65,7 @@ class NBTFunctions {
 	/* (non-javadoc)
 	 * @see VersionedFunctions#createShortListTag
 	 */
-	static NBTTagList createShortListTag(short... values) {
+	public static NBTTagList createShortListTag(short... values) {
 		NBTTagList result = new NBTTagList();
 		for (short value : values) {
 			result.appendTag(new NBTTagShort(value));
@@ -75,7 +76,7 @@ class NBTFunctions {
 	/* (non-javadoc)
 	 * @see VersionedFunctions#createStringTag
 	 */
-	static NBTTagString createStringTag(String value) {
+	public static NBTTagString createStringTag(String value) {
 		return new NBTTagString(value);
 	}
 }

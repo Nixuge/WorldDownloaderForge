@@ -16,12 +16,13 @@ package wdl.handler.entity;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.entity.Entity;
 import net.minecraft.inventory.Container;
 import net.minecraft.util.IChatComponent;
 import wdl.handler.BaseHandler;
 import wdl.handler.HandlerException;
-import wdl.versioned.VersionedFunctions;
 
 /**
  * A handler for an arbitrary entity.
@@ -147,9 +148,16 @@ public abstract class EntityHandler<E extends Entity, C extends Container> exten
 	 */
 	public abstract IChatComponent copyData(C container, E entity, boolean riding) throws HandlerException;
 
+
+	public static final ImmutableList<EntityHandler<?, ?>> ENTITY_HANDLERS = ImmutableList.of(
+			new HopperMinecartHandler(),
+			new HorseHandler(),
+			new StorageMinecartHandler(),
+			new VillagerHandler()
+	);
+
 	/**
 	 * Looks up the handler that handles the given block entity/container combo,
-	 * from {@link VersionedFunctions#ENTITY_HANDLERS}.
 	 *
 	 * @param entityClass The type for the entity.
 	 * @param containerClass The type for the container.
@@ -158,7 +166,7 @@ public abstract class EntityHandler<E extends Entity, C extends Container> exten
 	@SuppressWarnings("unchecked")
 	@Nullable
 	public static <E extends Entity, C extends Container> EntityHandler<? super E, ? super C> getHandler(Class<E> entityClass, Class<C> containerClass) {
-		for (EntityHandler<?, ?> h : VersionedFunctions.ENTITY_HANDLERS) {
+		for (EntityHandler<?, ?> h : ENTITY_HANDLERS) {
 			if (h.getEntityClass().isAssignableFrom(entityClass) &&
 					h.getContainerClass().isAssignableFrom(containerClass)) {
 				return (EntityHandler<? super E, ? super C>) h;

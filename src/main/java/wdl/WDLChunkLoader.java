@@ -49,7 +49,7 @@ import wdl.api.ITileEntityEditor.TileEntityCreationMode;
 import wdl.api.ITileEntityImportationIdentifier;
 import wdl.api.WDLApi;
 import wdl.api.WDLApi.ModInfo;
-import wdl.versioned.VersionedFunctions;
+
 import java.io.IOException;
 import net.minecraft.world.MinecraftException;
 import net.minecraft.util.ResourceLocation;
@@ -59,6 +59,7 @@ import net.minecraft.world.World;
 import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraft.world.chunk.NibbleArray;
 import wdl.config.settings.MiscSettings;
+import wdl.functions.HandlerFunctions;
 
 /**
  * Alternative implementation of {@link AnvilChunkLoader} that handles editing
@@ -131,7 +132,7 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 		this.wdl = wdl;
 		@SuppressWarnings("unchecked")
 		Map<ChunkCoordIntPair, NBTTagCompound> chunksToSave =
-				ReflectionUtils.findAndGetPrivateField(this, AnvilChunkLoader.class, VersionedFunctions.getChunksToSaveClass());
+				ReflectionUtils.findAndGetPrivateField(this, AnvilChunkLoader.class, Map.class);
 		this.chunksToSave = chunksToSave;
 		this.chunkSaveLocation = file;
 	}
@@ -185,7 +186,7 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 		
 		ExtendedBlockStorage[] chunkSections = chunk.getBlockStorageArray();
 		NBTTagList chunkSectionList = new NBTTagList();
-		boolean hasSky = VersionedFunctions.hasSkyLight(world);
+		boolean hasSky = HandlerFunctions.hasSkyLight(world);
 		
 		for (ExtendedBlockStorage blockStorage : chunkSections) {
 			// Part ripped from the 1.8.9a WorldDownloader, which only handles actually writing the blocks
@@ -452,6 +453,7 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 
 		return entityList;
 	}
+	
 
 	/**
 	 * Checks if the given entity should be saved, putting a message into the
@@ -660,7 +662,7 @@ public class WDLChunkLoader extends AnvilChunkLoader {
 	 */
 	protected boolean shouldImportBlockEntity(String entityID, BlockPos pos,
 			Block block, NBTTagCompound blockEntityNBT, Chunk chunk) {
-		if (VersionedFunctions.shouldImportBlockEntity(entityID, pos, block, blockEntityNBT, chunk)) {
+		if (HandlerFunctions.shouldImportBlockEntity(entityID, pos, block, blockEntityNBT, chunk)) {
 			return true;
 		}
 

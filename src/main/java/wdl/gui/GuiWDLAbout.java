@@ -20,11 +20,11 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.client.resources.Language;
 import wdl.VersionConstants;
 import wdl.WDL;
+import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.WDLButton;
 import wdl.gui.widget.ButtonDisplayGui;
 import wdl.gui.widget.WDLScreen;
 import wdl.gui.widget.TextList;
-import wdl.versioned.VersionedFunctions;
 
 /**
  * Contains information about the current installation of WDL.

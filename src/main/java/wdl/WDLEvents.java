@@ -60,6 +60,7 @@ import wdl.api.IWorldLoadListener;
 import wdl.api.WDLApi;
 import wdl.api.WDLApi.ModInfo;
 import wdl.config.settings.GeneratorSettings;
+import wdl.functions.VersionedFunctions;
 import wdl.gui.GuiTurningCameraBase;
 import wdl.gui.GuiWDL;
 import wdl.gui.GuiWDLAbout;
@@ -71,7 +72,6 @@ import wdl.handler.block.BlockHandler;
 import wdl.handler.blockaction.BlockActionHandler;
 import wdl.handler.entity.EntityHandler;
 import wdl.update.WDLUpdateChecker;
-import wdl.versioned.VersionedFunctions;
 
 /**
  * Handles all the events for WDL.

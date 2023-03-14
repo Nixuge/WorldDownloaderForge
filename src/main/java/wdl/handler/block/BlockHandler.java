@@ -19,6 +19,8 @@ import java.util.function.BiConsumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.client.resources.I18n;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
@@ -29,7 +31,6 @@ import net.minecraft.world.IBlockAccess;
 import wdl.ducks.INetworkNameable;
 import wdl.handler.BaseHandler;
 import wdl.handler.HandlerException;
-import wdl.versioned.VersionedFunctions;
 
 /**
  * A handler for an arbitrary block entity.
@@ -166,9 +167,18 @@ public abstract class BlockHandler<B extends TileEntity, C extends Container> ex
 		return name;
 	}
 
+	public static final ImmutableList<Object> BLOCK_HANDLERS = ImmutableList.of(
+			new BeaconHandler(),
+			new BrewingStandHandler(),
+			new ChestHandler(),
+			new DispenserHandler(),
+			new DropperHandler(),
+			new FurnaceHandler(),
+			new HopperHandler()
+	);
+
 	/**
 	 * Looks up the handler that handles the given block entity/container combo,
-	 * from {@link VersionedFunctions#BLOCK_HANDLERS}.
 	 *
 	 * @param blockEntityClass The type for the block entity.
 	 * @param containerClass The type for the container.
@@ -177,7 +187,7 @@ public abstract class BlockHandler<B extends TileEntity, C extends Container> ex
 	@SuppressWarnings("unchecked")
 	@Nullable
 	public static <B extends TileEntity, C extends Container> BlockHandler<B, C> getHandler(Class<B> blockEntityClass, Class<C> containerClass) {
-		for (Object hObj : VersionedFunctions.BLOCK_HANDLERS) {
+		for (Object hObj : BLOCK_HANDLERS) {
 			BlockHandler<B, C> h = (BlockHandler<B, C>)hObj;
 			if (h.getBlockEntityClass().equals(blockEntityClass) &&
 					h.getContainerClass().equals(containerClass)) {

@@ -45,8 +45,8 @@ import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.NetworkManager;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
 import net.minecraft.world.chunk.Chunk;
-import wdl.versioned.VersionedFunctions;
-import wdl.versioned.VersionedFunctions.ChannelName;
+import wdl.functions.VersionedFunctions;
+import wdl.functions.VersionedFunctions.ChannelName;
 
 /**
  * World Downloader permission system implemented with Plugin Channels.

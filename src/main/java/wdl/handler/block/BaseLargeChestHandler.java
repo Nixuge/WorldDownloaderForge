@@ -13,7 +13,7 @@
  */
 package wdl.handler.block;
 
-import static wdl.versioned.VersionedFunctions.*;
+import static wdl.functions.VersionedFunctions.*;
 
 import java.util.function.BiConsumer;
 

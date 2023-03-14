@@ -23,6 +23,7 @@ import net.minecraft.client.resources.I18n;
 import net.minecraft.util.ChatComponentText;
 import wdl.VersionConstants;
 import wdl.WDL;
+import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.WDLButton;
 import wdl.gui.widget.ButtonDisplayGui;
 import wdl.gui.widget.GuiList;
@@ -31,7 +32,6 @@ import wdl.gui.widget.WDLScreen;
 import wdl.gui.widget.TextList;
 import wdl.update.Release;
 import wdl.update.WDLUpdateChecker;
-import wdl.versioned.VersionedFunctions;
 
 /**
  * Gui that lists updates fetched via {@link wdl.update.GithubInfoGrabber}.

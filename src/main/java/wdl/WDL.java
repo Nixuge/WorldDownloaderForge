@@ -93,12 +93,15 @@ import wdl.config.settings.GeneratorSettings;
 import wdl.config.settings.MiscSettings;
 import wdl.config.settings.PlayerSettings;
 import wdl.config.settings.WorldSettings;
+import wdl.functions.GameRuleFunctions;
+import wdl.functions.GeneratorFunctions;
+import wdl.functions.HandlerFunctions;
+import wdl.functions.NBTFunctions;
 import wdl.gui.GuiWDLMultiworld;
 import wdl.gui.GuiWDLMultiworldSelect;
 import wdl.gui.GuiWDLOverwriteChanges;
 import wdl.gui.GuiWDLSaveProgress;
 import wdl.update.GithubInfoGrabber;
-import wdl.versioned.VersionedFunctions;
 
 /**
  * This is the main class that does most of the work.
@@ -434,7 +437,7 @@ public class WDL {
 			return;
 		}
 
-		saveHandler = VersionedFunctions.getSaveHandler(minecraft, getWorldFolderName(worldName));
+		saveHandler = HandlerFunctions.getSaveHandler(minecraft, getWorldFolderName(worldName));
 
 		runSanityCheck(false);
 
@@ -700,7 +703,7 @@ public class WDL {
 			} catch (IOException ex) {
 				WDLMessages.chatMessageTranslated(WDL.serverProps,
 						WDLMessageTypes.ERROR, "wdl.messages.generalError.failedToBackUp", ex);
-				VersionedFunctions.makeBackupFailedToast(ex);
+				GeneratorFunctions.makeBackupFailedToast(ex);
 			}
 		}
 
@@ -1216,12 +1219,12 @@ public class WDL {
 			int z = worldProps.getValue(PlayerSettings.PLAYER_Z);
 			// Positions are offset to center of block,
 			// or player height.
-			NBTTagList pos = VersionedFunctions.createDoubleListTag(x + 0.5D, y + 0.621D, z + 0.5D);
+			NBTTagList pos = NBTFunctions.createDoubleListTag(x + 0.5D, y + 0.621D, z + 0.5D);
 			playerNBT.setTag("Pos", pos);
 			// Force them to land on the ground?
-			NBTTagList motion = VersionedFunctions.createDoubleListTag(0.0D, -0.0001D, 0.0D);
+			NBTTagList motion = NBTFunctions.createDoubleListTag(0.0D, -0.0001D, 0.0D);
 			playerNBT.setTag("Motion", motion);
-			NBTTagList rotation = VersionedFunctions.createFloatListTag(0.0f, 0.0f);
+			NBTTagList rotation = NBTFunctions.createFloatListTag(0.0f, 0.0f);
 			playerNBT.setTag("Rotation", rotation);
 		}
 
@@ -1308,7 +1311,7 @@ public class WDL {
 		// generatorOptions
 		String generatorOptions = worldProps.getValue(GeneratorSettings.GENERATOR_OPTIONS);
 		// NOTE: The type varies between versions; in 1.12.2 it's a string tag and in 1.13 it's a compound.
-		worldInfoNBT.setTag("generatorOptions", VersionedFunctions.createGeneratorOptionsTag(generatorOptions));
+		worldInfoNBT.setTag("generatorOptions", GeneratorFunctions.createGeneratorOptionsTag(generatorOptions));
 		// generatorVersion
 		int generatorVersion = worldProps.getValue(GeneratorSettings.GENERATOR_VERSION);
 		worldInfoNBT.setInteger("generatorVersion", generatorVersion);
@@ -1348,11 +1351,11 @@ public class WDL {
 		// Compute an entire new set of gamerules
 		// (based on what we loaded from level.dat earlier)
 		NBTTagCompound vanillaRules = worldInfoNBT.getCompoundTag("GameRules");
-		Map<String, String> ourRules = VersionedFunctions.getGameRules(gameRules);
+		Map<String, String> ourRules = GameRuleFunctions.getGameRules(gameRules);
 		if (!vanillaRules.getKeySet().equals(ourRules.keySet())) {
 			// TODO: fix this
 			LOGGER.warn("[WDL] Mismatched custom/vanilla game rule list!  We have " + ourRules +
-					" and vanilla has " + VersionedFunctions.nbtString(vanillaRules) + ".  " +
+					" and vanilla has " + NBTFunctions.nbtString(vanillaRules) + ".  " +
 					"(only differences in keys matter; values are expected to differ)");
 		}
 		NBTTagCompound gamerules = new NBTTagCompound();

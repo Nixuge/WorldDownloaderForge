@@ -28,8 +28,8 @@ import wdl.WDL;
 import wdl.WDLMessageTypes;
 import wdl.WDLMessages;
 import wdl.config.settings.MiscSettings;
+import wdl.functions.VersionedFunctions;
 import wdl.update.Release.HashData;
-import wdl.versioned.VersionedFunctions;
 
 /**
  * Performs the update checking.

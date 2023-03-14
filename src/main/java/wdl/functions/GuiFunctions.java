@@ -11,7 +11,7 @@
  *
  * Do not redistribute (in modified or unmodified form) without prior permission.
  */
-package wdl.versioned;
+package wdl.functions;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -34,7 +34,7 @@ import net.minecraft.world.World;
 /**
  * Versioned functions related to GUIs.
  */
-final class GuiFunctions {
+public final class GuiFunctions {
 	private GuiFunctions() { throw new AssertionError(); }
 
 	private static final Logger LOGGER = LogManager.getLogger();
@@ -42,7 +42,7 @@ final class GuiFunctions {
 	/* (non-javadoc)
 	 * @see VersionedFunctions#makePlayer
 	 */
-	static EntityPlayerSP makePlayer(Minecraft minecraft, World world, NetHandlerPlayClient nhpc, EntityPlayerSP base) {
+	public static EntityPlayerSP makePlayer(Minecraft minecraft, World world, NetHandlerPlayClient nhpc, EntityPlayerSP base) {
 		return new EntityPlayerSP(minecraft, world, nhpc,
 				base.getStatFileWriter());
 	}
@@ -50,7 +50,7 @@ final class GuiFunctions {
 	/* (non-javadoc)
 	 * @see VersionedFunctions#drawDarkBackground
 	 */
-	static void drawDarkBackground(int top, int left, int bottom, int right) {
+	public static void drawDarkBackground(int top, int left, int bottom, int right) {
 		GlStateManager.disableLighting();
 		GlStateManager.disableFog();
 
@@ -78,7 +78,7 @@ final class GuiFunctions {
 	/* (non-javadoc)
 	 * @see VersionedFunctions#drawBorder
 	 */
-	static void drawBorder(int topMargin, int bottomMargin, int top, int left, int bottom, int right) {
+	public static void drawBorder(int topMargin, int bottomMargin, int top, int left, int bottom, int right) {
 		GlStateManager.disableLighting();
 		GlStateManager.disableFog();
 		// GlStateManager.disableDepthTest();
@@ -176,14 +176,14 @@ final class GuiFunctions {
 	/* (non-javadoc)
 	 * @see VersionedFunctions#setClipboardString
 	 */
-	static void setClipboardString(String text) {
+	public static void setClipboardString(String text) {
 		GuiScreen.setClipboardString(text);
 	}
 
 	/* (non-javadoc)
 	 * @see VersionedFunctions#openLink
 	 */
-	static void openLink(String url) {
+	public static void openLink(String url) {
 		try {
 			Class<?> desktopClass = Class.forName("java.awt.Desktop");
 			Object desktop = desktopClass.getMethod("getDesktop").invoke(

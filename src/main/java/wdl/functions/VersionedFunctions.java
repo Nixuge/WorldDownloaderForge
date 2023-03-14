@@ -11,7 +11,7 @@
  *
  * Do not redistribute (in modified or unmodified form) without prior permission.
  */
-package wdl.versioned;
+package wdl.functions;
 
 import java.io.IOException;
 import java.lang.annotation.Documented;
@@ -42,30 +42,22 @@ import net.minecraft.entity.passive.EntityVillager;
 import net.minecraft.init.Items;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTBase;
-import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.nbt.NBTTagString;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
 import net.minecraft.network.play.server.S3FPacketCustomPayload;
 import net.minecraft.network.play.server.S34PacketMaps;
 import net.minecraft.tileentity.TileEntity;
-import net.minecraft.util.BlockPos;
 import net.minecraft.util.ChatStyle;
 import net.minecraft.util.EnumChatFormatting;
 import net.minecraft.event.ClickEvent;
 import net.minecraft.event.ClickEvent.Action;
-import net.minecraft.world.GameRules;
 import net.minecraft.world.World;
 import net.minecraft.world.biome.BiomeGenBase;
-import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.storage.AnvilChunkLoader;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.storage.MapData;
 import net.minecraft.world.storage.SaveHandler;
 import wdl.config.settings.GeneratorSettings.Generator;
-import wdl.handler.block.BlockHandler;
-import wdl.handler.blockaction.BlockActionHandler;
-import wdl.handler.entity.EntityHandler;
 
 /**
  * Helper that determines version-specific information about things, such
@@ -73,57 +65,6 @@ import wdl.handler.entity.EntityHandler;
  */
 public final class VersionedFunctions {
 	private VersionedFunctions() { throw new AssertionError(); }
-
-	/**
-	 * Returns true if the given world has skylight data.
-	 *
-	 * @return a boolean
-	 */
-	public static boolean hasSkyLight(World world) {
-		return HandlerFunctions.hasSkyLight(world);
-	}
-
-	/**
-	 * All supported {@link BlockHandler}s.  Each type will only be represented once.
-	 */
-	public static final ImmutableList<Object> BLOCK_HANDLERS = HandlerFunctions.BLOCK_HANDLERS;
-
-	/**
-	 * All supported {@link BlockActionHandler}s.  Each type will only be represented once.
-	 */
-	public static final ImmutableList<BlockActionHandler<?, ?>> BLOCK_ACTION_HANDLERS = HandlerFunctions.BLOCK_ACTION_HANDLERS;
-
-	/**
-	 * All supported {@link EntityHandler}s.  There will be no ambiguities.
-	 */
-	public static final ImmutableList<EntityHandler<?, ?>> ENTITY_HANDLERS = HandlerFunctions.ENTITY_HANDLERS;
-
-	/**
-	 * Checks if the block entity should be imported. Only "problematic" (IE,
-	 * those that require manual interaction such as chests) block entities will
-	 * be imported. Additionally, the block at the block entity's coordinates
-	 * must be one that would normally be used with that block entity.
-	 *
-	 * @param entityID
-	 *            The block entity's ID, as found in the 'id' tag.
-	 * @param pos
-	 *            The location of the block entity, as created by its 'x', 'y',
-	 *            and 'z' tags.
-	 * @param block
-	 *            The block in the current world at the given position.
-	 * @param blockEntityNBT
-	 *            The full NBT tag of the existing block entity. May be used if
-	 *            further identification is needed.
-	 * @param chunk
-	 *            The (current) chunk for which entities are being imported. May be used
-	 *            if further identification is needed (e.g. nearby blocks).
-	 * @return true if it should be imported
-	 * @see wdl.WDLChunkLoader#shouldImportBlockEntity
-	 */
-	public static boolean shouldImportBlockEntity(String entityID, BlockPos pos,
-			Block block, NBTTagCompound blockEntityNBT, Chunk chunk) {
-		return HandlerFunctions.shouldImportBlockEntity(entityID, pos, block, blockEntityNBT, chunk);
-	}
 
 	/**
 	 * Creates a new block entity.  For use in testing only.
@@ -324,51 +265,7 @@ public final class VersionedFunctions {
 		return list.build();
 	}
 
-	public static enum GameRuleType {
-		INTEGER,
-		BOOLEAN;
-	}
 
-	/**
-	 * Checks if the given game rule is of the given type.
-	 * @param rules The rule collection
-	 * @param rule The name of the rule
-	 * @return The type, or null if no info could be found.
-	 */
-	@Nullable
-	public static GameRuleType getRuleType(GameRules rules, String rule) {
-		return GameRuleFunctions.getRuleType(rules, rule);
-	}
-
-	/**
-	 * Gets the value of a game rule.
-	 * @param rules The rule collection
-	 * @param rule The name of the rule
-	 * @return The value, or null if no info could be found.
-	 */
-	@Nullable
-	public static String getRuleValue(GameRules rules, String rule) { 
-		return GameRuleFunctions.getRuleValue(rules, rule);
-	}
-
-	/**
-	 * Sets the given rule to the given value.  If the rule doesn't exist, throws an exception.
-	 * @param rules The rules object.
-	 * @param rule The rule's name
-	 * @param value The new value
-	 */
-	public static void setRuleValue(GameRules rules, String rule, String value) {
-		GameRuleFunctions.setRuleValue(rules, rule, value);
-	}
-
-	/**
-	 * Gets a collection of gamerules and their values.
-	 * @param rules The rules object.
-	 * @return A map of all rule names to their values.
-	 */
-	public static Map<String, String> getGameRules(GameRules rules) {
-		return GameRuleFunctions.getGameRules(rules);
-	}
 
 	/**
 	 * Returns true if the given generator can be used in this Minecraft version.
@@ -533,14 +430,6 @@ public final class VersionedFunctions {
 	// 	return TypeFunctions.getChunkListClass();
 	// }
 
-	/**
-	 * Gets the class used to store the list of chunks in pending saving in AnvilChunkLoader
-	 * ({@link AnvilChunkLoader#chunksToSave}).
-	 */
-	@SuppressWarnings("rawtypes")
-	public static Class<? extends Map> getChunksToSaveClass() {
-		return TypeFunctions.getChunksToSaveClass();
-	}
 
 	/**
 	 * (EVIL) Converts name to the appropriate type for a custom name on this

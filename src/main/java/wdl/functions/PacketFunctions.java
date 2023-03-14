@@ -11,19 +11,19 @@
  *
  * Do not redistribute (in modified or unmodified form) without prior permission.
  */
-package wdl.versioned;
+package wdl.functions;
 
 import io.netty.buffer.Unpooled;
 import net.minecraft.network.PacketBuffer;
 import net.minecraft.network.play.client.C17PacketCustomPayload;
 import net.minecraft.network.play.server.S3FPacketCustomPayload;
-import wdl.versioned.VersionedFunctions.ChannelName;
+import wdl.functions.VersionedFunctions.ChannelName;
 
 /**
  * Contains functions related to packets. This version is used between Minecraft
  * 1.9 and Minecraft 1.12.2.
  */
-final class PacketFunctions {
+public final class PacketFunctions {
 	private PacketFunctions() { throw new AssertionError(); }
 
 	/* (non-javadoc)
@@ -31,19 +31,19 @@ final class PacketFunctions {
 	 *
 	 * Note: the max length was shorter in some earlier version (before 1.9).
 	 */
-	static final String CHANNEL_NAME_REGEX = ".{1,20}";
+	public static final String CHANNEL_NAME_REGEX = ".{1,20}";
 
 	/* (non-javadoc)
 	 * @see VersionedFunctions#makePluginMessagePacket
 	 */
-	static C17PacketCustomPayload makePluginMessagePacket(@ChannelName String channel, byte[] bytes) {
+	public static C17PacketCustomPayload makePluginMessagePacket(@ChannelName String channel, byte[] bytes) {
 		return new C17PacketCustomPayload(channel, new PacketBuffer(Unpooled.copiedBuffer(bytes)));
 	}
 
 	/* (non-javadoc)
 	 * @see VersionedFunctions#makeServerPluginMessagePacket
 	 */
-	static S3FPacketCustomPayload makeServerPluginMessagePacket(@ChannelName String channel, byte[] bytes) {
+	public static S3FPacketCustomPayload makeServerPluginMessagePacket(@ChannelName String channel, byte[] bytes) {
 		return new S3FPacketCustomPayload(channel, new PacketBuffer(Unpooled.copiedBuffer(bytes)));
 	}
 
@@ -51,7 +51,7 @@ final class PacketFunctions {
 	 * @see VersionedFunctions#getRegisterChannel
 	 */
 	@ChannelName
-	static String getRegisterChannel() {
+	public static String getRegisterChannel() {
 		return "REGISTER";
 	}
 
@@ -59,7 +59,7 @@ final class PacketFunctions {
 	 * @see VersionedFunctions#getUnregisterChannel
 	 */
 	@ChannelName
-	static String getUnregisterChannel() {
+	public static String getUnregisterChannel() {
 		return "UNREGISTER";
 	}
 }

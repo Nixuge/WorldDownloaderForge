@@ -18,6 +18,8 @@ import java.util.function.BiConsumer;
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
+import com.google.common.collect.ImmutableList;
+
 import net.minecraft.block.Block;
 import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.BlockPos;
@@ -25,7 +27,6 @@ import net.minecraft.util.IChatComponent;
 import net.minecraft.world.IBlockAccess;
 import wdl.handler.BaseHandler;
 import wdl.handler.HandlerException;
-import wdl.versioned.VersionedFunctions;
 
 /**
  * A handler for block actions. See {@linkplain wdl.handler.blockaction the
@@ -116,9 +117,12 @@ public abstract class BlockActionHandler<B extends Block, E extends TileEntity> 
 			E blockEntity, int data1, int data2, IBlockAccess world,
 			BiConsumer<BlockPos, E> saveMethod) throws HandlerException;
 
+
+	static final ImmutableList<BlockActionHandler<?, ?>> BLOCK_ACTION_HANDLERS = ImmutableList.of(
+				new NoteBlockHandler()
+	);
 	/**
 	 * Looks up the handler that handles the given block/block entity combo,
-	 * from {@link VersionedFunctions#BLOCK_ACTION_HANDLERS}.
 	 *
 	 * @param blockClass The type for the block.
 	 * @param blockEntityClass The type for the block entity.
@@ -127,7 +131,7 @@ public abstract class BlockActionHandler<B extends Block, E extends TileEntity> 
 	@SuppressWarnings("unchecked")
 	@Nullable
 	public static <B extends Block, E extends TileEntity> BlockActionHandler<B, E> getHandler(Class<B> blockClass, Class<E> blockEntityClass) {
-		for (BlockActionHandler<?, ?> h : VersionedFunctions.BLOCK_ACTION_HANDLERS) {
+		for (BlockActionHandler<?, ?> h : BLOCK_ACTION_HANDLERS) {
 			if (h.getBlockEntityClass().equals(blockEntityClass) &&
 					h.getBlockClass().equals(blockClass)) {
 				return (BlockActionHandler<B, E>)h;

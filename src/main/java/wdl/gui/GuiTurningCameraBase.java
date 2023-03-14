@@ -24,8 +24,8 @@ import net.minecraft.util.MovingObjectPosition;
 import net.minecraft.util.Vec3;
 import net.minecraft.util.IChatComponent;
 import wdl.WDL;
+import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.WDLScreen;
-import wdl.versioned.VersionedFunctions;
 
 /**
  * Base GUI with the player in the background turning slowly to show the

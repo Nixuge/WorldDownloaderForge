@@ -22,12 +22,12 @@ import net.minecraft.util.ChatComponentTranslation;
 import wdl.WDL;
 import wdl.config.IConfiguration;
 import wdl.config.settings.GeneratorSettings;
+import wdl.functions.VersionedFunctions;
 import wdl.gui.widget.ButtonDisplayGui;
 import wdl.gui.widget.WDLScreen;
 import wdl.gui.widget.WDLTextField;
 import wdl.gui.widget.SettingButton;
 import wdl.gui.widget.WDLButton;
-import wdl.versioned.VersionedFunctions;
 
 public class GuiWDLGenerator extends WDLScreen {
 	@Nullable

@@ -26,7 +26,7 @@ import net.minecraft.init.Blocks;
 import net.minecraft.inventory.InventoryBasic;
 import wdl.ducks.IBaseChangesApplied;
 import wdl.ducks.INetworkNameable;
-import wdl.versioned.VersionedFunctions;
+import wdl.functions.RegistryFunctions;
 
 /**
  * Sanity checks, run at compile and run time.
@@ -100,7 +100,7 @@ enum SanityCheck {
 		@Override
 		@SuppressWarnings("deprecation")
 		public void run() throws Exception {
-			int wireID = VersionedFunctions.getBlockId(Blocks.tripwire);
+			int wireID = RegistryFunctions.getBlockId(Blocks.tripwire);
 			for (int meta = 0; meta <= 15; meta++) {
 				int id = wireID << 4 | meta;
 				// Note: Deprecated but supported under forge, and this is
