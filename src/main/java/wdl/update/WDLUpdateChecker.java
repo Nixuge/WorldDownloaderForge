@@ -13,10 +13,7 @@
  */
 package wdl.update;
 
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -29,10 +26,10 @@ import wdl.WDLMessageTypes;
 import wdl.WDLMessages;
 import wdl.config.settings.MiscSettings;
 import wdl.functions.ChatFunctions;
-import wdl.update.Release.HashData;
 
 /**
  * Performs the update checking.
+ * Note: all multi-version & class hashing code has been removed entirely.
  */
 public class WDLUpdateChecker extends Thread {
 	/**
@@ -96,7 +93,7 @@ public class WDLUpdateChecker extends Thread {
 			return null;
 		}
 		///
-		String version = "v" + VersionConstants.getForgeModVersion();
+		String version = VersionConstants.getForgeModVersion();
 		if (isSnapshot(version)) {
 			// Running a snapshot version?  Check if a full version was released.
 			String realVersion = getRealVersion(version);
@@ -135,6 +132,7 @@ public class WDLUpdateChecker extends Thread {
 		if (recomendedRelease == null) {
 			return false;
 		}
+
 		return runningRelease != recomendedRelease;
 	}
 
@@ -185,7 +183,7 @@ public class WDLUpdateChecker extends Thread {
 	public void run() {
 		try {
 			if (!WDL.globalProps.getValue(MiscSettings.TUTORIAL_SHOWN)) {
-				sleep(5000);
+				sleep(2000);
 
 				ChatComponentTranslation success = new ChatComponentTranslation(
 						"wdl.intro.success");
@@ -229,7 +227,7 @@ public class WDLUpdateChecker extends Thread {
 				WDL.saveGlobalProps();
 			}
 
-			sleep(5000);
+			sleep(2000);
 
 			releases = GithubInfoGrabber.getReleases();
 			WDLMessages.chatMessageTranslated(WDL.serverProps,
@@ -241,12 +239,11 @@ public class WDLUpdateChecker extends Thread {
 				return;
 			}
 
-			String version = VersionConstants.getModFullVersion();
-			String currentTag = "v" + version;
+			String version = VersionConstants.getForgeModVersion();
 			for (int i = 0; i < releases.size(); i++) {
 				Release release = releases.get(i);
 
-				if (release.tag.equalsIgnoreCase(currentTag)) {
+				if (release.tag.equalsIgnoreCase(version)) {
 					runningRelease = release;
 				}
 			}
@@ -255,11 +252,11 @@ public class WDLUpdateChecker extends Thread {
 				if (!isSnapshot(version)) {
 					WDLMessages.chatMessageTranslated(WDL.serverProps,
 							WDLMessageTypes.UPDATES,
-							"wdl.messages.updates.failedToFindMatchingRelease", currentTag);
+							"wdl.messages.updates.failedToFindMatchingRelease", version);
 				} else {
 					WDLMessages.chatMessageTranslated(WDL.serverProps,
 							WDLMessageTypes.UPDATES,
-							"wdl.messages.updates.failedToFindMatchingRelease.snapshot", currentTag, getRealVersion(version));
+							"wdl.messages.updates.failedToFindMatchingRelease.snapshot", version, getRealVersion(version));
 				}
 				// Wait until the new version check finishes before returning.
 			}
@@ -274,7 +271,7 @@ public class WDLUpdateChecker extends Thread {
 				// Show the new version available message, and give a link.
 				WDLMessages.chatMessageTranslated(WDL.serverProps,
 						WDLMessageTypes.UPDATES, "wdl.messages.updates.newRelease",
-						currentTag, recomendedRelease.tag, updateLink);
+						version, recomendedRelease.tag, updateLink);
 			}
 
 			// Next up: Check if the version is untested.
@@ -292,53 +289,6 @@ public class WDLUpdateChecker extends Thread {
 				return;
 			}
 
-			if (runningRelease.hiddenInfo == null) {
-				WDLMessages.chatMessageTranslated(WDL.serverProps,
-						WDLMessageTypes.UPDATE_DEBUG,
-						"wdl.messages.updates.failedToFindMetadata", currentTag);
-				return;
-			}
-			//Check the hashes, and list any failing ones.
-			Map<HashData, Object> failed = new HashMap<>();
-
-			hashLoop: for (HashData data : runningRelease.hiddenInfo.hashes) {
-				try {
-					String hash = ClassHasher.hash(data.relativeTo, data.file);
-
-					for (String validHash : data.validHashes) {
-						if (validHash.equalsIgnoreCase(hash)) {
-							// Labeled continues / breaks _are_ a thing.
-							// This just continues the outer loop.
-							continue hashLoop;
-						}
-					}
-
-					WDLMessages.chatMessageTranslated(
-							WDL.serverProps,
-							WDLMessageTypes.UPDATE_DEBUG, "wdl.messages.updates.incorrectHash",
-							data.file, data.relativeTo,
-							Arrays.toString(data.validHashes), hash);
-
-					failed.put(data, hash);
-					continue;
-				} catch (Exception e) {
-					WDLMessages.chatMessageTranslated(
-							WDL.serverProps,
-							WDLMessageTypes.UPDATE_DEBUG, "wdl.messages.updates.hashException",
-							data.file, data.relativeTo,
-							Arrays.toString(data.validHashes), e);
-
-					failed.put(data, e);
-				}
-			}
-
-			if (failed.size() > 0) {
-				ChatComponentTranslation mcfThread = new ChatComponentTranslation(
-						"wdl.intro.forumsLink");
-				mcfThread.setChatStyle(ChatFunctions.createLinkFormatting(FORUMS_THREAD_USAGE_LINK));
-				WDLMessages.chatMessageTranslated(WDL.serverProps,
-						WDLMessageTypes.UPDATES, "wdl.messages.updates.badHashesFound", mcfThread);
-			}
 		} catch (Exception e) {
 			WDLMessages.chatMessageTranslated(WDL.serverProps,
 					WDLMessageTypes.UPDATE_DEBUG, "wdl.messages.updates.updateCheckError", e);

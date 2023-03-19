@@ -61,11 +61,10 @@ public class GithubInfoGrabber {
 			"WorldDownloader_Update_Cache.json");
 
 	static {
-		String mcVersion = VersionConstants.getMinecraftVersionInfo();
 		String wdlVersion = VersionConstants.getModFullVersion();
 
-		USER_AGENT = String.format("World Downloader mod by Pokechu22 "
-				+ "(Minecraft %s; WDL %s) ", mcVersion, wdlVersion);
+		USER_AGENT = String.format("World Downloader mod by Pokechu22 - "
+				+ "Forge 1.8.9 port by Nixuge, v%s ", wdlVersion);
 	}
 
 	/**

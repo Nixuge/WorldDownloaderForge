@@ -71,7 +71,6 @@ public class GuiWDLUpdates extends WDLScreen {
 				this.fontHeight = fontRendererObj.FONT_HEIGHT + 1;
 
 				this.title = buildReleaseTitle(release);
-				this.caption = buildVersionInfo(release);
 				List<String> body = Utils.wordWrap(release.textOnlyBody, getListWidth());
 
 				body1 = (body.size() >= 1 ? body.get(0) : "");
@@ -217,69 +216,15 @@ public class GuiWDLUpdates extends WDLScreen {
 	}
 
 	/**
-	 * Gets the translated version info for the given release.
-	 */
-	private String buildVersionInfo(Release release) {
-		String type = "?", supportedVersions = "?";
-
-		if (release.hiddenInfo != null) {
-			type = release.hiddenInfo.loader;
-
-			String[] versions = release.hiddenInfo.supportedMinecraftVersions;
-			supportedVersions = buildSupportedVersions(versions);
-		}
-
-		return I18n.format("wdl.gui.updates.update.version", type, supportedVersions);
-	}
-
-	private String buildSupportedVersions(String[] versions) {
-		String supportedVersions;
-		if (versions.length == 1) {
-			supportedVersions = I18n.format(
-					"wdl.gui.updates.update.version.listSingle",
-					versions[0]);
-		} else if (versions.length == 2) {
-			supportedVersions = I18n.format(
-					"wdl.gui.updates.update.version.listDouble",
-					versions[0], versions[1]);
-		} else {
-			StringBuilder builder = new StringBuilder();
-
-			for (int i = 0; i < versions.length; i++) {
-				if (i == 0) {
-					builder.append(I18n.format(
-							"wdl.gui.updates.update.version.listStart",
-							versions[i]));
-				} else if (i == versions.length - 1) {
-					builder.append(I18n.format(
-							"wdl.gui.updates.update.version.listEnd",
-							versions[i]));
-				} else {
-					builder.append(I18n.format(
-							"wdl.gui.updates.update.version.listMiddle",
-							versions[i]));
-				}
-			}
-
-			supportedVersions = builder.toString();
-		}
-		return supportedVersions;
-	}
-
-	/**
 	 * Gets the translated title for the given release.
 	 */
 	private String buildReleaseTitle(Release release) {
 		String version = release.tag;
-		String mcVersion = "?";
 
-		if (release.hiddenInfo != null) {
-			mcVersion = buildSupportedVersions(release.hiddenInfo.supportedMinecraftVersions);
-		}
 		if (release.prerelease) {
-			return I18n.format("wdl.gui.updates.update.title.prerelease", version, mcVersion);
+			return I18n.format("wdl.gui.updates.update.title.prerelease", version, "1.8.9");
 		} else {
-			return I18n.format("wdl.gui.updates.update.title.release", version, mcVersion);
+			return I18n.format("wdl.gui.updates.update.title.release", version, "1.8.9");
 		}
 	}
 
@@ -305,15 +250,7 @@ public class GuiWDLUpdates extends WDLScreen {
 					GuiFunctions.openLink(release.URL);
 				}
 			});
-			if (release.hiddenInfo != null) {
-				this.addButton(new WDLButton(
-						this.width / 2 + 5, 18, 150, 20,
-						I18n.format("wdl.gui.updates.update.viewForumPost")) {
-					public @Override void performAction() {
-						GuiFunctions.openLink(release.hiddenInfo.post);
-					}
-				});
-			}
+
 			this.addButton(new ButtonDisplayGui(
 					this.width / 2 - 100, this.height - 29, 200, 20, this.parent));
 
@@ -321,7 +258,6 @@ public class GuiWDLUpdates extends WDLScreen {
 
 			list.addLine(buildReleaseTitle(release));
 			list.addLine(I18n.format("wdl.gui.updates.update.releaseDate", release.date));
-			list.addLine(buildVersionInfo(release));
 			list.addBlankLine();
 			list.addLine(release.textOnlyBody);
 
