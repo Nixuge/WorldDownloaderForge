@@ -1,0 +1,21 @@
+{
+    "version": "2.0.0",
+    "tasks": [
+        {
+            "label": "Run Client (debug)",
+            "command": {
+                "quoting": "escape",
+                "value": [
+                    "./gradlew"
+                ]
+            },
+            "problemMatcher": [],
+            "type": "shell",
+            "args": [
+                "runClient",
+                "--debug-jvm"
+            ],
+            "isBackground": true,
+        }
+    ]
+}

@@ -274,16 +274,6 @@ public class WDLUpdateChecker extends Thread {
 						version, recomendedRelease.tag, updateLink);
 			}
 
-			// Next up: Check if the version is untested.
-			if (VersionConstants.isUntestedVersion()) {
-				ChatComponentTranslation githubIssues = new ChatComponentTranslation(
-						"wdl.intro.githubRepo");
-				githubIssues.setChatStyle(ChatFunctions.createLinkFormatting(GITHUB_ISSUES_LINK));
-				WDLMessages.chatMessageTranslated(WDL.serverProps,
-						WDLMessageTypes.UPDATES, "wdl.messages.updates.untestedVersion",
-						VersionConstants.getMinecraftVersion(), githubIssues);
-			}
-
 			if (runningRelease == null) {
 				// Can't hash without a release, but that's a normal condition (unlike below)
 				return;

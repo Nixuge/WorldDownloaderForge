@@ -98,18 +98,6 @@ public class VersionConstants {
 		return McMod.VERSION;
 	}
 
-
-	
-
-	/**
-	 * Checks if this version is one of the older, untested versions.
-	 *
-	 * @return true if this version is not tested and a disclaimer should be printed on startup
-	 */
-	public static boolean isUntestedVersion() {
-		return true;
-	}
-
 	/**
 	 * True if this version shades the FastUtil library; false if it's included
 	 * with Minecraft directly.
