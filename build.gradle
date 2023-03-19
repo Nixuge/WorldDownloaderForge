@@ -36,7 +36,7 @@ repositories {
 }
 
 configurations {
-    configurations.runtimeOnly.setCanBeResolved(true)
+    configurations.runtimeOnly.setCanBeResolved(true) // for runClient
     include
     compile.extendsFrom(include)
 }
@@ -71,8 +71,20 @@ processResources {
 }
 
 mixin {
+    disableRefMapWarning = true // Doesn't work
+    defaultObfuscationEnv searge
     add sourceSets.main, mod_mixin_refmap.replace('${mod_id}', mod_id)
 }
+
+// reobf {
+//     shadowJar {
+//         mappingType = "searge"
+//     }
+// }
+// artifacts {
+//     archives jar
+//     archives shadowJar
+// }
 
 jar {
     from(configurations.include.collect {
