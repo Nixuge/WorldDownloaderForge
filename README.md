@@ -54,3 +54,4 @@ I had to manually (w ctrl+f) replace ~600 lines with errors to go from liteloade
 - Cleanup the updater as this is now 1.8.9 only
 - IF I keep the old UI system, have a "dropdown list" for choice buttons instead of it just rolling choices one by one when you click on the button
 - Add back tests
+- See src/main/java/wdl/functions/README.md
