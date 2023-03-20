@@ -12,7 +12,7 @@
  *
  * Do not redistribute (in modified or unmodified form) without prior permission.
  */
-package com.uyjulian.LiteModWDL.mixin;
+package me.nixuge.worlddownloader.mixin;
 
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.profiler.Profiler;
@@ -20,13 +20,13 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
-import wdl.gui.notifications.NotificationManager;
-import wdl.gui.notifications.NotificationManagerOld;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+
+import me.nixuge.worlddownloader.notifications.NotificationManager;
 
 @Mixin(WorldClient.class)
 public abstract class MixinWorldClient extends World {

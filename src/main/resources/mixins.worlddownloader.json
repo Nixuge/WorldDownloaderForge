@@ -1,7 +1,7 @@
 {
     "compatibilityLevel": "JAVA_8",
     "required": true,
-    "package": "com.uyjulian.LiteModWDL.mixin",
+    "package": "me.nixuge.worlddownloader.mixin",
     "refmap": "refmap.worlddownloader.json",
     "mixins": [
       "MixinWorldClient"

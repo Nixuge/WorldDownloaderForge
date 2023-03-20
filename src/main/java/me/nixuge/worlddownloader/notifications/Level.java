@@ -1,4 +1,4 @@
-package wdl.gui.notifications;
+package me.nixuge.worlddownloader.notifications;
 
 public enum Level {
 	

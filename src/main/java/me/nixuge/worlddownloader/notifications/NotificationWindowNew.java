@@ -1,4 +1,4 @@
-package wdl.gui.notifications;
+package me.nixuge.worlddownloader.notifications;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
@@ -22,7 +22,7 @@ import org.lwjgl.opengl.GL11;
 // import org.lwjgl.opengl.GL11;
 
 import lombok.Getter;
-import wdl.ReflectionUtils;
+import me.nixuge.worlddownloader.ReflectionUtils;
 
 public class NotificationWindowNew {
 	public static FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;

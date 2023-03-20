@@ -11,7 +11,7 @@
  *
  * Do not redistribute (in modified or unmodified form) without prior permission.
  */
-package wdl;
+package me.nixuge.worlddownloader;
 
 import java.lang.reflect.Field;
 import java.util.Map;

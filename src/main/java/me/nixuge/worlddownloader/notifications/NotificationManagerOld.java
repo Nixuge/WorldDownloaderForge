@@ -1,4 +1,4 @@
-package wdl.gui.notifications;
+package me.nixuge.worlddownloader.notifications;
 
 import java.util.ArrayList;
 import java.util.Iterator;
