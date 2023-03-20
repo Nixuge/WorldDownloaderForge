@@ -5,7 +5,6 @@ import lombok.Setter;
 import me.nixuge.worlddownloader.command.commands.ShowNotification;
 import me.nixuge.worlddownloader.events.RenderOverlayEventHandler;
 import net.minecraftforge.client.ClientCommandHandler;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;

@@ -11,6 +11,8 @@
  * For information about this the MMPLv2, see https://stopmodreposts.org/
  *
  * Do not redistribute (in modified or unmodified form) without prior permission.
+ * 
+ * Modified by Nixuge
  */
 package com.uyjulian.LiteModWDL.mixin;
 
@@ -48,7 +50,7 @@ public abstract class MixinWorldClient extends World implements IBaseChangesAppl
 	}
 
 	@Inject(method="removeEntityFromWorld", at=@At("HEAD"))
-	private void onRemoveEntityFromWorld(int p_73028_1_, CallbackInfoReturnable<Entity> ci) {
-		wdl.WDLHooks.onWorldClientRemoveEntityFromWorld((WorldClient)(Object)this, p_73028_1_);
+	private void onRemoveEntityFromWorld(int entityID, CallbackInfoReturnable<Entity> ci) {
+		wdl.WDLHooks.onWorldClientRemoveEntityFromWorld((WorldClient)(Object)this, entityID);
 	}
 }

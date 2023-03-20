@@ -66,37 +66,26 @@ public abstract class MixinNetHandlerPlayClient implements INetHandlerPlayClient
 
 	@Inject(method="onDisconnect", at=@At("HEAD"))
 	private void onDisconnect(IChatComponent reason, CallbackInfo ci) {
-		/* WDL >>> */
 		wdl.WDLHooks.onNHPCDisconnect((NetHandlerPlayClient)(Object)this, reason);
-		/* <<< WDL */
-		//more down here
 	}
+
 	@Inject(method="handleChat", at=@At("RETURN"))
-	private void onHandleChat(S02PacketChat p_147251_1_, CallbackInfo ci) {
-		//more up here
-		/* WDL >>> */
-		wdl.WDLHooks.onNHPCHandleChat((NetHandlerPlayClient)(Object)this, p_147251_1_);
-		/* <<< WDL */
+	private void onHandleChat(S02PacketChat packetIn, CallbackInfo ci) {
+		wdl.WDLHooks.onNHPCHandleChat((NetHandlerPlayClient)(Object)this, packetIn);
 	}
+
 	@Inject(method="handleBlockAction", at=@At("RETURN"))
 	private void onHandleBlockAction(S24PacketBlockAction packetIn, CallbackInfo ci) {
-		//more up here
-		/* WDL >>> */
 		wdl.WDLHooks.onNHPCHandleBlockAction((NetHandlerPlayClient)(Object)this, packetIn);
-		/* <<< WDL */
 	}
+
 	@Inject(method="handleMaps", at=@At("RETURN"))
 	private void onHandleMaps(S34PacketMaps packetIn, CallbackInfo ci) {
-		//more up here
-		/* WDL >>> */
 		wdl.WDLHooks.onNHPCHandleMaps((NetHandlerPlayClient)(Object)this, packetIn);
-		/* <<< WDL */
 	}
+
 	@Inject(method="handleCustomPayload", at=@At("RETURN"))
 	private void onHandleCustomPayload(S3FPacketCustomPayload packetIn, CallbackInfo ci) {
-		//more up here
-		/* WDL >>> */
 		wdl.WDLHooks.onNHPCHandleCustomPayload((NetHandlerPlayClient)(Object)this, packetIn);
-		/* <<< WDL */
 	}
 }
