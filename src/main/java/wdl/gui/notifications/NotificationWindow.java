@@ -98,7 +98,7 @@ public class NotificationWindow {
 		GlStateManager.color(0.1f, 0.1f, 0.1f, alpha);
 		// b.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION_TEX_COLOR);
 		GL11.glBegin(GL11.GL_QUADS);
-		b.
+		
 		{
 			GL11.glVertex2d(x, y);
 			GL11.glVertex2d(x + width, y);

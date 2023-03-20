@@ -4,11 +4,7 @@
     "package": "com.uyjulian.LiteModWDL.mixin",
     "refmap": "refmap.worlddownloader.json",
     "mixins": [
-      "MixinGuiIngameMenu",
-      "MixinWorldClient",
-      "MixinNetHandlerPlayClient",
-      "MixinCrashReport",
-      "MixinInventoryBasic"
+      "MixinWorldClient"
     ]
 
 }

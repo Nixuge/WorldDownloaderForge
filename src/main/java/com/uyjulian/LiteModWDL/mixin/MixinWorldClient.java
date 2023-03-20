@@ -21,7 +21,6 @@ import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
-import wdl.ducks.IBaseChangesApplied;
 import wdl.gui.notifications.NotificationManager;
 
 import org.spongepowered.asm.mixin.Mixin;
@@ -31,7 +30,7 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(WorldClient.class)
-public abstract class MixinWorldClient extends World implements IBaseChangesApplied {
+public abstract class MixinWorldClient extends World {
 
 	NotificationManager notificationManager = NotificationManager.getInstance();
 
@@ -43,20 +42,10 @@ public abstract class MixinWorldClient extends World implements IBaseChangesAppl
 	@Inject(method="tick", at=@At("RETURN"))
 	private void onTick(CallbackInfo ci) {
 		//more up here
-		/* WDL >>> */
-		wdl.WDLHooks.onWorldClientTick((WorldClient)(Object)this);
-		
+		/* WDL >>> */		
 		notificationManager.update();
 		notificationManager.draw();
 
 		/* <<< WDL */
-	}
-
-	@Inject(method="removeEntityFromWorld", at=@At("HEAD"))
-	private void onRemoveEntityFromWorld(int p_73028_1_, CallbackInfoReturnable<Entity> ci) {
-		/* WDL >>> */
-		wdl.WDLHooks.onWorldClientRemoveEntityFromWorld((WorldClient)(Object)this, p_73028_1_);
-		/* <<< WDL */
-		//more down here
 	}
 }
