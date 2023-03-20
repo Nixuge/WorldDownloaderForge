@@ -1,27 +1,21 @@
-buildscript {
-    repositories {
-        mavenCentral()
-        maven { url = "http://files.minecraftforge.net/maven" }
-        maven { url = "https://repo.spongepowered.org/maven" }
-    }
-    dependencies {
-        classpath files('forgegradle/ForgeGradle-2.1.2.jar')
-        // classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
-        classpath 'org.spongepowered:mixingradle:0.6-SNAPSHOT'
-    }
+plugins {
+    id "java"
+    id "idea"
+    // id "eclipse"
+    id "com.github.johnrengelman.shadow" version "6.1.0"
+    id "net.minecraftforge.gradle.forge"
+    id "org.spongepowered.mixin"
+    id "com.gorylenko.gradle-git-properties" version "2.4.0"
 }
-apply plugin: 'net.minecraftforge.gradle.forge'
-apply plugin: 'org.spongepowered.mixin'
-apply plugin: 'eclipse'
 
 version = mod_version
 group = mod_group
 archivesBaseName = mod_id
 
-sourceCompatibility = targetCompatibility = '1.8'
-compileJava {
-    sourceCompatibility = targetCompatibility = '1.8'
-}
+sourceCompatibility = '1.8'
+// compileJava {
+//     sourceCompatibility = '1.8'
+// }
 
 minecraft {
     version = "${minecraft_version}-${forge_version}"
@@ -38,15 +32,17 @@ minecraft {
 repositories {
     mavenCentral()
     maven { url = "https://repo.spongepowered.org/maven" }
+    maven { url = "https://jitpack.io/" }
 }
 
 configurations {
-    embed
-    compile.extendsFrom(embed)
+    configurations.runtimeOnly.setCanBeResolved(true) // for runClient
+    include
+    compile.extendsFrom(include)
 }
 
 dependencies {
-    embed('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
+    include('org.spongepowered:mixin:0.7.11-SNAPSHOT') {
         exclude module: 'guava'
         exclude module: 'commons-io'
         exclude module: 'gson'
@@ -75,11 +71,23 @@ processResources {
 }
 
 mixin {
+    disableRefMapWarning = true // Doesn't work
+    defaultObfuscationEnv searge
     add sourceSets.main, mod_mixin_refmap.replace('${mod_id}', mod_id)
 }
 
+// reobf {
+//     shadowJar {
+//         mappingType = "searge"
+//     }
+// }
+// artifacts {
+//     archives jar
+//     archives shadowJar
+// }
+
 jar {
-    from(configurations.embed.collect {
+    from(configurations.include.collect {
         it.isDirectory() ? it : zipTree(it)
     }) {
         exclude "LICENSE.txt", "META-INF/MANIFSET.MF", "META-INF/maven/**", "META-INF/*.RSA", "META-INF/*.SF"
