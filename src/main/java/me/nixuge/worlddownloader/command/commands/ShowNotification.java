@@ -6,11 +6,15 @@ import me.nixuge.worlddownloader.notifications.Level;
 import me.nixuge.worlddownloader.notifications.Notification;
 import me.nixuge.worlddownloader.notifications.NotificationManager;
 import me.nixuge.worlddownloader.command.AbstractCommand;
+import net.minecraft.client.renderer.Tessellator;
+import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.EnumChatFormatting;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import org.lwjgl.opengl.GL11;
 
 public class ShowNotification extends AbstractCommand {
 
@@ -37,6 +41,7 @@ public class ShowNotification extends AbstractCommand {
             // Minecraft.getMinecraft().fontRendererObj.drawString(getCommandName(), 500, 500, 0xffffffff, false);
         // }
         this.tell(new MessageBuilder("Notification should now be showing", EnumChatFormatting.GRAY));
-       
+        // WorldRenderer worldRenderer = Tessellator.getInstance().getWorldRenderer().sortVertexData(getRequiredPermissionLevel(), getRequiredPermissionLevel(), getRequiredPermissionLevel());
+        // GL11.
     }
 }

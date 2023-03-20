@@ -35,6 +35,10 @@ minecraft {
     serverRunArgs += "--mixin ${resolved_core_config}"
 }
 
+runClient {
+	args = ["--username", dev_username]
+}
+
 repositories {
     mavenCentral()
     maven { url = "https://repo.spongepowered.org/maven" }

@@ -14,6 +14,7 @@
  */
 package me.nixuge.worlddownloader.mixin;
 
+import net.minecraft.client.Minecraft;
 import net.minecraft.client.multiplayer.WorldClient;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.world.World;
@@ -26,6 +27,8 @@ import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
+import me.nixuge.worlddownloader.notifications.Level;
+import me.nixuge.worlddownloader.notifications.Notification;
 import me.nixuge.worlddownloader.notifications.NotificationManager;
 
 @Mixin(WorldClient.class)
@@ -43,6 +46,9 @@ public abstract class MixinWorldClient extends World {
 		//more up here
 		/* WDL >>> */		
 		NotificationManager.render();
+		if (Minecraft.getMinecraft().theWorld.getWorldTime() % 40 == 0) {
+			NotificationManager.show(new Notification(Level.INFO, "title here", "msg here", 1));
+		}
 
 		/* <<< WDL */
 	}

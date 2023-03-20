@@ -7,6 +7,7 @@ public class NotificationManager {
     private static Notification currentNotification = null;
 
     public static void show(Notification notification) {
+        System.out.println("new notification!!!");
         pendingNotifications.add(notification);
     }
 
@@ -26,6 +27,7 @@ public class NotificationManager {
         update();
 
         if (currentNotification != null)
-            currentNotification.render();
+            currentNotification.drawScreen(0, 0, 0);
+            // currentNotification.render();
     }
 }

@@ -13,7 +13,7 @@ import java.awt.Color;
 
 import org.lwjgl.opengl.GL11;
 
-public class Notification {
+public class Notification extends GuiScreen {
     private Level type;
     private String title;
     private String messsage;
@@ -48,6 +48,14 @@ public class Notification {
         return System.currentTimeMillis() - start;
     }
 
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        this.drawDefaultBackground();
+        render();
+        super.drawScreen(mouseX, mouseY, partialTicks);
+    }
+
+
     public void render() {
         System.out.println("rendering...");
         // double offset = 0;
@@ -55,14 +63,27 @@ public class Notification {
         int width = 120;
         int height = 30;
         long time = getTime();
+        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
 
-        if (time < fadedIn) {
-            offset = (int)Math.tanh(time / (double) (fadedIn) * 3.0) * width;
-        } else if (time > fadeOut) {
-            offset = (int)(Math.tanh(3.0 - (time - fadeOut) / (double) (end - fadeOut) * 3.0) * width);
-        } else {
-            offset = width;
-        }
+        // fontRenderer.drawStringWithShadow("please wokr why lol", width, time, 0xffffff);
+
+        GL11.glPushMatrix();
+        // mc.renderEngine.bindTexture(overlay);
+        // GL11.glScalef(scalefact,scalefact, 1);
+
+        // this.drawTexturedModalRect(0, 0, 0, 0, 256, 256);
+    
+        drawRect(0, 0, mc.displayWidth, mc.displayHeight, 0xffffffff);
+        // this.drawRect((int) (xPos+scalefact*256), 0, mc.displayWidth, mc.displayHeight, 0);
+        GL11.glPopMatrix();
+
+        // if (time < fadedIn) {
+        //     offset = (int)Math.tanh(time / (double) (fadedIn) * 3.0) * width;
+        // } else if (time > fadeOut) {
+        //     offset = (int)(Math.tanh(3.0 - (time - fadeOut) / (double) (end - fadeOut) * 3.0) * width);
+        // } else {
+        //     offset = width;
+        // }
 
         Color color = new Color(0, 0, 0, 220);
         Color color1;
@@ -77,60 +98,15 @@ public class Notification {
             color = new Color(i, 0, 0, 220);
         }
 
-        FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
-
-        drawRect(mc.displayWidth - offset, mc.displayHeight - 5 - height, mc.displayWidth, mc.displayHeight - 5, color.getRGB());
-        drawRect(mc.displayWidth - offset, mc.displayHeight - 5 - height, mc.displayWidth - offset + 4, mc.displayHeight - 5, color1.getRGB());
+        drawRect(0, 0, 500, 500, color.getRGB());
+        drawRect(0, 0, 500, 500, color1.getRGB());
 
         fontRenderer.drawString(title, (int) (mc.displayWidth - offset + 8), mc.displayHeight - 2 - height, -1);
         fontRenderer.drawString(messsage, (int) (mc.displayWidth - offset + 8), mc.displayHeight - 15, -1);
-        System.out.println("rendered...");
+        System.out.println("rendered!");
     }
-
-    /**
-     * Draws a solid color rectangle with the specified coordinates and color (ARGB format). Args: x1, y1, x2, y2, color
-     */
-    public static void drawRect(int left, int top, int right, int bottom, int color)
-    {
-        left = 0;
-        top = 0;
-        right = 500;
-        bottom = 500;
-        color = 0xffffffff;
-        System.out.println("please");
-        if (left < right)
-        {
-            int i = left;
-            left = right;
-            right = i;
-        }
-
-        if (top < bottom)
-        {
-            int j = top;
-            top = bottom;
-            bottom = j;
-        }
-
-        float f3 = (float)(color >> 24 & 255) / 255.0F;
-        float f = (float)(color >> 16 & 255) / 255.0F;
-        float f1 = (float)(color >> 8 & 255) / 255.0F;
-        float f2 = (float)(color & 255) / 255.0F;
-        Tessellator tessellator = Tessellator.getInstance();
-        WorldRenderer worldrenderer = tessellator.getWorldRenderer();
-        GlStateManager.enableBlend();
-        GlStateManager.disableTexture2D();
-        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-        GlStateManager.color(f, f1, f2, f3);
-        worldrenderer.begin(7, DefaultVertexFormats.POSITION);
-        worldrenderer.pos((double)left, (double)bottom, 0.0D).endVertex();
-        worldrenderer.pos((double)right, (double)bottom, 0.0D).endVertex();
-        worldrenderer.pos((double)right, (double)top, 0.0D).endVertex();
-        worldrenderer.pos((double)left, (double)top, 0.0D).endVertex();
-        tessellator.draw();
-        GlStateManager.enableTexture2D();
-        GlStateManager.disableBlend();
-    }
-
-
+    // l
+    // t
+    // r
+    // b
 }
