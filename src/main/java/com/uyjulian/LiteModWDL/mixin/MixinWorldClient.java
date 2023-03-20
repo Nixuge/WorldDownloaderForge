@@ -22,6 +22,7 @@ import net.minecraft.world.WorldProvider;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
 import wdl.ducks.IBaseChangesApplied;
+import wdl.gui.notifications.NotificationManager;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -31,6 +32,8 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(WorldClient.class)
 public abstract class MixinWorldClient extends World implements IBaseChangesApplied {
+
+	NotificationManager notificationManager = NotificationManager.getInstance();
 
 	protected MixinWorldClient(ISaveHandler saveHandlerIn, WorldInfo info, WorldProvider providerIn,
 			Profiler profilerIn, boolean client) {
@@ -42,6 +45,10 @@ public abstract class MixinWorldClient extends World implements IBaseChangesAppl
 		//more up here
 		/* WDL >>> */
 		wdl.WDLHooks.onWorldClientTick((WorldClient)(Object)this);
+		
+		notificationManager.update();
+		notificationManager.draw();
+
 		/* <<< WDL */
 	}
 

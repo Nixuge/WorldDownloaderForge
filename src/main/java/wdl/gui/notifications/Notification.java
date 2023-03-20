@@ -19,5 +19,4 @@ public class Notification extends Gui {
 	public String getText() {
 		return text;
 	}
-	
 }
