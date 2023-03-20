@@ -1,4 +1,4 @@
-package wdl.gui.notifications;
+package wdl.gui.notifications; 
 
 import net.minecraft.client.gui.Gui;
 

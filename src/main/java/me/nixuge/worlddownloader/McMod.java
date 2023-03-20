@@ -3,7 +3,10 @@ package me.nixuge.worlddownloader;
 import lombok.Getter;
 import lombok.Setter;
 import me.nixuge.worlddownloader.command.commands.ShowNotification;
+import me.nixuge.worlddownloader.events.RenderOverlayEventHandler;
 import net.minecraftforge.client.ClientCommandHandler;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
+import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.common.event.FMLInitializationEvent;
@@ -39,5 +42,6 @@ public class McMod {
     @Mod.EventHandler
     public void init(final FMLInitializationEvent event) {
         ClientCommandHandler.instance.registerCommand(new ShowNotification());
+        MinecraftForge.EVENT_BUS.register(new RenderOverlayEventHandler());
     }
 }
