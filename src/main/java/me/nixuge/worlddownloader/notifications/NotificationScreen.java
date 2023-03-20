@@ -10,7 +10,6 @@ import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import net.minecraftforge.client.GuiIngameForge;
-import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.fml.common.eventhandler.EventPriority;
 import net.minecraftforge.fml.common.eventhandler.SubscribeEvent;
 
@@ -18,7 +17,7 @@ import java.awt.Color;
 
 import org.lwjgl.opengl.GL11;
 
-public class Notification extends Gui {
+public class NotificationScreen extends GuiScreen {
     private Level type;
     private String title;
     private String messsage;
@@ -32,7 +31,7 @@ public class Notification extends Gui {
 
     private static Minecraft mc = Minecraft.getMinecraft();
 
-    public Notification(Level type, String title, String messsage, int length) {
+    public NotificationScreen(Level type, String title, String messsage, int length) {
         // super(mc);
         this.type = type;
         this.title = title;
@@ -42,7 +41,7 @@ public class Notification extends Gui {
         fadeOut = fadedIn + 500 * length;
         end = fadeOut + fadedIn;
     }
-    public Notification(GuiScreen parent) {
+    public NotificationScreen(GuiScreen parent) {
         this.type = Level.INFO;
         this.title = "please";
         this.messsage = "MESSAGE HEERE";
@@ -65,18 +64,12 @@ public class Notification extends Gui {
         return System.currentTimeMillis() - start;
     }
 
-    // @Override
-    // public void reb(int mouseX, int mouseY, float partialTicks) {
-    //     // System.out.println("eyyy");
-    //     // this.drawCenteredString(mc.fontRendererObj, "owoowowo", 50, 50, 0xffffff);
-    //     render();
-    //     // super.drawScreen(mouseX, mouseY, partialTicks);
-    // }
-
-    @SubscribeEvent(priority = EventPriority.HIGHEST)
-    public void onRenderOverlay(RenderGameOverlayEvent.Post event) {
-        float ticks = event.partialTicks;
+    @Override
+    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
+        // System.out.println("eyyy");
+        // this.drawCenteredString(mc.fontRendererObj, "owoowowo", 50, 50, 0xffffff);
         render();
+        // super.drawScreen(mouseX, mouseY, partialTicks);
     }
 
     public void render() {

@@ -27,7 +27,8 @@ public class NotificationManager {
         update();
 
         if (currentNotification != null)
-            currentNotification.renderGameOverlay(partialTicks);
+            // currentNotification.draw(partialTicks);
+            currentNotification.render();
             // currentNotification.render();
     }
 }
