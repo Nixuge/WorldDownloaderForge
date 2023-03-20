@@ -23,11 +23,11 @@ public class NotificationManager {
 
     }
 
-    public static void render() {
+    public static void render(float partialTicks) {
         update();
 
         if (currentNotification != null)
-            currentNotification.drawScreen(0, 0, 0);
+            currentNotification.renderGameOverlay(partialTicks);
             // currentNotification.render();
     }
 }

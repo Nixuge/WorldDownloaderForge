@@ -3,17 +3,19 @@ package me.nixuge.worlddownloader.notifications;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
 import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.GuiIngame;
 import net.minecraft.client.gui.GuiScreen;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import net.minecraftforge.client.GuiIngameForge;
 
 import java.awt.Color;
 
 import org.lwjgl.opengl.GL11;
 
-public class Notification extends GuiScreen {
+public class Notification extends GuiIngame {
     private Level type;
     private String title;
     private String messsage;
@@ -23,9 +25,10 @@ public class Notification extends GuiScreen {
     private long fadeOut;
     private long end;
 
-    private Minecraft mc;
+    private static Minecraft mc = Minecraft.getMinecraft();
 
     public Notification(Level type, String title, String messsage, int length) {
+        super(mc);
         this.type = type;
         this.title = title;
         this.messsage = messsage;
@@ -33,7 +36,6 @@ public class Notification extends GuiScreen {
         fadedIn = 200 * length;
         fadeOut = fadedIn + 500 * length;
         end = fadeOut + fadedIn;
-        this.mc = Minecraft.getMinecraft();
     }
 
     public void show() {
@@ -49,10 +51,10 @@ public class Notification extends GuiScreen {
     }
 
     @Override
-    public void drawScreen(int mouseX, int mouseY, float partialTicks) {
-        this.drawDefaultBackground();
+    public void renderGameOverlay(float partialTicks) {
+        this.drawCenteredString(mc.fontRendererObj, "owoowowo", 50, 50, 0xffffff);
         render();
-        super.drawScreen(mouseX, mouseY, partialTicks);
+        super.renderGameOverlay(partialTicks);
     }
 
 

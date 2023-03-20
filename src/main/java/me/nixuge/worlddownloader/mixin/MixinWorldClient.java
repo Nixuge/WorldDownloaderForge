@@ -45,7 +45,7 @@ public abstract class MixinWorldClient extends World {
 	private void onTick(CallbackInfo ci) {
 		//more up here
 		/* WDL >>> */		
-		NotificationManager.render();
+		NotificationManager.render(this.worldInfo.getWorldTime());
 		if (Minecraft.getMinecraft().theWorld.getWorldTime() % 40 == 0) {
 			NotificationManager.show(new Notification(Level.INFO, "title here", "msg here", 1));
 		}
