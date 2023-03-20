@@ -2,8 +2,11 @@ package me.nixuge.worlddownloader;
 
 import lombok.Getter;
 import lombok.Setter;
+import me.nixuge.worlddownloader.command.commands.ShowNotification;
+import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.config.Configuration;
 import net.minecraftforge.fml.common.Mod;
+import net.minecraftforge.fml.common.event.FMLInitializationEvent;
 import wdl.WDL;
 
 @Mod(
@@ -31,5 +34,10 @@ public class McMod {
 
     public static String getFullConfigString() {
         return VERSION + " (Nixuge/WorldDownloaderForge), " + ORIGINAL_VERSION + " (Pokechu22/WorldDownloader)";
+    }
+
+    @Mod.EventHandler
+    public void init(final FMLInitializationEvent event) {
+        ClientCommandHandler.instance.registerCommand(new ShowNotification());
     }
 }

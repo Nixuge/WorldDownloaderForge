@@ -28,7 +28,7 @@ import net.minecraft.client.gui.GuiTextField;
 import net.minecraft.util.IChatComponent;
 import wdl.gui.widget.GuiList.GuiListEntry;
 
-abstract class ExtGuiScreen extends GuiScreen implements IExtGuiScreen {
+public abstract class ExtGuiScreen extends GuiScreen implements IExtGuiScreen {
 
 	/**
 	 * Hide the buttonList field from subclasses.

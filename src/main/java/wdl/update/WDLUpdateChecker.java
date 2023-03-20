@@ -171,7 +171,6 @@ public class WDLUpdateChecker extends Thread {
 	private static final String FORUMS_THREAD_USAGE_LINK = "https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/2520465-world-downloader-mod-create-backups-of-your-builds#Usage";
 	private static final String WIKI_LINK = "https://github.com/pokechu22/WorldDownloader/wiki";
 	private static final String GITHUB_LINK = "https://github.com/pokechu22/WorldDownloader";
-	private static final String GITHUB_ISSUES_LINK = "https://github.com/pokechu22/WorldDownloader/issues";
 	private static final String REDISTRIBUTION_LINK = "https://pokechu22.github.io/WorldDownloader/redistribution";
 	private static final String SMR_LINK = "https://www.minecraftforum.net/forums/mapping-and-modding-java-edition/minecraft-mods/mods-discussion/2314237-list-of-sites-stealing-minecraft-content";
 
