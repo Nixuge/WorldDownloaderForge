@@ -3,13 +3,13 @@ package me.nixuge.worlddownloader.command.commands;
 
 import me.nixuge.worlddownloader.command.MessageBuilder;
 import me.nixuge.worlddownloader.command.AbstractCommand;
-import net.minecraft.client.Minecraft;
 import net.minecraft.command.ICommandSender;
 import net.minecraft.util.EnumChatFormatting;
 import wdl.gui.notifications.Level;
-import wdl.gui.notifications.NotificationManager;
 import wdl.gui.notifications.Notification;
-import wdl.gui.notifications.NotificationWindow;
+import wdl.gui.notifications.NotificationManager;
+import wdl.gui.notifications.NotificationManagerOld;
+import wdl.gui.notifications.NotificationOld;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,9 +30,10 @@ public class ShowNotification extends AbstractCommand {
     @Override
     public void onCommand(final ICommandSender sender, final String[] args) {
         // this.tell(new MessageBuilder("Notification should now be showing", EnumChatFormatting.GRAY));
-        NotificationWindow window =  new NotificationWindow(new Notification(Level.INFO, "ayoooo"));
-        NotificationManager mgr = NotificationManager.getInstance();
-        mgr.addNotification(new Notification(Level.INFO, "uwuu"));
+        // NotificationWindowNew window =  new NotificationWindowNew(new Notification(Level.INFO, "ayoooo"));
+        // NotificationManagerOld mgr = NotificationManagerOld.getInstance();
+        // mgr.addNotification(new NotificationOld(Level.INFO, "uwdsfsd sdfsdfsdfsdfuu"));
+        NotificationManager.show(new Notification(Level.INFO, "title here", "msg here", 50));
         // for (int i = 0; i < 50_000; i++) {
             // window.draw();
             // Minecraft.getMinecraft().fontRendererObj.drawString(getCommandName(), 500, 500, 0xffffffff, false);

@@ -15,24 +15,23 @@
 package com.uyjulian.LiteModWDL.mixin;
 
 import net.minecraft.client.multiplayer.WorldClient;
-import net.minecraft.entity.Entity;
 import net.minecraft.profiler.Profiler;
 import net.minecraft.world.World;
 import net.minecraft.world.WorldProvider;
 import net.minecraft.world.storage.ISaveHandler;
 import net.minecraft.world.storage.WorldInfo;
 import wdl.gui.notifications.NotificationManager;
+import wdl.gui.notifications.NotificationManagerOld;
 
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(WorldClient.class)
 public abstract class MixinWorldClient extends World {
 
-	NotificationManager notificationManager = NotificationManager.getInstance();
+	// NotificationManagerOld notificationManager = NotificationManagerOld.getInstance();
 
 	protected MixinWorldClient(ISaveHandler saveHandlerIn, WorldInfo info, WorldProvider providerIn,
 			Profiler profilerIn, boolean client) {
@@ -43,8 +42,7 @@ public abstract class MixinWorldClient extends World {
 	private void onTick(CallbackInfo ci) {
 		//more up here
 		/* WDL >>> */		
-		notificationManager.update();
-		notificationManager.draw();
+		NotificationManager.render();
 
 		/* <<< WDL */
 	}
