@@ -11,8 +11,8 @@ import net.minecraft.client.renderer.GlStateManager;
 public class NotificationManager {
 	public static NotificationManager instance;
 	public static NotificationManager getInstance() {
-		if (instance == null) {
-			instance = new NotificationManager();
+		if (NotificationManager.instance == null) {
+			NotificationManager.instance = new NotificationManager();
 		}
 		return instance;
 	}
@@ -33,7 +33,7 @@ public class NotificationManager {
 	public void addNotification(Notification note) {
 		try {
 			NotificationWindow window = new NotificationWindow(note);
-			window.setPosition(mc.displayWidth - window.getWidth() - 3,
+			window.setPosition(mc.displayWidth,
 					mc.displayHeight);
 			notes.add(window);
 			adding = true;
@@ -44,7 +44,7 @@ public class NotificationManager {
 					NotificationWindow window = new NotificationWindow(new Notification(Level.ERROR,
 							"Error displaying note, please report to the creator of the client along with this message: "
 									+ e.getMessage()));
-					window.setPosition(mc.displayWidth- window.getWidth() - 3,
+					window.setPosition(mc.displayWidth,
 							mc.displayHeight);
 					notes.add(window);
 					adding = true;
@@ -66,7 +66,7 @@ public class NotificationManager {
 		Iterator<NotificationWindow> iter = notes.iterator();
 		while (iter.hasNext()) {
 			NotificationWindow window = iter.next();
-			if (window.getLifeTime() > window.getNotification().getText().length() * 3) {
+			if (window.getLifeTime() > window.getNotification().getMaxTime()) {
 				iter.remove();
 			}
 		}
@@ -94,7 +94,7 @@ public class NotificationManager {
 		for (int i = notes.size() - 1; i > -1; i--) {
 			NotificationWindow window = notes.get(i);
 			GlStateManager.translate(0, space, 0);
-			window.setPosition(mc.displayWidth- window.getWidth() - 3,
+			window.setPosition(mc.displayWidth,
 					mc.displayHeight);
 			window.draw();
 		}

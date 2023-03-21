@@ -1,149 +1,139 @@
-package wdl.gui.notifications; 
+package wdl.gui.notifications;
 
-import static org.lwjgl.opengl.GL11.GL_BLEND;
-import static org.lwjgl.opengl.GL11.GL_CULL_FACE;
-import static org.lwjgl.opengl.GL11.GL_ONE_MINUS_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_SRC_ALPHA;
-import static org.lwjgl.opengl.GL11.GL_TEXTURE_2D;
-import static org.lwjgl.opengl.GL11.glBlendFunc;
-import static org.lwjgl.opengl.GL11.glDisable;
-import static org.lwjgl.opengl.GL11.glEnable;
-
-import org.lwjgl.opengl.GL11;
-
+import lombok.Getter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.util.Timer;
 import wdl.ReflectionUtils;
 
 public class NotificationWindow {
+	@Getter
 	private int x;
+	@Getter
 	private int y;
-	
+
+	private int max_width = Minecraft.getMinecraft().displayWidth >> 2;
+
+	@Getter
 	private int width;
+	@Getter
 	private int height;
-	
-	private float time = 0;
+
+	@Getter
+	private float lifeTime = 0;
 	private float preTime = 0;
-	
+
 	private Notification notification;
-	
+
 	private int stringWidth = 0;
 
 	private FontRenderer fontRenderer = Minecraft.getMinecraft().fontRendererObj;
-	
+	private Timer timer = ReflectionUtils.findAndGetPrivateField(Minecraft.getMinecraft(), Timer.class);
+
 	public NotificationWindow(Notification notification) {
 		this.notification = notification;
 		stringWidth = fontRenderer.getStringWidth(this.notification.getText());
-		if(this.getNotification().getLevel().getHeader().isEmpty()) {
-			this.width = stringWidth + 11;
+		if (this.getNotification().getLevel().getHeader().isEmpty()) {
+			this.width = stringWidth + 15 + fontRenderer.getStringWidth(this.getNotification().getText());
+		} else {
+			this.width = stringWidth + 15 + Math.max(
+					fontRenderer.getStringWidth(this.getNotification().getLevel().getHeader()),
+					fontRenderer.getStringWidth(this.getNotification().getText()));
 		}
-		else {
-			this.width = stringWidth + 15 + fontRenderer.getStringWidth(this.getNotification().getLevel().getHeader());
-		}
-		
+		if (this.width > max_width)
+			this.width = max_width;
+
 		this.height = 16;
 	}
-	
+
 	public void update() {
-		preTime = time;
-		time += 1f;
-		if(time < 0f) {
-			time = 0f;
+		preTime = lifeTime;
+		lifeTime += 1f;
+		if (lifeTime < 0f) {
+			lifeTime = 0f;
 		}
 	}
-	
+
 	public Notification getNotification() {
 		return notification;
 	}
 	
+	/**
+	 * Function to get the x offset for the notification animation based on how 
+	 * advanced the notification display is. 
+	 * Triggers at 0->10% and 90->100% of the notification display. 
+	 * Unless notification maxTime > 100, in which case it's calculated 
+	 * as if the maxTime was 100.
+	 * @return the X offset
+	 */
+	public int getXoffset() {
+		// percentages of the notification display at which the animation triggers
+		float lowPercent = .1f;
+		float highPercent = .9f;
+
+		// calculate time based on both the worldTick & the renderPartialTicks
+		// without the renderPartialTicks, the animation looks choppy bc it only runs 20 times/sec
+		float time = (this.preTime + (this.lifeTime - this.preTime) * timer.renderPartialTicks);
+		float timePercent;
+
+		// if notification maxtime is more than ~100, the slide in & out animations look weird
+		// this if/else just makes it so that it's normalized to 100 if more than 100
+		if (notification.getMaxTime() > 100) {
+			timePercent = (time / 100);
+			float offsetPercentages = notification.getMaxTime() / 100f;
+			lowPercent = lowPercent * offsetPercentages;
+			highPercent = highPercent * offsetPercentages;
+		} else {
+			timePercent = (time / notification.getMaxTime());
+		}
+		
+		if (timePercent < lowPercent) {
+			double ttan = Math.tanh(timePercent * 10 * 3);
+			return (int) (ttan * this.width - this.width);
+			// System.out.println("of1:" + xOffset + " time:" + timePercent * 10 + " ttan:" + ttan + " w:" + width);
+		}
+
+		if(timePercent > highPercent) {
+			double ttan = Math.tanh((-(timePercent - highPercent)) * 10 * 3);
+			return (int) (ttan * this.width);
+		}
+		return 0;
+	}
+
+
 	public void draw() {
-		Timer timer = ReflectionUtils.findAndGetPrivateField(Minecraft.getMinecraft(), Timer.class);
-		float time = (this.preTime + (this.time - this.preTime) * timer.renderPartialTicks);
-		float maxTime = getNotification().getText().length() * 3;
-		float timePercent = (time / maxTime);
-		glEnable(GL_BLEND);
-		glDisable(GL_CULL_FACE);
-		glDisable(GL_TEXTURE_2D);
-		glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-		float alpha = 1;
-		
-		if(timePercent < 0.1f) {
-			alpha = timePercent * 10f;
-		}
-		
-		if(timePercent > 0.9f) {
-			alpha = -(timePercent - 1f) * 10f;
-		}
-		
-		GL11.glColor4f(0.1f, 0.1f, 0.1f, alpha);
-		GL11.glBegin(GL11.GL_QUADS);
-		{
-			GL11.glVertex2d(x, y);
-			GL11.glVertex2d(x + width, y);
-			GL11.glVertex2d(x + width, y + height);
-			GL11.glVertex2d(x, y + height);
-		}
-		GL11.glEnd();
-		
-		GL11.glLineWidth(6f);
-		GL11.glColor4f(0.8f, 0.1f, 0.1f, alpha);
-		GL11.glBegin(GL11.GL_LINES);
-		{
-			float width = timePercent * this.width;
-			
-			GL11.glVertex2d(x, y + height - 2);
-			GL11.glVertex2d(x + width, y + height - 2);
-		}
-		GL11.glEnd();
-		
-		if(alpha > 1) {
-			alpha = 1;
-		}
-		if(alpha < 0) {
-			alpha = 0;
-		}
+		// For some reason need this, even w the color in the drawRect
+		GlStateManager.color(0f, 0f, 0f);
+
+		int xOffset = getXoffset();
+
+
+		Gui.drawRect(x - xOffset, y, x - width - xOffset, y - height, 0x33111111);
 		Level l = getNotification().getLevel();
-		glEnable(GL_CULL_FACE);
-		if(alpha > 0.5f) {
-			if(l == Level.ERROR) {
-				fontRenderer.drawStringWithShadow(this.getNotification().getLevel().getHeader(), x + 5, y + 3f, 0xffffffff);
-			}
-			if(l == Level.INFO) {
-				fontRenderer.drawStringWithShadow(this.getNotification().getLevel().getHeader(), x + 5, y + 3f, 0xffffffff);
-			}
-			if(l == Level.WARNING) {
-				fontRenderer.drawStringWithShadow(this.getNotification().getLevel().getHeader(), x + 5, y + 3f, 0xffffffff);
-			}
-			
-			fontRenderer.drawStringWithShadow(notification.getText(), x + -(stringWidth - width) - 5, y + 3f, 0xffffffff);
+
+		if (l == Level.ERROR) {
+			fontRenderer.drawStringWithShadow(this.getNotification().getLevel().getHeader(), x - xOffset - width + 5, y + 3f,
+					0xffffffff);
 		}
-		
+		if (l == Level.INFO) {
+			fontRenderer.drawStringWithShadow(this.getNotification().getLevel().getHeader(), x - xOffset - width + 5, y + 3f,
+					0xffffffff);
+		}
+		if (l == Level.WARNING) {
+			fontRenderer.drawStringWithShadow(this.getNotification().getLevel().getHeader(), x - xOffset - width + 5, y + 3f,
+					0xffffffff);
+		}
+
+		fontRenderer.drawString(notification.getText(), x - xOffset - width, y - height + 3f, 0xffffffff, false);
 	}
-	
-	public int getHeight() {
-		return height;
+
+	public void setPosition(int displayWidth, int displayHeight) {
+		// x >> 1 == x/2
+		this.x = displayWidth >> 1;
+		this.y = displayHeight >> 1;
+
+		this.max_width = displayWidth;
 	}
-	
-	public int getWidth() {
-		return width;
-	}
-	
-	public int getX() {
-		return x;
-	}
-	
-	public int getY() {
-		return y;
-	}
-	
-	public void setPosition(int x, int y) {
-		this.x = x;
-		this.y = y;
-	}
-	
-	public float getLifeTime() {
-		return time;
-	}
-	
 }

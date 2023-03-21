@@ -34,19 +34,18 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
 @Mixin(WorldClient.class)
 public abstract class MixinWorldClient extends World implements IBaseChangesApplied {
-    public NotificationManager notificationManager;
+    private NotificationManager notificationManager = NotificationManager.getInstance();
 
 	protected MixinWorldClient(ISaveHandler saveHandlerIn, WorldInfo info, WorldProvider providerIn,
 			Profiler profilerIn, boolean client) {
 		super(saveHandlerIn, info, providerIn, profilerIn, client);
-		this.notificationManager = NotificationManager.getInstance();
 	}
 
 	@Inject(method="tick", at=@At("RETURN"))
 	private void onTick(CallbackInfo ci) {
 		wdl.WDLHooks.onWorldClientTick((WorldClient)(Object)this);
-
-		notificationManager.update();
+		
+		notificationManager.update();		
 	}
 
 	@Inject(method="removeEntityFromWorld", at=@At("HEAD"))

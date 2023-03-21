@@ -25,6 +25,6 @@ public class ShowNotification extends AbstractCommand {
 
     @Override
     public void onCommand(final ICommandSender sender, final String[] args) {
-       NotificationManager.getInstance().addNotification(new Notification(Level.INFO, "New notification !"));
+       NotificationManager.getInstance().addNotification(new Notification(Level.INFO, "New notification !", 100));
     }
 }
