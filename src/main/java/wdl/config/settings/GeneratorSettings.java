@@ -57,7 +57,7 @@ public final class GeneratorSettings {
 		AMPLIFIED("amplified", "amplified", 0, ""),
 		CUSTOMIZED("custom", "custom", 0, ""),
 		BUFFET("buffet", "buffet", 0, ""),
-		LEGACY("legacy", "default_1_1", 0, ""); // XXX do we really need this?
+		LEGACY("legacy", "default_1_1", 0, ""); // Do we really need this? YES WE DO !
 
 		private final String confName;
 		private static final Map<String, Generator> FROM_STRING = makeFromString(values(), t -> t.confName);

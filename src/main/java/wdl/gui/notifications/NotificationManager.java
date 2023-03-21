@@ -1,15 +1,14 @@
-package wdl.gui.notifications; 
+package wdl.gui.notifications;
 
 import java.util.ArrayList;
 import java.util.Iterator;
-
-import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.renderer.GlStateManager;
 
 public class NotificationManager {
 	public static NotificationManager instance;
+
 	public static NotificationManager getInstance() {
 		if (NotificationManager.instance == null) {
 			NotificationManager.instance = new NotificationManager();
@@ -17,8 +16,7 @@ public class NotificationManager {
 		return instance;
 	}
 
-
-	private ArrayList<NotificationWindow> notes = new ArrayList<NotificationWindow>();
+	private ArrayList<Notification> notes = new ArrayList<Notification>();
 
 	private boolean adding = false;
 
@@ -32,23 +30,20 @@ public class NotificationManager {
 
 	public void addNotification(Notification note) {
 		try {
-			NotificationWindow window = new NotificationWindow(note);
-			window.setPosition(mc.displayWidth,
+			note.getWindow().setPosition(mc.displayWidth,
 					mc.displayHeight);
-			notes.add(window);
+			notes.add(note);
 			adding = true;
 		} catch (Exception e) {
 			try {
-				// if (Jigsaw.devVersion) {
-					if (true) {
-					NotificationWindow window = new NotificationWindow(new Notification(Level.ERROR,
-							"Error displaying note, please report to the creator of the client along with this message: "
-									+ e.getMessage()));
-					window.setPosition(mc.displayWidth,
-							mc.displayHeight);
-					notes.add(window);
-					adding = true;
-				}
+				Notification notification = new Notification(Level.ERROR,
+						"Error displaying note, please report: "
+								+ e.getMessage());
+				notification.getWindow().setPosition(mc.displayWidth,
+						mc.displayHeight);
+				notes.add(notification);
+				adding = true;
+
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
@@ -60,13 +55,13 @@ public class NotificationManager {
 		if (Minecraft.getMinecraft().thePlayer == null) {
 			return;
 		}
-		for (NotificationWindow window : notes) {
-			window.update();
+		for (Notification notification : notes) {
+			notification.getWindow().update();
 		}
-		Iterator<NotificationWindow> iter = notes.iterator();
+		Iterator<Notification> iter = notes.iterator();
 		while (iter.hasNext()) {
-			NotificationWindow window = iter.next();
-			if (window.getLifeTime() > window.getNotification().getMaxTime()) {
+			Notification notification = iter.next();
+			if (notification.getWindow().getLifeTime() > notification.getMaxTime()) {
 				iter.remove();
 			}
 		}
@@ -86,13 +81,20 @@ public class NotificationManager {
 		}
 
 		GlStateManager.pushMatrix();
-		// GlStateManager.scale(2d /
-		// Minecraft.getMinecraft().gameSettings.guiScale, 2d /
-		// Minecraft.getMinecraft().gameSettings.guiScale, 1);
+
+		// Scale opengl calls to minecraft scale
+		GlStateManager.scale(2d /
+				Minecraft.getMinecraft().gameSettings.guiScale,
+				2d / Minecraft.getMinecraft().gameSettings.guiScale,
+				1
+		);
+
+		// Above chat
 		GlStateManager.translate(0, -21, 0);
 		GlStateManager.translate(0, addingCount, 0);
+
 		for (int i = notes.size() - 1; i > -1; i--) {
-			NotificationWindow window = notes.get(i);
+			NotificationWindow window = notes.get(i).getWindow();
 			GlStateManager.translate(0, space, 0);
 			window.setPosition(mc.displayWidth,
 					mc.displayHeight);
@@ -100,7 +102,5 @@ public class NotificationManager {
 		}
 		GlStateManager.popMatrix();
 		GlStateManager.enableTexture2D();
-		GL11.glColor4f(1f, 1f, 1f, 1f);
 	}
-
 }
