@@ -6,33 +6,41 @@ import lombok.Getter;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import wdl.gui.notifications.shapes.data.Position;
-import wdl.gui.notifications.shapes.data.RoundedCornerType;
+import wdl.gui.notifications.shapes.data.CornerType;
 
 @Getter
 public class RoundedCorner extends Shape {
+    private static int ROUNDING_STEP = 1;
+
     private int radius;
-    private RoundedCornerType cornerType;
-    
-    public RoundedCorner(RoundedCornerType cornerType, Position position, int radius) {
+    private CornerType cornerType;
+
+    public RoundedCorner(CornerType cornerType, Position position, int radius, int color) {
+        super(color);
         this.cornerType = cornerType;
         this.radius = radius;
         setPosition(position);
     }
     
-    //TODO: pre calculate this & save calculations
+    // 2do: pre calculate this & save calculations
+    // Will see since xOffset changes & performance is negligible
+    // TODO: fix function apparently drawing twice?
+    // TODO: allow to multiply Cos()/Sin() to make for higher/lower roundness
     @Override
     public void draw(int xOffset) {
+        
 		GlStateManager.enableBlend();
 		GlStateManager.disableTexture2D();
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(.2f, .2f, 1.0f, 1.0f);
+		GlStateManager.color(red, green, blue, alpha / 2);
 
 		worldrenderer.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION);
-
 	
+
         int posLeft = position.left() - xOffset;
         int posTop = position.top();
-		for (int i = cornerType.getStartingDegree(); i < cornerType.getEndingDegree(); i+=2) {
+
+		for (int i = cornerType.getStartingDegree(); i <= cornerType.getEndingDegree() ; i += 4) {
 			double angleRad = i * Math.PI / 180.0;
 			double xHere = posLeft + radius * Math.cos(angleRad);
 			double yHere = posTop + radius * Math.sin(angleRad);
@@ -40,14 +48,15 @@ public class RoundedCorner extends Shape {
 			worldrenderer.pos(xHere, yHere, 0).endVertex();
 			worldrenderer.pos(posLeft, posTop , 0).endVertex();
 		}
+
+        // Can't see any way to enable that without using 
+        // GL11 directly unfortunately
+        // Doesn't seem to cause any issue tho.
+        // GL11.glEnable(GL11.GL_POLYGON_SMOOTH); 
 		tessellator.draw();
-		// GL11.glEnd();
+        // GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
 		GlStateManager.enableTexture2D();
 		GlStateManager.disableBlend();
-    }
-
-    public void setPosition(Position position) {
-        this.position = position;
     }
 
     @Override

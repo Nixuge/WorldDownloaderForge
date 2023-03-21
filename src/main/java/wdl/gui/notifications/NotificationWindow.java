@@ -4,12 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import wdl.gui.notifications.shapes.RoundedRectangle;
-import wdl.gui.notifications.shapes.data.RoundedCornerType;
+import wdl.gui.notifications.shapes.data.CornerType;
+import wdl.gui.notifications.shapes.data.Size;
 import wdl.gui.notifications.shapes.data.Position;
 
 public class NotificationWindow {
@@ -46,11 +48,7 @@ public class NotificationWindow {
 	private Tessellator tessellator = Tessellator.getInstance();
 	private WorldRenderer worldrenderer = tessellator.getWorldRenderer();
 
-	private RoundedRectangle roundedRectangle = new RoundedRectangle(
-		null,
-		5,
-		new RoundedCornerType[] {RoundedCornerType.TOP_LEFT, RoundedCornerType.BOTTOM_LEFT}
-	);
+	private RoundedRectangle roundedRectangle;
 
 	public NotificationWindow(Notification notification) {
 		this.notification = notification;
@@ -69,6 +67,15 @@ public class NotificationWindow {
 			this.width = max_width;
 
 		this.height = 32;
+
+		this.roundedRectangle = new RoundedRectangle(
+			null,
+			new Size(width, height), 
+			5,
+			0x33111111, 
+			new CornerType[] {CornerType.TOP_LEFT, CornerType.BOTTOM_LEFT}
+		);
+
 	}
 
 	public void update() {
@@ -89,6 +96,7 @@ public class NotificationWindow {
 	 * @return the X offset
 	 */
 	public int getXoffset(float partialTicks) {
+		//TODO: fix small weird bump after slide in animation finished
 		// percentages of the notification display at which the animation triggers
 		float lowPercent = .1f;
 		float highPercent = .9f;
@@ -142,7 +150,8 @@ public class NotificationWindow {
 		
 		// drawRect(left, top, right, bottom);
 		roundedRectangle.draw(getXoffset(partialTicks));
-		drawRounded(left, top, right, bottom);
+		// drawRect(left, top, right, bottom);
+		// drawRounded(left, top, right, bottom);
 
 		fontRenderer.drawString(notification.getText(), left , top  + 16, 0xFFFFFFFF);
 		
@@ -182,7 +191,6 @@ public class NotificationWindow {
 			top = bottom;
 			bottom = j;
 		}
-
 		GlStateManager.enableBlend();
 		GlStateManager.disableTexture2D();
 		GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
@@ -268,13 +276,15 @@ public class NotificationWindow {
 	}
 
 	public void setPosition(int x, int y) {
-		// x >> 1 == x/2
+		int newLeftS = x - width;
+		int newTopS = y - height;
+		if (this.leftS == newLeftS && this.topS == newTopS)
+			return;
+		
+		this.leftS = newLeftS;
+		this.topS = newTopS;
 
-		this.leftS = x - width;
-		this.topS = y - height;
-
-		this.max_width = x;
-		//TODO: cache to avoid calling every time
+		// this.max_width = x;
 		this.roundedRectangle.setPosition(new Position(leftS, topS, leftS + width, topS + height));
 	}
 }
