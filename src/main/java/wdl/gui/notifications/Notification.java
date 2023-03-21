@@ -40,6 +40,11 @@ public class Notification extends Gui {
 	 * - Too much padding on the right of notifications
 	 * - Width can go over maxWidth
 	 * 
+	 * 
+	 * ========== Unsure TODOs ==========
+	 * - Animation when notifications go up
+	 * --> Can cause problems such as appearing one clipping
+	 * 
 	 * (Not notification) LiquidBounce's TP script -> try w blink before, see if that works?
 	 */
 

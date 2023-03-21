@@ -4,9 +4,11 @@ import java.util.ArrayList;
 import java.util.Iterator;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.ScaledResolution;
 import net.minecraft.client.renderer.GlStateManager;
 
 public class NotificationManager {
+	// TODO: store that somewhere
 	public static NotificationManager instance;
 
 	public static NotificationManager getInstance() {
@@ -69,17 +71,20 @@ public class NotificationManager {
 
 		GlStateManager.pushMatrix();
 
-		// Scale opengl calls to minecraft scale
+		// Scale opengl calls down/up to Minecraft scale
+		// Now using function below which scales thing dynamically,
+		// unlike this which acts like the scale is always "Normal"
 		// GlStateManager.scale(2d /
 		// 		Minecraft.getMinecraft().gameSettings.guiScale,
 		// 		2d / Minecraft.getMinecraft().gameSettings.guiScale,
 		// 		1
 		// );
-		// NOTE:
-		// scale "Auto" is 0, and so is broken rn.
-		int currentGuiScale = Minecraft.getMinecraft().gameSettings.guiScale;
+
+		int currentGuiScale = mc.gameSettings.guiScale;
 		if (this.guiScale != currentGuiScale) {
-			this.guiScale = currentGuiScale;
+			// Seem to need to recreate a new instance everytime scale changes?
+			// Note: using ScaledResolutions because unlike gameSettings.guiScale, it supports "AUTO" scaling
+			this.guiScale = new ScaledResolution(mc).getScaleFactor();
 			scale = this.guiScale / 2f;
 			scaleDown = 1 / scale;
 			space = 5 * scaleDown;
@@ -93,7 +98,7 @@ public class NotificationManager {
 			NotificationWindow window = notes.get(i).getWindow();
 			heightOffset += space + window.getHeight();
 			// GlStateManager.translate(0, space, 0);
-			window.setPosition((int)((mc.displayWidth >> 1) * scaleDown), (int)(((mc.displayHeight >> 1) * scaleDown) - heightOffset));
+			window.setPosition((int)((mc.displayWidth >> 1) * scaleDown), (int)(((mc.displayHeight >> 1) * scaleDown)) - heightOffset);
 			// System.out.println("i: " + i + " space:" + space);
 
 			window.draw(partialTicks);

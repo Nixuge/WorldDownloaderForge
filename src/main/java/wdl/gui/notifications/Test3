@@ -1,0 +1,39 @@
+import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Gui;
+import net.minecraft.client.gui.ScaledResolution;
+import org.lwjgl.opengl.GL11;
+
+public class RoundedRect extends Gui {
+
+    private Minecraft mc;
+
+    public RoundedRect(Minecraft mc) {
+        this.mc = mc;
+    }
+
+    public void drawRoundedRect(int x, int y, int width, int height, int radius, int color) {
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glBegin(GL11.GL_TRIANGLE_FAN);
+        GL11.glColor4f((float) (color >> 16 & 255) / 255.0F, (float) (color >> 8 & 255) / 255.0F, (float) (color & 255) / 255.0F, (float) (color >> 24 & 255) / 255.0F);
+        GL11.glVertex2f(x + radius, y + radius);
+        GL11.glVertex2f(x + radius, y + height - radius);
+        GL11.glVertex2f(x + width - radius, y + height - radius);
+        GL11.glVertex2f(x + width - radius, y + radius);
+        for (int i = 0; i <= 90; i += 10) {
+            double angle = i * Math.PI / 180;
+            GL11.glVertex2d(x + radius + radius * Math.cos(angle), y + radius + radius * Math.sin(angle));
+        }
+        GL11.glEnd();
+        GL11.glEnable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_BLEND);
+    }
+
+    public void render() {
+        ScaledResolution scaledResolution = new ScaledResolution(mc);
+        int width = scaledResolution.getScaledWidth();
+        int height = scaledResolution.getScaledHeight();
+        drawRoundedRect(width / 2 - 50, height / 2 - 50, 100, 100, 10, 0x80000000);
+    }
+}
