@@ -35,7 +35,7 @@ public enum CornerType {
      * @param radius Radius of the rounded corner
      * @return Position fixed to match the corner
      */
-    public Position getFixedPositionRounded(Position position, Size size, int radius) {
+    public Position getFixedPositionRounded(Position position, int radius) {
         int width = position.right() - position.left();
         int height = position.top() - position.bottom();
 
@@ -44,8 +44,8 @@ public enum CornerType {
         return new Position(
             xChange,
             yChange,
-            xChange + size.width(),
-            yChange + size.height()
+            xChange + width,
+            yChange + height
         );
     }
 

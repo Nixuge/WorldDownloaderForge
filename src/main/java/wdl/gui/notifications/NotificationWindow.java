@@ -4,14 +4,12 @@ import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.FontRenderer;
-import net.minecraft.client.gui.Gui;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import wdl.gui.notifications.shapes.RoundedRectangle;
 import wdl.gui.notifications.shapes.data.CornerType;
-import wdl.gui.notifications.shapes.data.Size;
 import wdl.gui.notifications.shapes.data.Position;
 
 public class NotificationWindow {
@@ -70,7 +68,6 @@ public class NotificationWindow {
 
 		this.roundedRectangle = new RoundedRectangle(
 			null,
-			new Size(width, height), 
 			5,
 			0x33111111, 
 			new CornerType[] {CornerType.TOP_LEFT, CornerType.BOTTOM_LEFT}
@@ -153,12 +150,12 @@ public class NotificationWindow {
 		// drawRect(left, top, right, bottom);
 		// drawRounded(left, top, right, bottom);
 
-		fontRenderer.drawString(notification.getText(), left , top  + 16, 0xFFFFFFFF);
+		fontRenderer.drawString(notification.getText(), left + 3, top + 3 + 16, 0xFFFFFFFF);
 		
 		Level l = notification.getLevel();
 		if (l != Level.NONE) {
 			fontRenderer.drawString(l.getHeader(),
-				left + (width - (fontRenderer.getStringWidth(l.getHeader()))) / 2, top , l.getColor(), false);
+				left + (width - (fontRenderer.getStringWidth(l.getHeader()))) / 2, top + 3, l.getColor(), false);
 		}
 		// Level l = getNotification().getLevel();
 		// if (l == Level.ERROR) {

@@ -31,8 +31,11 @@ public class RoundedCorner extends Shape {
         
 		GlStateManager.enableBlend();
 		GlStateManager.disableTexture2D();
+        // GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GlStateManager.color(red, green, blue, alpha / 2);
+        // float tempA = alpha / 2;
+        // System.out.println("alpha:" + alpha);
+		GlStateManager.color(red, green, blue, alpha);
 
 		worldrenderer.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION);
 	
@@ -40,7 +43,7 @@ public class RoundedCorner extends Shape {
         int posLeft = position.left() - xOffset;
         int posTop = position.top();
 
-		for (int i = cornerType.getStartingDegree(); i <= cornerType.getEndingDegree() ; i += 4) {
+		for (int i = cornerType.getStartingDegree(); i <= cornerType.getEndingDegree() ; i += ROUNDING_STEP) {
 			double angleRad = i * Math.PI / 180.0;
 			double xHere = posLeft + radius * Math.cos(angleRad);
 			double yHere = posTop + radius * Math.sin(angleRad);
@@ -52,9 +55,9 @@ public class RoundedCorner extends Shape {
         // Can't see any way to enable that without using 
         // GL11 directly unfortunately
         // Doesn't seem to cause any issue tho.
-        // GL11.glEnable(GL11.GL_POLYGON_SMOOTH); 
+        GL11.glEnable(GL11.GL_POLYGON_SMOOTH); 
 		tessellator.draw();
-        // GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
+        GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
 		GlStateManager.enableTexture2D();
 		GlStateManager.disableBlend();
     }

@@ -7,7 +7,6 @@ import java.util.Map;
 import java.util.Map.Entry;
 
 import wdl.gui.notifications.shapes.data.Position;
-import wdl.gui.notifications.shapes.data.Size;
 
 // @SuppressWarnings("unused")
 public class RoundedRectangle extends Shape {
@@ -17,13 +16,11 @@ public class RoundedRectangle extends Shape {
     private Rectangle[] sideRectangles = new Rectangle[2];
     private Map<CornerType, Rectangle> straightCorners = new HashMap<>();
     // private Rectangle[] straightCorners;
-    private Size size;
     private int radius;
 
-    public RoundedRectangle(Position position, Size size, int radius, int color, CornerType[] enabledCorners) {
+    public RoundedRectangle(Position position, int radius, int color, CornerType[] enabledCorners) {
         super();
         this.radius = radius;
-        this.size = size;
         // this.enabledCorners = enabledCorners;
         // Create corners
         this.corners = new RoundedCorner[enabledCorners.length];
@@ -69,7 +66,7 @@ public class RoundedRectangle extends Shape {
         // Update corners positions
         for(int i = 0; i < corners.length; i++) {
             RoundedCorner currentCorner = corners[i];
-            currentCorner.setPosition(currentCorner.getCornerType().getFixedPositionRounded(position, size, radius));
+            currentCorner.setPosition(currentCorner.getCornerType().getFixedPositionRounded(position, radius));
         }
 
         // Update main rectangle position
