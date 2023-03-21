@@ -2,6 +2,7 @@ package me.nixuge.worlddownloader.command.commands;
 
 
 import me.nixuge.worlddownloader.command.AbstractCommand;
+import me.nixuge.worlddownloader.command.MessageBuilder;
 import net.minecraft.command.ICommandSender;
 import wdl.gui.notifications.Level;
 import wdl.gui.notifications.Notification;
@@ -25,6 +26,18 @@ public class ShowNotification extends AbstractCommand {
 
     @Override
     public void onCommand(final ICommandSender sender, final String[] args) {
-       NotificationManager.getInstance().addNotification(new Notification(Level.INFO, "New notification !", 100));
+        String finalStr = "";
+        for (int i = 0; i < args.length; i++) {
+            if (i == 0) continue;
+            finalStr += args[i] + " ";
+        }
+        for (Level lvl : Level.values()) {
+            if (lvl.toString().toLowerCase().equals(args[0].toLowerCase())) {
+                tell(new MessageBuilder("No notification of type " + lvl.toString() + " sent."));
+                NotificationManager.getInstance().addNotification(new Notification(lvl, finalStr, 100));
+                return;
+            }
+        }
+        tell(new MessageBuilder("No notification type specified"));
     }
 }

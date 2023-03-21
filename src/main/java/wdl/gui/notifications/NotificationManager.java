@@ -94,7 +94,7 @@ public class NotificationManager {
 			heightOffset += space + window.getHeight();
 			// GlStateManager.translate(0, space, 0);
 			window.setPosition((int)((mc.displayWidth >> 1) * scaleDown), (int)(((mc.displayHeight >> 1) * scaleDown) - heightOffset));
-			System.out.println("i: " + i + " space:" + space);
+			// System.out.println("i: " + i + " space:" + space);
 
 			window.draw(partialTicks);
 			

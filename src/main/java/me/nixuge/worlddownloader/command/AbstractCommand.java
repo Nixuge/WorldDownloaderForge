@@ -12,7 +12,7 @@ public abstract class AbstractCommand extends CommandBase {
     private String prefix;
 
     public AbstractCommand(final String name) {
-        this(name, "NoUnloadChunks");
+        this(name, "WorldDownloader");
     }
 
     public AbstractCommand(final String name, final String prefix) {

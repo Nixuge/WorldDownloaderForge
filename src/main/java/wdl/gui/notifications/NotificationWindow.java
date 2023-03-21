@@ -47,17 +47,17 @@ public class NotificationWindow {
 		stringWidthText = fontRenderer.getStringWidth(this.notification.getText());
 		stringWidthHeader = fontRenderer.getStringWidth(this.notification.getLevel().getHeader());
 
-		if (this.getNotification().getLevel().getHeader().isEmpty()) {
+		if (this.notification.getLevel().getHeader().isEmpty()) {
 			this.width = stringWidthText + 15 + stringWidthText;
 		} else {
-			this.width = stringWidthText + 15 + Math.max(stringWidthText, stringWidthHeader);
+			this.width = stringWidthText + 15 + Math.min(stringWidthText, stringWidthHeader);
 		}
 
 		// Maybe eventually make notification size a constant?
 		if (this.width > max_width)
 			this.width = max_width;
 
-		this.height = 16;
+		this.height = 32;
 	}
 
 	public void update() {
@@ -66,10 +66,6 @@ public class NotificationWindow {
 		if (lifeTime < 0f) {
 			lifeTime = 0f;
 		}
-	}
-
-	public Notification getNotification() {
-		return notification;
 	}
 
 	/**
@@ -106,37 +102,40 @@ public class NotificationWindow {
 
 		// If trouble understanding this, replace lowPercent & highPercent by
 		// their default values from above
+		// How this works:
+		// 1 - From the total time%, calculate the animation% (from 0 to 1)
+		// 2 - Apply a tanh (! needs to be *3 for it, see desmos graph)
+		// 3 - Multiply tanh by width, & remove 1x the width
 		if (timePercent < lowPercent) {
-			double ttan = Math.tanh(timePercent * 10 * 3);
-			return (int) (ttan * this.width - this.width);
+			double tanh = Math.tanh(timePercent * 10 * 3);
+			return (int) (tanh * this.width) - this.width;
 		} else if (timePercent > highPercent) {
-			// TODO: try and invert that
-			// (starts slow & gets fast)
-			double ttan = Math.tanh((-(timePercent - highPercent)) * 10 * 3);
-			return (int) (ttan * this.width);
+			float animationPercent = 1 - ((timePercent - highPercent) * 10);
+			double tanh = Math.tanh(animationPercent * 3);
+			return (int) (tanh * this.width) - this.width;
 		}
 
 		return 0;
 	}
 
 	public void draw(float partialTicks) {
-		// For some reason need this, even w the color in the drawRect
-		// GlStateManager.color(0f, 0f, 0f);
-		
-
 		int left = x - getXoffset(partialTicks);
 		int top = y;
 		int right = left + width;
 		int bottom = top + height;
-
 
 		if (bottom > mc.displayHeight)
 			return;
 		
 		drawRect(left, top, right, bottom);
 
-		fontRenderer.drawString(notification.getText(), 0, 0, 0xFFFFFFFF);
-
+		fontRenderer.drawString(notification.getText(), left + 3, top + 3 + 16, 0xFFFFFFFF);
+		
+		Level l = notification.getLevel();
+		if (l != Level.NONE) {
+			fontRenderer.drawString(l.getHeader(),
+				left + (width - (fontRenderer.getStringWidth(l.getHeader()))) / 2, top + 3, l.getColor(), false);
+		}
 		// Level l = getNotification().getLevel();
 		// if (l == Level.ERROR) {
 		// fontRenderer.drawStringWithShadow(this.getNotification().getLevel().getHeader(),
@@ -153,9 +152,6 @@ public class NotificationWindow {
 		// x - xOffset - width + 5, y,
 		// 0xffffffff);
 		// }
-
-		// fontRenderer.drawString(notification.getText(), x - xOffset - width, y -
-		// height + 3f, 0xffffffff, false);
 	}
 
 	public void drawRect(int left, int top, int right, int bottom) {
