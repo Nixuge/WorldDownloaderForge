@@ -36,6 +36,7 @@ public class Notification extends Gui {
 	 *   & even header text when already shown
 	 * - hover/click support
 	 * 
+	 * (Not notification) LiquidBounce's TP script -> try w blink before, see if that works?
 	 */
 
 

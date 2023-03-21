@@ -18,9 +18,10 @@ public class NotificationManager {
 
 	private ArrayList<Notification> notes = new ArrayList<Notification>();
 
-	private boolean adding = false;
-
-	private int addingCount = 0;
+	private int guiScale = 2;
+	private float scale = 1f;
+	private float scaleDown = 1f;
+	private float space = 5;
 
 	private Minecraft mc = Minecraft.getMinecraft();
 
@@ -30,25 +31,18 @@ public class NotificationManager {
 
 	public void addNotification(Notification note) {
 		try {
-			note.getWindow().setPosition(mc.displayWidth,
-					mc.displayHeight);
 			notes.add(note);
-			adding = true;
 		} catch (Exception e) {
 			try {
 				Notification notification = new Notification(Level.ERROR,
 						"Error displaying note, please report: "
 								+ e.getMessage());
-				notification.getWindow().setPosition(mc.displayWidth,
-						mc.displayHeight);
 				notes.add(notification);
-				adding = true;
 
 			} catch (Exception e1) {
 				e1.printStackTrace();
 			}
 		}
-
 	}
 
 	public void update() {
@@ -67,40 +61,45 @@ public class NotificationManager {
 		}
 	}
 
-	public void draw() {
+	public void draw(float partialTicks) {
 		if (Minecraft.getMinecraft().thePlayer == null) {
 			return;
 		}
-		int space = -18;
-		if (adding) {
-			adding = false;
-			addingCount = -space;
-		}
-		if (addingCount > 0) {
-			addingCount--;
-		}
+		
 
 		GlStateManager.pushMatrix();
 
 		// Scale opengl calls to minecraft scale
-		GlStateManager.scale(2d /
-				Minecraft.getMinecraft().gameSettings.guiScale,
-				2d / Minecraft.getMinecraft().gameSettings.guiScale,
-				1
-		);
+		// GlStateManager.scale(2d /
+		// 		Minecraft.getMinecraft().gameSettings.guiScale,
+		// 		2d / Minecraft.getMinecraft().gameSettings.guiScale,
+		// 		1
+		// );
+		// NOTE:
+		// scale "Auto" is 0, and so is broken rn.
+		int currentGuiScale = Minecraft.getMinecraft().gameSettings.guiScale;
+		if (this.guiScale != currentGuiScale) {
+			this.guiScale = currentGuiScale;
+			scale = this.guiScale / 2f;
+			scaleDown = 1 / scale;
+			space = 5 * scaleDown;
+		}
 
-		// Above chat
-		GlStateManager.translate(0, -21, 0);
-		GlStateManager.translate(0, addingCount, 0);
+		// start above chat
+		int heightOffset = 20;
+		
 
 		for (int i = notes.size() - 1; i > -1; i--) {
 			NotificationWindow window = notes.get(i).getWindow();
-			GlStateManager.translate(0, space, 0);
-			window.setPosition(mc.displayWidth,
-					mc.displayHeight);
-			window.draw();
+			heightOffset += space + window.getHeight();
+			// GlStateManager.translate(0, space, 0);
+			window.setPosition((int)((mc.displayWidth >> 1) * scaleDown), (int)(((mc.displayHeight >> 1) * scaleDown) - heightOffset));
+			System.out.println("i: " + i + " space:" + space);
+
+			window.draw(partialTicks);
+			
 		}
 		GlStateManager.popMatrix();
-		GlStateManager.enableTexture2D();
+		// GlStateManager.enableTexture2D();
 	}
 }

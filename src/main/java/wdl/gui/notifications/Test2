@@ -1,0 +1,50 @@
+		GlStateManager.color(0f, 0f, 0f);
+
+		int xOffset = getXoffset();
+
+		// Gui.drawRect(x - xOffset, y, x - width - xOffset, y - height, 0x33111111);
+
+		Tessellator tessellator = Tessellator.getInstance();
+		WorldRenderer renderer = tessellator.getWorldRenderer();
+
+		// Set up the OpenGL state for rendering the notification
+		// GlStateManager.pushMatrix();
+		GL11.glPushMatrix();
+		// GL11.glEnable(GL11.GL_BLEND);
+		GlStateManager.enableBlend();
+		// GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		// GL11.glTranslatef(x - xOffset, y, 0);
+		GlStateManager.translate(x - xOffset, y + yOffset, 0);
+		System.out.println(y);
+		GlStateManager.scale(1.5, 1.5, 1.5);
+
+		// Render the notification background
+		GlStateManager.color(0.066f, 0.066f, 0.066f, 0.2f);
+		// GL11.glColor4f(0.066f, 0.066f, 0.066f, 0.2f);
+		// renderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+		GL11.glBegin(GL11.GL_QUADS);
+		
+		System.out.println("yof:" + yOffset);
+		// renderer.pos(0, 0 + yOffset, 0).endVertex();
+		GL11.glVertex2f(0, 0);
+		// renderer.pos(0, height + yOffset, 0).endVertex();
+		GL11.glVertex2f(0, height);
+		// renderer.pos(width, height + yOffset, 0).endVertex();
+		GL11.glVertex2f(width, height);
+		// renderer.pos(width, 0 + yOffset, 0).endVertex();
+		GL11.glVertex2f(width + 10, 0);
+
+		// tessellator.draw();
+		GL11.glEnd();
+
+		// Render the text with the specified color
+		// fontRenderer.FONT_HEIGHT
+		// fontRenderer.d
+		fontRenderer.drawString(notification.getText(), 0, 0, 0xFFFFFFFF);
+
+		// Restore the OpenGL state
+		// GL11.glDisable(GL11.GL_BLEND);
+		GlStateManager.disableBlend();
+		// GL11.glPopMatrix();
+		GlStateManager.popMatrix();

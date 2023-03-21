@@ -13,6 +13,6 @@ public class RenderOverlayEventHandler {
 
     @SubscribeEvent
     public void onRenderGameOverlay(RenderGameOverlayEvent.Post event) {
-        notificationManager.draw();
+        notificationManager.draw(event.partialTicks);
     }
 }
