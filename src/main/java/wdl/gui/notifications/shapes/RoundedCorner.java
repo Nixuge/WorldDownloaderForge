@@ -29,7 +29,7 @@ public class RoundedCorner extends Shape {
     @Override
     public void draw(int xOffset) {
         
-		GlStateManager.enableBlend();
+		// GlStateManager.enableBlend();
 		GlStateManager.disableTexture2D();
         // GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
 		GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -49,7 +49,9 @@ public class RoundedCorner extends Shape {
 			double yHere = posTop + radius * Math.sin(angleRad);
 			
 			worldrenderer.pos(xHere, yHere, 0).endVertex();
-			worldrenderer.pos(posLeft, posTop , 0).endVertex();
+            // if (i % 2 == 0) {
+                worldrenderer.pos(posLeft, posTop , 0).endVertex();
+            // }
 		}
 
         // Can't see any way to enable that without using 
@@ -59,7 +61,7 @@ public class RoundedCorner extends Shape {
 		tessellator.draw();
         GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
 		GlStateManager.enableTexture2D();
-		GlStateManager.disableBlend();
+		// GlStateManager.disableBlend();
     }
 
     @Override

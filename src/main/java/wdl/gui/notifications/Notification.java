@@ -22,6 +22,7 @@ public class Notification extends Gui {
 	private int maxTime;
 
 	/* =============== Tasklist - Notifications ===============
+	 * - Borders
 	 * - Proper centered header & text under
 	 * - Split text at the right moment to avoid
 	 *   overflowing when above max size (see below)
@@ -39,6 +40,7 @@ public class Notification extends Gui {
 	 * ========== Bug fixes to do ==========
 	 * - Too much padding on the right of notifications
 	 * - Width can go over maxWidth
+	 * - Rounded corners aren't transparent
 	 * 
 	 * 
 	 * ========== Unsure TODOs ==========

@@ -47,6 +47,14 @@ public class NotificationManager {
 		}
 	}
 
+	public void removeAll() {
+		Iterator<Notification> iter = notes.iterator();
+		while (iter.hasNext()) {
+			iter.next();
+			iter.remove();
+		}
+	}
+
 	public void update() {
 		if (Minecraft.getMinecraft().thePlayer == null) {
 			return;

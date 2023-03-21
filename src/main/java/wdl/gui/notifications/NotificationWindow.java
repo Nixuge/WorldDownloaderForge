@@ -93,7 +93,6 @@ public class NotificationWindow {
 	 * @return the X offset
 	 */
 	public int getXoffset(float partialTicks) {
-		//TODO: fix small weird bump after slide in animation finished
 		// percentages of the notification display at which the animation triggers
 		float lowPercent = .1f;
 		float highPercent = .9f;
@@ -124,12 +123,17 @@ public class NotificationWindow {
 		// 3 - Multiply tanh by width, & remove 1x the width
 		if (timePercent < lowPercent) {
 			double tanh = Math.tanh(timePercent * 10 * 3);
+			if (tanh > .99f) // avoid having a "bump" when the animation is already "finished"
+				return 0;
 			return (int) (tanh * this.width) - this.width;
+
 		} else if (timePercent > highPercent) {
 			// invert the animation percent, so that it goes
 			// first slow then fast
 			float animationPercent = 1 - ((timePercent - highPercent) * 10);
 			double tanh = Math.tanh(animationPercent * 3);
+			if (tanh > .99f) // same as above
+				return 0; 
 			return (int) (tanh * this.width) - this.width;
 		}
 
@@ -138,8 +142,9 @@ public class NotificationWindow {
 
 	public void draw(float partialTicks) {
 		int left = leftS - getXoffset(partialTicks);
+		// fancyPrint(50, "ok:", left);
 		int top = topS;
-		int right = left + width;
+		// int right = left + width;
 		int bottom = top + height;
 
 		if (bottom > mc.displayHeight)
@@ -176,18 +181,6 @@ public class NotificationWindow {
 	}
 
 	public void drawRect(int left, int top, int right, int bottom) {
-		// System.out.println("drawing. x:" + left + " y:" + top + " x2:" + right + " y2:" + bottom);
-		if (left < right) {
-			int i = left;
-			left = right;
-			right = i;
-		}
-
-		if (top < bottom) {
-			int j = top;
-			top = bottom;
-			bottom = j;
-		}
 		GlStateManager.enableBlend();
 		GlStateManager.disableTexture2D();
 		GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
@@ -219,61 +212,11 @@ public class NotificationWindow {
 		System.out.println(full);
 	}
 
-	public void drawRounded(int left, int top, int right, int bottom) {
-		// roundedRectangle.draw(0);
-		// int radius = 5;
-		// // System.out.println("drawing rounded:!");
-		// // GL11.glEnable(GL11.GL_BLEND);
-		// // GL11.glDisable(GL11.GL_TEXTURE_2D);
-		// // GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		// GlStateManager.enableBlend();
-		// GlStateManager.disableTexture2D();
-		// GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		// GlStateManager.color(.2f, .2f, 1.0f, 1.0f);
-		// // GL11.glColor4f(.1f, .1f, .6f, .3f);
-		// // for (int i = 0; i <= 90; i += 5) {
-		// // 	double angle = i * Math.PI / 180.0;
-		// // 	double xHere = left + radius + radius * Math.cos(angle);
-		// // 	double yHere = top + radius + radius * Math.sin(angle);
-		// // 	GL11.glVertex2d(xHere, yHere);
-		// // }
-		// // GL11.glVertex2i(0,0);
-
-		// worldrenderer.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION);
-		// // worldrenderer.pos(left, bottom, 0.0D).endVertex();
-		// // GL11.glBegin(GL11.GL_POLYGON);
-		
-
-		// // GL11.glVertex2i(100,100);
-		// for (int i = 180; i < 270; i+=2) {
-		// 	double angleRad = i * Math.PI / 180.0;
-		// 	double xHere = 50 + radius * Math.cos(angleRad);
-		// 	double yHere = 50 + radius * Math.sin(angleRad);
-			
-		// 	worldrenderer.pos(xHere, yHere, 0).endVertex();
-		// 	worldrenderer.pos(50, 50 , 0).endVertex();
-		// }
-		
-		// // for (int i = 90; i <= 180; i += 5) {
-		// // 	double angle = i * Math.PI / 180;
-		// // 	GL11.glVertex2d(right - radius + radius * Math.cos(angle), top + radius + radius * Math.sin(angle));
-		// // }
-		// // for (int i = 180; i <= 270; i += 5) {
-		// // 	double angle = i * Math.PI / 180;
-		// // 	GL11.glVertex2d(right - radius + radius * Math.cos(angle), bottom - radius + radius * Math.sin(angle));
-		// // }
-		// // for (int i = 270; i <= 360; i += 5) {
-		// // 	double angle = i * Math.PI / 180;
-		// // 	GL11.glVertex2d(left + radius + radius * Math.cos(angle), bottom - radius + radius * Math.sin(angle));
-		// // }
-		// tessellator.draw();
-		// // GL11.glEnd();
-		// GlStateManager.enableTexture2D();
-		// GlStateManager.disableBlend();
-	}
+	public void drawRounded(int left, int top, int right, int bottom) {}
 
 	public void setPosition(int x, int y) {
-		int newLeftS = x - width;
+		// + 1 because of scaling problems 
+		int newLeftS = x - width + 1;
 		int newTopS = y - height;
 		if (this.leftS == newLeftS && this.topS == newTopS)
 			return;
