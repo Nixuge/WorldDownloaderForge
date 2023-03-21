@@ -1,7 +1,5 @@
 package wdl.gui.notifications;
 
-import org.lwjgl.opengl.GL11;
-
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
@@ -10,10 +8,11 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import wdl.gui.notifications.shapes.RoundedRectangle;
+import wdl.gui.notifications.shapes.data.RoundedCornerType;
+import wdl.gui.notifications.shapes.data.Position;
 
 public class NotificationWindow {
-	private static final int ROUNDED_CORNER_RADIUS = 5;
-
 	@Getter
 	@Setter
 	private static int xOffsetMaxTime = 60;
@@ -46,6 +45,12 @@ public class NotificationWindow {
 
 	private Tessellator tessellator = Tessellator.getInstance();
 	private WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+
+	private RoundedRectangle roundedRectangle = new RoundedRectangle(
+		null,
+		5,
+		new RoundedCornerType[] {RoundedCornerType.TOP_LEFT, RoundedCornerType.BOTTOM_LEFT}
+	);
 
 	public NotificationWindow(Notification notification) {
 		this.notification = notification;
@@ -136,14 +141,15 @@ public class NotificationWindow {
 			return;
 		
 		// drawRect(left, top, right, bottom);
+		roundedRectangle.draw(getXoffset(partialTicks));
 		drawRounded(left, top, right, bottom);
 
-		fontRenderer.drawString(notification.getText(), left + 3, top + 3 + 16, 0xFFFFFFFF);
+		fontRenderer.drawString(notification.getText(), left , top  + 16, 0xFFFFFFFF);
 		
 		Level l = notification.getLevel();
 		if (l != Level.NONE) {
 			fontRenderer.drawString(l.getHeader(),
-				left + (width - (fontRenderer.getStringWidth(l.getHeader()))) / 2, top + 3, l.getColor(), false);
+				left + (width - (fontRenderer.getStringWidth(l.getHeader()))) / 2, top , l.getColor(), false);
 		}
 		// Level l = getNotification().getLevel();
 		// if (l == Level.ERROR) {
@@ -209,95 +215,56 @@ public class NotificationWindow {
 	}
 
 	public void drawRounded(int left, int top, int right, int bottom) {
-		int radius = 5;
-		// System.out.println("drawing rounded:!");
-		GL11.glEnable(GL11.GL_BLEND);
-		GL11.glDisable(GL11.GL_TEXTURE_2D);
-		GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-		GL11.glColor4f(1.0f, 1.0f, 1.0f, 1.0f);
-		GL11.glBegin(GL11.GL_POLYGON);
-		// for (int i = 0; i <= 90; i += 5) {
-		// 	double angle = i * Math.PI / 180.0;
-		// 	double xHere = left + radius + radius * Math.cos(angle);
-		// 	double yHere = top + radius + radius * Math.sin(angle);
-		// 	GL11.glVertex2d(xHere, yHere);
-		// }
-		// GL11.glVertex2i(0,0);
-		// GL11.glVertex2i(100,100);
-		for (int i = 180; i < 270; i++) {
-			double angleRad = i * Math.PI / 180.0;
-			double xHere = 50 + radius * Math.cos(angleRad);
-			double yHere = 50 + radius * Math.sin(angleRad);
-			// fancyPrint(7, "x:",xHere,"y:",yHere);
-			GL11.glVertex2d(xHere, yHere);
-			GL11.glVertex2d(50, 50 );
-		}
-		// GL11.glVertex2d(500, 500);
-		// GL11.glVertex2d(100, 100);
-		// GL11.glVertex2d(100, 200);
-		// GL11.glVertex2d(1, 1);
-		
-		// for (int i = 90; i <= 180; i += 5) {
-		// 	double angle = i * Math.PI / 180;
-		// 	GL11.glVertex2d(right - radius + radius * Math.cos(angle), top + radius + radius * Math.sin(angle));
-		// }
-		// for (int i = 180; i <= 270; i += 5) {
-		// 	double angle = i * Math.PI / 180;
-		// 	GL11.glVertex2d(right - radius + radius * Math.cos(angle), bottom - radius + radius * Math.sin(angle));
-		// }
-		// for (int i = 270; i <= 360; i += 5) {
-		// 	double angle = i * Math.PI / 180;
-		// 	GL11.glVertex2d(left + radius + radius * Math.cos(angle), bottom - radius + radius * Math.sin(angle));
-		// }
-		GL11.glEnd();
-		GL11.glEnable(GL11.GL_TEXTURE_2D);
-		GL11.glDisable(GL11.GL_BLEND);
-		// if (left < right) {
-		// 	int i = left;
-		// 	left = right;
-		// 	right = i;
-		// }
+		// roundedRectangle.draw(0);
+		// int radius = 5;
+		// // System.out.println("drawing rounded:!");
+		// // GL11.glEnable(GL11.GL_BLEND);
+		// // GL11.glDisable(GL11.GL_TEXTURE_2D);
+		// // GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		// GlStateManager.enableBlend();
+		// GlStateManager.disableTexture2D();
+		// GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+		// GlStateManager.color(.2f, .2f, 1.0f, 1.0f);
+		// // GL11.glColor4f(.1f, .1f, .6f, .3f);
+		// // for (int i = 0; i <= 90; i += 5) {
+		// // 	double angle = i * Math.PI / 180.0;
+		// // 	double xHere = left + radius + radius * Math.cos(angle);
+		// // 	double yHere = top + radius + radius * Math.sin(angle);
+		// // 	GL11.glVertex2d(xHere, yHere);
+		// // }
+		// // GL11.glVertex2i(0,0);
 
-		// if (top < bottom) {
-		// 	int j = top;
-		// 	top = bottom;
-		// 	bottom = j;
-		// }
-		// // GlStateManager.enableBlend();
-		// // GlStateManager.disableTexture2D();
-		// // GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-		// // GlStateManager.color(0.066f, 0.066f, 0.066f, 0.2f);
-
-		// // worldrenderer.begin(GL11.GL_TRIANGLE_FAN, DefaultVertexFormats.POSITION_TEX);
-
-		// // worldrenderer.pos(left + ROUNDED_CORNER_RADIUS, top + ROUNDED_CORNER_RADIUS, 0.0).tex(0.5f, 0.5f).endVertex();
+		// worldrenderer.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION);
+		// // worldrenderer.pos(left, bottom, 0.0D).endVertex();
+		// // GL11.glBegin(GL11.GL_POLYGON);
 		
-		// int ROUND_APROXIMATION_STEP = 10;
-        // // for (int i = 0; i <= 90; i += 10) {
-        //     // double angle = i * Math.PI / 180;
-        //     // GL11.glVertex2d(x + radius + radius * Math.cos(angle), y + radius + radius * Math.sin(angle));
-        // // }
-		// int color = 0xFFFFFFFF;
-        // GL11.glEnable(GL11.GL_BLEND);
-        // GL11.glDisable(GL11.GL_TEXTURE_2D);
-        // GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        // GL11.glBegin(GL11.GL_TRIANGLE_FAN);
-        // GL11.glColor4f((float) (color >> 16 & 255) / 255.0F, (float) (color >> 8 & 255) / 255.0F, (float) (color & 255) / 255.0F, (float) (color >> 24 & 255) / 255.0F);
-		
-		// for (int i = 0; i <= 90; i += ROUND_APROXIMATION_STEP) {
-		// 	double rad = Math.toRadians(i);
-		// 	float thisX = left + ROUNDED_CORNER_RADIUS + ROUNDED_CORNER_RADIUS * (float) Math.cos(rad);
-		// 	float thisY = top + ROUNDED_CORNER_RADIUS + ROUNDED_CORNER_RADIUS * (float) Math.sin(rad);
-		// 	// worldrenderer.pos(thisX, thisY, 0.0).endVertex();
-		// 	GL11.glVertex2d(thisX, thisY);
+
+		// // GL11.glVertex2i(100,100);
+		// for (int i = 180; i < 270; i+=2) {
+		// 	double angleRad = i * Math.PI / 180.0;
+		// 	double xHere = 50 + radius * Math.cos(angleRad);
+		// 	double yHere = 50 + radius * Math.sin(angleRad);
+			
+		// 	worldrenderer.pos(xHere, yHere, 0).endVertex();
+		// 	worldrenderer.pos(50, 50 , 0).endVertex();
 		// }
-		// GL11.glEnd();
-        // GL11.glEnable(GL11.GL_TEXTURE_2D);
-        // GL11.glDisable(GL11.GL_BLEND);
-	
-		// // tessellator.draw();
-		// // GlStateManager.enableTexture2D();
-		// // GlStateManager.disableBlend();
+		
+		// // for (int i = 90; i <= 180; i += 5) {
+		// // 	double angle = i * Math.PI / 180;
+		// // 	GL11.glVertex2d(right - radius + radius * Math.cos(angle), top + radius + radius * Math.sin(angle));
+		// // }
+		// // for (int i = 180; i <= 270; i += 5) {
+		// // 	double angle = i * Math.PI / 180;
+		// // 	GL11.glVertex2d(right - radius + radius * Math.cos(angle), bottom - radius + radius * Math.sin(angle));
+		// // }
+		// // for (int i = 270; i <= 360; i += 5) {
+		// // 	double angle = i * Math.PI / 180;
+		// // 	GL11.glVertex2d(left + radius + radius * Math.cos(angle), bottom - radius + radius * Math.sin(angle));
+		// // }
+		// tessellator.draw();
+		// // GL11.glEnd();
+		// GlStateManager.enableTexture2D();
+		// GlStateManager.disableBlend();
 	}
 
 	public void setPosition(int x, int y) {
@@ -307,5 +274,7 @@ public class NotificationWindow {
 		this.topS = y - height;
 
 		this.max_width = x;
+		//TODO: cache to avoid calling every time
+		this.roundedRectangle.setPosition(new Position(leftS, topS, leftS + width, topS + height));
 	}
 }
