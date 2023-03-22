@@ -34,7 +34,7 @@ public class ShowNotification extends AbstractCommand {
         for (Level lvl : Level.values()) {
             if (lvl.toString().toLowerCase().equals(args[0].toLowerCase())) {
                 tell(new MessageBuilder("No notification of type " + lvl.toString() + " sent."));
-                NotificationManager.getInstance().addNotification(new Notification(lvl, finalStr, 200));
+                NotificationManager.getInstance().addNotification(new Notification(lvl, finalStr, 200000));
                 return;
             }
         }

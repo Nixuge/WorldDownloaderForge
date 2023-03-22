@@ -60,6 +60,7 @@ public class RoundedRectangle extends Shape {
             rectangle.draw(xOffset);
         }
     }
+    
     @Override
     public void drawToggleAttribs(int xOffset) {
         GlStateManager.pushAttrib();
