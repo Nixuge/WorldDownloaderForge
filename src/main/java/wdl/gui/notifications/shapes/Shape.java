@@ -48,6 +48,12 @@ public abstract class Shape {
         blue = (float)(color & 255) / 255.0F;
     }
 
+    // Note:
+    // Due to how the code is structured here, it is required that setPosition is called
+    // at least ONCE with a non-null position before drawing, otherwise a crash would happen.
+    // This always happens here because of how NotificationWindow.setPosition(...) and
+    // NotificationManager.draw(...) work, but need to keep that in mind if reusing it
+    // somewhere else.
     public void setPosition(Position position) {
         if (position == null)
             return;

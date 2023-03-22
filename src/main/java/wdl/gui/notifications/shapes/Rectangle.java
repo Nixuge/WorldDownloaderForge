@@ -7,6 +7,9 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import wdl.gui.notifications.shapes.data.Position;
 
 public class Rectangle extends Shape {
+    public Rectangle(int color) {
+        super(color);
+    }
 
     public Rectangle(Position position, int color) {
         super(color);
@@ -16,7 +19,7 @@ public class Rectangle extends Shape {
     @Override
     public void draw(int xOffset) {
         GlStateManager.color(red, green, blue, alpha);
-        
+
         worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 
         worldrenderer.pos(position.left() - xOffset, position.bottom(), 0).endVertex();

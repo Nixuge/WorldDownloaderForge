@@ -15,6 +15,10 @@ public class RoundedCorner extends Shape {
     private int radius;
     private CornerType cornerType;
 
+    public RoundedCorner(CornerType cornerType, int radius, int color) {
+        this(cornerType, null, radius, color);
+    }
+
     public RoundedCorner(CornerType cornerType, Position position, int radius, int color) {
         super(color);
         this.cornerType = cornerType;
@@ -30,7 +34,7 @@ public class RoundedCorner extends Shape {
         // float tempA = alpha / 2;
         // System.out.println("alpha:" + alpha);
         GlStateManager.color(red, green, blue, alpha);
-        
+
         worldrenderer.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION);
         
         int posLeft = position.left() - xOffset;

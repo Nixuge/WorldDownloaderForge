@@ -13,7 +13,6 @@ import wdl.gui.notifications.shapes.data.Position;
 
 // @SuppressWarnings("unused")
 public class RoundedRectangle extends Shape {
-    // private final RoundedCornerType[] enabledCorners;
     private RoundedCorner[] corners;
     private Rectangle mainRectangle;
     private Rectangle[] sideRectangles = new Rectangle[2];
@@ -24,23 +23,25 @@ public class RoundedRectangle extends Shape {
     public RoundedRectangle(Position position, int radius, int color, CornerType[] enabledCorners) {
         super();
         this.radius = radius;
-        // this.enabledCorners = enabledCorners;
-        // Create corners
+
+        // Create rounded corners
         this.corners = new RoundedCorner[enabledCorners.length];
         for(int i = 0; i < enabledCorners.length; i++) {
             corners[i] = new RoundedCorner(enabledCorners[i], null, radius, color);
         }
-        
-        // Create rectangle spanning from top to bottom in the middle
-        mainRectangle = new Rectangle(null, color);
-        // Create side rectangles
-        sideRectangles[0] = new Rectangle(null, color);
-        sideRectangles[1] = new Rectangle(null, color);
-        // Create map w corner rectangles
+        // Create map w square corners
         for (CornerType cornerType : CornerType.getOtherCorners(enabledCorners)) {
-            straightCorners.put(cornerType, new Rectangle(null, color));
+            straightCorners.put(cornerType, new Rectangle(color));
         }
 
+        // Create rectangle spanning from top to bottom in the middle
+        mainRectangle = new Rectangle(color);
+
+        // Create side rectangles
+        sideRectangles[0] = new Rectangle(color);
+        sideRectangles[1] = new Rectangle(color);
+
+        // Finally, set the position of the rect
         setPosition(position);
     }
 
