@@ -27,26 +27,33 @@ public class RoundedCorner extends Shape {
     // TODO: fix function apparently drawing twice?
     @Override
     public void draw(int xOffset) {
-        
-        // GlStateManager.enableBlend();
+        //TODO: run all of those BEFORE drawing everything
+        // so it doesn't need to be called every time
+        GlStateManager.pushAttrib();
+        GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
-        // GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        // GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+
         // float tempA = alpha / 2;
         // System.out.println("alpha:" + alpha);
         GlStateManager.color(red, green, blue, alpha);
-
+        
         worldrenderer.begin(GL11.GL_POLYGON, DefaultVertexFormats.POSITION);
-    
-
+        
         int posLeft = position.left() - xOffset;
         int posTop = position.top();
+        // worldrenderer.pos(posLeft + radius, posTop + radius, 0).endVertex();
+        // worldrenderer.pos(posLeft + (radius/2), posTop, 0).endVertex();
+        // worldrenderer.pos(posLeft, posTop + (radius/2), 0).endVertex();
+        // top ; left+ (radius/2)
+        // top + (radius/2) ; left
+        // top + radius ; left + radius;
 
         for (int i = cornerType.getStartingDegree(); i <= cornerType.getEndingDegree() ; i += ROUNDING_STEP) {
             double angleRad = i * Math.PI / 180.0;
             double xHere = posLeft + radius * Math.cos(angleRad);
             double yHere = posTop + radius * Math.sin(angleRad);
-            
             worldrenderer.pos(xHere, yHere, 0).endVertex();
             // if (i % 2 == 0) {
                 worldrenderer.pos(posLeft, posTop , 0).endVertex();
@@ -59,8 +66,11 @@ public class RoundedCorner extends Shape {
         GL11.glEnable(GL11.GL_POLYGON_SMOOTH); 
         tessellator.draw();
         GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
+
+        // See todo on top of function
         GlStateManager.enableTexture2D();
-        // GlStateManager.disableBlend();
+        GlStateManager.disableBlend();
+        GlStateManager.popAttrib();
     }
 
     @Override

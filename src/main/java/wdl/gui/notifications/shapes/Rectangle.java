@@ -15,6 +15,9 @@ public class Rectangle extends Shape {
 
     @Override
     public void draw(int xOffset) {
+        //TODO: run all of those BEFORE drawing everything
+        // so it doesn't need to be called every time
+        GlStateManager.pushAttrib();
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
@@ -29,8 +32,10 @@ public class Rectangle extends Shape {
 
         tessellator.draw();
 
+        // see todo at start of function
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+        GlStateManager.popAttrib();
     }
 
     @Override
