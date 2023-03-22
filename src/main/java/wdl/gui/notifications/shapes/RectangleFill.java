@@ -1,18 +1,18 @@
-package wdl.gui.notifications.drawing.shapes;
+package wdl.gui.notifications.shapes;
 
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import wdl.gui.notifications.drawing.base.Shape;
-import wdl.gui.notifications.drawing.data.Position;
+import wdl.gui.notifications.shapes.base.Shape;
+import wdl.gui.notifications.shapes.data.Position;
 
-public class Rectangle extends Shape {
-    public Rectangle(int color) {
+public class RectangleFill extends Shape {
+    public RectangleFill(int color) {
         super(color);
     }
 
-    public Rectangle(Position position, int color) {
+    public RectangleFill(Position position, int color) {
         this(color);
         setPosition(position);
     }
@@ -47,10 +47,4 @@ public class Rectangle extends Shape {
         // GlStateManager.popAttrib();
         // GlStateManager.popMatrix();
     }
-
-    @Override
-    public void removeShape() {
-    }
-
-
 }

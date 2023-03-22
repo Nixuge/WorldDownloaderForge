@@ -1,4 +1,4 @@
-package wdl.gui.notifications.drawing.shapes;
+package wdl.gui.notifications.shapes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,40 +7,40 @@ import java.util.Map.Entry;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.GlStateManager;
-import wdl.gui.notifications.drawing.base.Shape;
-import wdl.gui.notifications.drawing.data.CornerType;
-import wdl.gui.notifications.drawing.data.Position;
+import wdl.gui.notifications.shapes.base.Shape;
+import wdl.gui.notifications.shapes.data.CornerType;
+import wdl.gui.notifications.shapes.data.Position;
 
 // While this shape is technically rounded, it's just a collection
 // of multiple subshapes, so no need ot extend ShapeRounded.
-public class RoundedRectangle extends Shape {
-    private RoundedCorner[] corners;
-    private Rectangle mainRectangle;
-    private Rectangle[] sideRectangles = new Rectangle[2];
-    private Map<CornerType, Rectangle> straightCorners = new HashMap<>();
+public class RoundedRectangleFill extends Shape {
+    private RoundedCornerFill[] corners;
+    private RectangleFill mainRectangle;
+    private RectangleFill[] sideRectangles = new RectangleFill[2];
+    private Map<CornerType, RectangleFill> straightCorners = new HashMap<>();
     // private Rectangle[] straightCorners;
     private int radius;
 
-    public RoundedRectangle(Position position, int radius, int color, CornerType[] enabledCorners) {
+    public RoundedRectangleFill(Position position, int radius, int color, CornerType[] enabledCorners) {
         super();
         this.radius = radius;
 
         // Create rounded corners
-        this.corners = new RoundedCorner[enabledCorners.length];
+        this.corners = new RoundedCornerFill[enabledCorners.length];
         for(int i = 0; i < enabledCorners.length; i++) {
-            corners[i] = new RoundedCorner(enabledCorners[i], null, radius, color);
+            corners[i] = new RoundedCornerFill(enabledCorners[i], null, radius, color);
         }
         // Create map w square corners
         for (CornerType cornerType : CornerType.getOtherCorners(enabledCorners)) {
-            straightCorners.put(cornerType, new Rectangle(color));
+            straightCorners.put(cornerType, new RectangleFill(color));
         }
 
         // Create rectangle spanning from top to bottom in the middle
-        mainRectangle = new Rectangle(color);
+        mainRectangle = new RectangleFill(color);
 
         // Create side rectangles
-        sideRectangles[0] = new Rectangle(color);
-        sideRectangles[1] = new Rectangle(color);
+        sideRectangles[0] = new RectangleFill(color);
+        sideRectangles[1] = new RectangleFill(color);
 
         // Finally, set the position of the rect
         setPosition(position);
@@ -59,7 +59,7 @@ public class RoundedRectangle extends Shape {
         sideRectangles[0].draw(xOffset);
         sideRectangles[1].draw(xOffset);
 
-        for (Rectangle rectangle : straightCorners.values()) {
+        for (RectangleFill rectangle : straightCorners.values()) {
             rectangle.draw(xOffset);
         }
     }
@@ -82,7 +82,7 @@ public class RoundedRectangle extends Shape {
         sideRectangles[0].draw(xOffset);
         sideRectangles[1].draw(xOffset);
 
-        for (Rectangle rectangle : straightCorners.values()) {
+        for (RectangleFill rectangle : straightCorners.values()) {
             rectangle.draw(xOffset);
         }
 
@@ -104,7 +104,7 @@ public class RoundedRectangle extends Shape {
 
         // Update corners positions
         for(int i = 0; i < corners.length; i++) {
-            RoundedCorner currentCorner = corners[i];
+            RoundedCornerFill currentCorner = corners[i];
             currentCorner.setPosition(currentCorner.getCornerType().getFixedPositionRounded(position, radius));
         }
 
@@ -114,13 +114,9 @@ public class RoundedRectangle extends Shape {
         sideRectangles[0].setPosition(new Position(position.left(), position.top() + radius, position.left() + radius, position.bottom() - radius));
         sideRectangles[1].setPosition(new Position(position.right() - radius, position.top() + radius, position.right(), position.bottom() - radius));
         // Update straight corners
-        for (Entry<CornerType, Rectangle> entry : straightCorners.entrySet()) {
+        for (Entry<CornerType, RectangleFill> entry : straightCorners.entrySet()) {
             entry.getValue().setPosition(
                 entry.getKey().getRectanglePosition(position, radius));
         }
-    }
-
-    @Override
-    public void removeShape() {
     }
 }

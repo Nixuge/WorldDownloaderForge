@@ -8,9 +8,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import wdl.gui.notifications.drawing.data.CornerType;
-import wdl.gui.notifications.drawing.data.Position;
-import wdl.gui.notifications.drawing.shapes.RoundedRectangle;
+import wdl.gui.notifications.shapes.RoundedCornerBorder;
+import wdl.gui.notifications.shapes.RoundedRectangleFill;
+import wdl.gui.notifications.shapes.data.CornerType;
+import wdl.gui.notifications.shapes.data.Position;
 
 public class NotificationWindow {
     @Getter
@@ -46,7 +47,8 @@ public class NotificationWindow {
     private Tessellator tessellator = Tessellator.getInstance();
     private WorldRenderer worldrenderer = tessellator.getWorldRenderer();
 
-    private RoundedRectangle roundedRectangle;
+    private RoundedRectangleFill roundedRectangle;
+    private RoundedCornerBorder borderTest;
 
     public NotificationWindow(Notification notification) {
         this.notification = notification;
@@ -66,12 +68,13 @@ public class NotificationWindow {
 
         this.height = 32;
 
-        this.roundedRectangle = new RoundedRectangle(
+        this.roundedRectangle = new RoundedRectangleFill(
             null,
-            3,
+            5,
             0x33111111, 
             new CornerType[] {CornerType.TOP_LEFT, CornerType.BOTTOM_LEFT}
         );
+        this.borderTest = new RoundedCornerBorder(CornerType.TOP_LEFT, 5, 0xFFFFFFFF);
 
     }
 
@@ -151,7 +154,10 @@ public class NotificationWindow {
             return;
         
         // drawRect(left, top, right, bottom);
-        roundedRectangle.drawToggleAttribs(getXoffset(partialTicks));
+        int xOffset = getXoffset(partialTicks);
+
+        roundedRectangle.drawToggleAttribs(xOffset);
+        borderTest.drawToggleAttribs(xOffset);
         // drawRect(left, top, right, bottom);
         // drawRounded(left, top, right, bottom);
 
@@ -226,5 +232,6 @@ public class NotificationWindow {
 
         // this.max_width = x;
         this.roundedRectangle.setPosition(new Position(leftS, topS, leftS + width, topS + height));
+        this.borderTest.setPosition(new Position(leftS + 5, topS + 5, 0, 0));
     }
 }

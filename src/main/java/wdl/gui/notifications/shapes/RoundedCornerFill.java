@@ -1,24 +1,24 @@
-package wdl.gui.notifications.drawing.shapes;
+package wdl.gui.notifications.shapes;
 
 import org.lwjgl.opengl.GL11;
 
 import lombok.Getter;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import wdl.gui.notifications.drawing.base.ShapeRounded;
-import wdl.gui.notifications.drawing.data.CornerType;
-import wdl.gui.notifications.drawing.data.Position;
+import wdl.gui.notifications.shapes.base.ShapeRounded;
+import wdl.gui.notifications.shapes.data.CornerType;
+import wdl.gui.notifications.shapes.data.Position;
 
 @Getter
-public class RoundedCorner extends ShapeRounded {
+public class RoundedCornerFill extends ShapeRounded {
     private CornerType cornerType;
 
-    public RoundedCorner(CornerType cornerType, int radius, int color) {
+    public RoundedCornerFill(CornerType cornerType, int radius, int color) {
         super(color, radius);
         this.cornerType = cornerType;
     }
 
-    public RoundedCorner(CornerType cornerType, Position position, int radius, int color) {
+    public RoundedCornerFill(CornerType cornerType, Position position, int radius, int color) {
         this(cornerType, radius, color);
         setPosition(position);
     }
@@ -73,10 +73,5 @@ public class RoundedCorner extends ShapeRounded {
         GlStateManager.enableCull();
         GlStateManager.disableBlend();
         // GlStateManager.popAttrib();
-    }
-
-    @Override
-    public void removeShape() {
-        // TODO Auto-generated method stub
     }
 }
