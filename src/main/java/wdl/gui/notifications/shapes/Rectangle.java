@@ -15,22 +15,22 @@ public class Rectangle extends Shape {
 
     @Override
     public void draw(int xOffset) {
-		GlStateManager.enableBlend();
-		GlStateManager.disableTexture2D();
-		GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-		GlStateManager.color(red, green, blue, alpha);
-		
-		worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
+        GlStateManager.color(red, green, blue, alpha);
+        
+        worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 
-		worldrenderer.pos(position.left() - xOffset, position.bottom(), 0).endVertex();
-		worldrenderer.pos(position.right() - xOffset, position.bottom(), 0).endVertex();
-		worldrenderer.pos(position.right() - xOffset, position.top(), 0).endVertex();
-		worldrenderer.pos(position.left() - xOffset, position.top(), 0).endVertex();
+        worldrenderer.pos(position.left() - xOffset, position.bottom(), 0).endVertex();
+        worldrenderer.pos(position.right() - xOffset, position.bottom(), 0).endVertex();
+        worldrenderer.pos(position.right() - xOffset, position.top(), 0).endVertex();
+        worldrenderer.pos(position.left() - xOffset, position.top(), 0).endVertex();
 
-		tessellator.draw();
+        tessellator.draw();
 
-		GlStateManager.enableTexture2D();
-		GlStateManager.disableBlend();
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
     }
 
     @Override

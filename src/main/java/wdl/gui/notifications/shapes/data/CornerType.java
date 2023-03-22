@@ -14,20 +14,20 @@ enum Offset {
 
 @Getter
 public enum CornerType {
-	TOP_LEFT(180, Offset.NONE), 
-	TOP_RIGHT(270, Offset.X), 
-	BOTTOM_LEFT(90, Offset.Y), 
-	BOTTOM_RIGHT(0, Offset.X_Y);
-	
-	private final int startingDegree;
-	private final int endingDegree;
+    TOP_LEFT(180, Offset.NONE), 
+    TOP_RIGHT(270, Offset.X), 
+    BOTTOM_LEFT(90, Offset.Y), 
+    BOTTOM_RIGHT(0, Offset.X_Y);
+    
+    private final int startingDegree;
+    private final int endingDegree;
     private final Offset offset;
-	
-	CornerType(int startingDegree, Offset offset) {
-		this.startingDegree = startingDegree;
+    
+    CornerType(int startingDegree, Offset offset) {
+        this.startingDegree = startingDegree;
         this.endingDegree = startingDegree + 90;
         this.offset = offset;
-	}
+    }
 
     /**
      * @param position Position of the containing RoundedRectangle

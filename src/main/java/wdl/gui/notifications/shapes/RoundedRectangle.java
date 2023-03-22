@@ -61,6 +61,11 @@ public class RoundedRectangle extends Shape {
         if (position == null)
             return;
         
+        if (this.radius * 2 > position.right() - position.left())
+            System.out.println("2*radius is bigger than the whole rectangle width");
+        if (this.radius * 2 > position.top() - position.bottom())
+            System.out.println("2*radius is bigger than the whole rectangle height");
+
         this.position = position;
 
         // Update corners positions

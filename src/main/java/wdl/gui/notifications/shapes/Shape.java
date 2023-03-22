@@ -10,8 +10,8 @@ import wdl.gui.notifications.shapes.data.Position;
 
 @Setter
 public abstract class Shape {
-	protected static Tessellator tessellator = Tessellator.getInstance();
-	protected static WorldRenderer worldrenderer = tessellator.getWorldRenderer();
+    protected static Tessellator tessellator = Tessellator.getInstance();
+    protected static WorldRenderer worldrenderer = tessellator.getWorldRenderer();
 
     private static List<Shape> shapeInstances = new ArrayList<>();
 
