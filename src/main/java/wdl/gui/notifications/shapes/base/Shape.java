@@ -1,4 +1,4 @@
-package wdl.gui.notifications.shapes;
+package wdl.gui.notifications.shapes.base;
 
 import java.util.ArrayList;
 import java.util.List;

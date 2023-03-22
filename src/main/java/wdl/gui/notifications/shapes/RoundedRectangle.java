@@ -1,5 +1,6 @@
 package wdl.gui.notifications.shapes;
 
+import wdl.gui.notifications.shapes.base.Shape;
 import wdl.gui.notifications.shapes.data.CornerType;
 
 import java.util.HashMap;
@@ -11,7 +12,8 @@ import org.lwjgl.opengl.GL11;
 import net.minecraft.client.renderer.GlStateManager;
 import wdl.gui.notifications.shapes.data.Position;
 
-// @SuppressWarnings("unused")
+// While this shape is technically rounded, it's just a collection
+// of multiple subshapes, so no need ot extend ShapeRounded.
 public class RoundedRectangle extends Shape {
     private RoundedCorner[] corners;
     private Rectangle mainRectangle;
@@ -48,7 +50,7 @@ public class RoundedRectangle extends Shape {
     @Override
     public void draw(int xOffset) {
         for (int i = 0; i < corners.length; i++) {
-            corners[i].draw(xOffset);
+            corners[i].drawToggleAttribs(xOffset);
         }
 
         mainRectangle.draw(xOffset);
@@ -66,15 +68,18 @@ public class RoundedRectangle extends Shape {
         GlStateManager.pushAttrib();
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
-        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        GlStateManager.disableCull();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 1);
         
         draw(xOffset);
 
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
+        GlStateManager.enableCull();
         GlStateManager.popAttrib();
     }
 
+    @Override
     public void setPosition(Position position) {
         if (position == null)
             return;

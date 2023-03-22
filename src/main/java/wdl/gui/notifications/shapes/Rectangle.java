@@ -4,6 +4,7 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import wdl.gui.notifications.shapes.base.Shape;
 import wdl.gui.notifications.shapes.data.Position;
 
 public class Rectangle extends Shape {
@@ -12,7 +13,7 @@ public class Rectangle extends Shape {
     }
 
     public Rectangle(Position position, int color) {
-        super(color);
+        this(color);
         setPosition(position);
     }
 
@@ -29,18 +30,22 @@ public class Rectangle extends Shape {
 
         tessellator.draw();
     }
+
     @Override
     public void drawToggleAttribs(int xOffset) {
+        GlStateManager.pushMatrix();
         GlStateManager.pushAttrib();
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
-        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        // GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
         
         draw(xOffset);
 
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
         GlStateManager.popAttrib();
+        GlStateManager.popMatrix();
     }
 
     @Override

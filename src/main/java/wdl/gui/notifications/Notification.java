@@ -37,14 +37,14 @@ public class Notification {
      * - hover/click support
      * 
      * ========== Bug fixes to do ==========
-     * - Too much padding on the right of notifications
      * - Width can go over maxWidth
-     * - Rounded corners aren't transparent
+     * - Colors can flicker, "normal" mc GL11 behavior, just need to re check GlStateManager
+     *   calls & make sure everything gets enabled/disabled at the right time.
      * 
      * 
      * ========== Unsure TODOs ==========
-     * - Animation when notifications go up
-     * --> Can cause problems such as appearing one clipping
+     * - Animation when notifications go up (/down)
+     * --> Can cause problems such as appearing one clipping + unneccessary rn, will see later
      * 
      * (Not notification) LiquidBounce's TP script -> try w blink before, see if that works?
      */
