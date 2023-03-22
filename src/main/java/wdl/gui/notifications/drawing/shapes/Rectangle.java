@@ -1,11 +1,11 @@
-package wdl.gui.notifications.shapes;
+package wdl.gui.notifications.drawing.shapes;
 
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import wdl.gui.notifications.shapes.base.Shape;
-import wdl.gui.notifications.shapes.data.Position;
+import wdl.gui.notifications.drawing.base.Shape;
+import wdl.gui.notifications.drawing.data.Position;
 
 public class Rectangle extends Shape {
     public Rectangle(int color) {
@@ -33,8 +33,8 @@ public class Rectangle extends Shape {
 
     @Override
     public void drawToggleAttribs(int xOffset) {
-        GlStateManager.pushMatrix();
-        GlStateManager.pushAttrib();
+        // GlStateManager.pushMatrix();
+        // GlStateManager.pushAttrib();
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
@@ -44,8 +44,8 @@ public class Rectangle extends Shape {
 
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
-        GlStateManager.popAttrib();
-        GlStateManager.popMatrix();
+        // GlStateManager.popAttrib();
+        // GlStateManager.popMatrix();
     }
 
     @Override

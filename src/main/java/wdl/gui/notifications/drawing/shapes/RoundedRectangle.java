@@ -1,7 +1,4 @@
-package wdl.gui.notifications.shapes;
-
-import wdl.gui.notifications.shapes.base.Shape;
-import wdl.gui.notifications.shapes.data.CornerType;
+package wdl.gui.notifications.drawing.shapes;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -10,7 +7,9 @@ import java.util.Map.Entry;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.GlStateManager;
-import wdl.gui.notifications.shapes.data.Position;
+import wdl.gui.notifications.drawing.base.Shape;
+import wdl.gui.notifications.drawing.data.CornerType;
+import wdl.gui.notifications.drawing.data.Position;
 
 // While this shape is technically rounded, it's just a collection
 // of multiple subshapes, so no need ot extend ShapeRounded.
@@ -47,10 +46,12 @@ public class RoundedRectangle extends Shape {
         setPosition(position);
     }
 
+    //NOTE:
+    //THIS ISN'T WORKING AS OF NOW!
     @Override
     public void draw(int xOffset) {
         for (int i = 0; i < corners.length; i++) {
-            corners[i].drawToggleAttribs(xOffset);
+            corners[i].draw(xOffset);
         }
 
         mainRectangle.draw(xOffset);
@@ -65,18 +66,28 @@ public class RoundedRectangle extends Shape {
     
     @Override
     public void drawToggleAttribs(int xOffset) {
-        GlStateManager.pushAttrib();
         GlStateManager.enableBlend();
         GlStateManager.disableTexture2D();
         GlStateManager.disableCull();
-        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 1);
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+
+        for (int i = 0; i < corners.length; i++) {
+            corners[i].draw(xOffset);
+        }
         
-        draw(xOffset);
+        GlStateManager.enableCull();
+
+        mainRectangle.draw(xOffset);
+
+        sideRectangles[0].draw(xOffset);
+        sideRectangles[1].draw(xOffset);
+
+        for (Rectangle rectangle : straightCorners.values()) {
+            rectangle.draw(xOffset);
+        }
 
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
-        GlStateManager.enableCull();
-        GlStateManager.popAttrib();
     }
 
     @Override

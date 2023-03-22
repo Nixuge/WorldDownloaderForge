@@ -1,4 +1,4 @@
-package wdl.gui.notifications.shapes.base;
+package wdl.gui.notifications.drawing.base;
 
 public abstract class ShapeRounded extends Shape {
     public ShapeRounded(int radius) {

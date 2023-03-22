@@ -1,4 +1,4 @@
-package wdl.gui.notifications.shapes.data;
+package wdl.gui.notifications.drawing.data;
 
 import java.util.ArrayList;
 import java.util.List;

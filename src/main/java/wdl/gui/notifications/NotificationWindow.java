@@ -8,9 +8,9 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import wdl.gui.notifications.shapes.RoundedRectangle;
-import wdl.gui.notifications.shapes.data.CornerType;
-import wdl.gui.notifications.shapes.data.Position;
+import wdl.gui.notifications.drawing.data.CornerType;
+import wdl.gui.notifications.drawing.data.Position;
+import wdl.gui.notifications.drawing.shapes.RoundedRectangle;
 
 public class NotificationWindow {
     @Getter

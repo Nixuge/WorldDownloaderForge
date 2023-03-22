@@ -1,4 +1,4 @@
-package wdl.gui.notifications.shapes.base;
+package wdl.gui.notifications.drawing.base;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -6,7 +6,7 @@ import java.util.List;
 import lombok.Setter;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
-import wdl.gui.notifications.shapes.data.Position;
+import wdl.gui.notifications.drawing.data.Position;
 
 @Setter
 public abstract class Shape {
