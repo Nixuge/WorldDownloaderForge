@@ -6,6 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
 
+import org.lwjgl.opengl.GL11;
+
+import net.minecraft.client.renderer.GlStateManager;
 import wdl.gui.notifications.shapes.data.Position;
 
 // @SuppressWarnings("unused")
@@ -55,6 +58,19 @@ public class RoundedRectangle extends Shape {
         for (Rectangle rectangle : straightCorners.values()) {
             rectangle.draw(xOffset);
         }
+    }
+    @Override
+    public void drawToggleAttribs(int xOffset) {
+        GlStateManager.pushAttrib();
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        
+        draw(xOffset);
+
+        GlStateManager.enableTexture2D();
+        GlStateManager.disableBlend();
+        GlStateManager.popAttrib();
     }
 
     public void setPosition(Position position) {

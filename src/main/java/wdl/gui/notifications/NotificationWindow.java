@@ -15,7 +15,7 @@ import wdl.gui.notifications.shapes.data.Position;
 public class NotificationWindow {
     @Getter
     @Setter
-    private static int xOffsetMaxTime = 60;
+    private static int xOffsetMaxTime = 80;
 
     // static positions (no offset, just base ones)
     @Getter
@@ -104,7 +104,7 @@ public class NotificationWindow {
         float timePercent;
 
         // if notification maxtime is more than ~100, the slide in & out animations look
-        // weird, & if more than ~60, isn't fast enough (for me at least)
+        // weird, & if more than ~80, isn't fast enough (for me at least)
         // this if/else just makes it so that it's normalized to xOffsetMaxTime if more than xOffsetMaxTime
         if (notification.getMaxTime() > xOffsetMaxTime) {
             timePercent = (time / xOffsetMaxTime);
@@ -151,7 +151,7 @@ public class NotificationWindow {
             return;
         
         // drawRect(left, top, right, bottom);
-        roundedRectangle.draw(getXoffset(partialTicks));
+        roundedRectangle.drawToggleAttribs(getXoffset(partialTicks));
         // drawRect(left, top, right, bottom);
         // drawRounded(left, top, right, bottom);
 

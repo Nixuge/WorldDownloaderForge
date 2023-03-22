@@ -27,14 +27,6 @@ public class RoundedCorner extends Shape {
     // TODO: fix function apparently drawing twice?
     @Override
     public void draw(int xOffset) {
-        //TODO: run all of those BEFORE drawing everything
-        // so it doesn't need to be called every time
-        GlStateManager.pushAttrib();
-        GlStateManager.enableBlend();
-        GlStateManager.disableTexture2D();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        // GlStateManager.tryBlendFuncSeparate(770, 771, 1, 0);
-
         // float tempA = alpha / 2;
         // System.out.println("alpha:" + alpha);
         GlStateManager.color(red, green, blue, alpha);
@@ -59,6 +51,7 @@ public class RoundedCorner extends Shape {
                 worldrenderer.pos(posLeft, posTop , 0).endVertex();
             // }
         }
+        // worldrenderer.pos(posLeft + radius, posTop + radius, 0).endVertex();
 
         // Can't see any way to enable that without using 
         // GL11 directly unfortunately
@@ -66,8 +59,17 @@ public class RoundedCorner extends Shape {
         GL11.glEnable(GL11.GL_POLYGON_SMOOTH); 
         tessellator.draw();
         GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
+    }
+    @Override
+    public void drawToggleAttribs(int xOffset) {
+        GlStateManager.pushAttrib();
+        GlStateManager.enableBlend();
+        GlStateManager.disableTexture2D();
+        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        // GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 0);
+        
+        draw(xOffset);
 
-        // See todo on top of function
         GlStateManager.enableTexture2D();
         GlStateManager.disableBlend();
         GlStateManager.popAttrib();

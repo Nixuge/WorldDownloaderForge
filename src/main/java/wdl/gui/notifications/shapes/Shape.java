@@ -54,6 +54,18 @@ public abstract class Shape {
         this.position = position;
     }
     
+    /**
+     * Draw the element on the screen, without toggling on/off GlStateManager attribs.
+     * Use only if you have another function calling those toggles, otherwise use drawToggleAttribs(...)
+     * 
+     * @param xOffset x position of the shape will be reduced by xOffset
+     */
     public abstract void draw(int xOffset);
+    /**
+     * Wrapper for draw(...) that toggles on & off GlStateManager attribs.
+     * 
+     * @param xOffset x position of the shape will be reduced by xOffset
+     */
+    public abstract void drawToggleAttribs(int xOffset);
     public abstract void removeShape();
 }
