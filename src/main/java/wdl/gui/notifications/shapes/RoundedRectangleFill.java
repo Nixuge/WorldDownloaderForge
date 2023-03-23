@@ -105,6 +105,10 @@ public class RoundedRectangleFill extends Shape {
         // Update corners positions
         for(int i = 0; i < corners.length; i++) {
             RoundedCornerFill currentCorner = corners[i];
+            System.out.println(currentCorner);
+            System.out.println(currentCorner.getCornerType());
+            System.out.println(position);
+            System.out.println(radius);
             currentCorner.setPosition(currentCorner.getCornerType().getFixedPositionRounded(position, radius));
         }
 
