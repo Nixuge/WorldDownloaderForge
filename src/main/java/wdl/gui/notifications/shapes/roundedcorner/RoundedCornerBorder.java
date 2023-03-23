@@ -1,4 +1,4 @@
-package wdl.gui.notifications.shapes;
+package wdl.gui.notifications.shapes.roundedcorner;
 
 import org.lwjgl.opengl.GL11;
 
@@ -13,13 +13,9 @@ import wdl.gui.notifications.shapes.data.Position;
 public class RoundedCornerBorder extends ShapeRounded {
     private CornerType cornerType;
 
-    public RoundedCornerBorder(CornerType cornerType, int radius, int color) {
+    public RoundedCornerBorder(CornerType cornerType, Position position, int radius, int color) {
         super(color, radius);
         this.cornerType = cornerType;
-    }
-
-    public RoundedCornerBorder(CornerType cornerType, Position position, int radius, int color) {
-        this(cornerType, radius, color);
         setPosition(position);
     }
     

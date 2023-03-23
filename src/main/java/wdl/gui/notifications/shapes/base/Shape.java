@@ -1,8 +1,5 @@
 package wdl.gui.notifications.shapes.base;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import lombok.Setter;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
@@ -13,8 +10,6 @@ public abstract class Shape {
     protected static Tessellator tessellator = Tessellator.getInstance();
     protected static WorldRenderer worldrenderer = tessellator.getWorldRenderer();
 
-    private static List<Shape> shapeInstances = new ArrayList<>();
-
     protected int xOffset;
     protected Position position;
 
@@ -24,21 +19,16 @@ public abstract class Shape {
     protected float green;
     protected float blue;
 
-
     public Shape(Position position, int color) {
-        this();
         setPosition(position);
         setColor(color);
     }
 
     public Shape(int color) {
-        this();
         setColor(color);
     }
 
-    public Shape(){
-        shapeInstances.add(this);
-    }
+    public Shape(){}
 
     public void setColor(int color) {
         this.rawColor = color;
@@ -62,13 +52,14 @@ public abstract class Shape {
     
     /**
      * Draw the element on the screen, without toggling on/off GlStateManager attribs.
-     * Use only if you have another function calling those toggles, otherwise use drawToggleAttribs(...)
+     * Use only if you have another function calling those toggles, otherwise use drawToggleAttribs(...).
+     * Meant to be overwritten only in the final (filled/border/...) shape.
      * 
      * @param xOffset x position of the shape will be reduced by xOffset
      */
     public abstract void draw(int xOffset);
     /**
-     * Wrapper for draw(...) that toggles on & off GlStateManager attribs.
+     * Wrapper for draw(...) that toggles on & off GlStateManager/GL11 attribs.
      * 
      * @param xOffset x position of the shape will be reduced by xOffset
      */

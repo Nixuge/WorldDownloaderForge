@@ -1,25 +1,22 @@
-package wdl.gui.notifications.shapes;
+package wdl.gui.notifications.shapes.roundedcorner;
 
 import org.lwjgl.opengl.GL11;
 
 import lombok.Getter;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import wdl.gui.notifications.shapes.base.ShapeNoDraw;
 import wdl.gui.notifications.shapes.base.ShapeRounded;
 import wdl.gui.notifications.shapes.data.CornerType;
 import wdl.gui.notifications.shapes.data.Position;
 
 @Getter
-public class RoundedCornerFill extends ShapeRounded {
-    private CornerType cornerType;
+public class RoundedCornerShape extends ShapeRounded implements ShapeNoDraw {
+    protected CornerType cornerType;
 
-    public RoundedCornerFill(CornerType cornerType, int radius, int color) {
+    public RoundedCornerShape(CornerType cornerType, Position position, int radius, int color) {
         super(color, radius);
         this.cornerType = cornerType;
-    }
-
-    public RoundedCornerFill(CornerType cornerType, Position position, int radius, int color) {
-        this(cornerType, radius, color);
         setPosition(position);
     }
     
@@ -58,7 +55,22 @@ public class RoundedCornerFill extends ShapeRounded {
 
     @Override
     public void drawToggleAttribs(int xOffset) {
+        toggleOnAttribs();
         
+        draw(xOffset);
+
+        toggleOffAttribs();
+    }
+
+    @Override
+    public void drawPositions(int xOffset) {
+        for (double[] position : this.positions) {
+            worldrenderer.pos(position[0] - xOffset, position[1] , 0).endVertex();
+        }
+    }
+
+    @Override
+    public void toggleOnAttribs() {
         // GlStateManager.pushAttrib();
         GlStateManager.enableBlend();
         // GlStateManager.color(red, green, blue, alpha);
@@ -66,9 +78,10 @@ public class RoundedCornerFill extends ShapeRounded {
         GlStateManager.disableCull();
         GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
         // GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 1);
-        
-        draw(xOffset);
+    }
 
+    @Override
+    public void toggleOffAttribs() {
         GlStateManager.enableTexture2D();
         GlStateManager.enableCull();
         GlStateManager.disableBlend();

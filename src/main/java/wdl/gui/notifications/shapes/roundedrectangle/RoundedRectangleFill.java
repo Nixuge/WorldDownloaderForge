@@ -1,4 +1,4 @@
-package wdl.gui.notifications.shapes;
+package wdl.gui.notifications.shapes.roundedrectangle;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -7,13 +7,13 @@ import java.util.Map.Entry;
 import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.GlStateManager;
-import wdl.gui.notifications.shapes.base.Shape;
+import wdl.gui.notifications.shapes.base.ShapeContainer;
 import wdl.gui.notifications.shapes.data.CornerType;
 import wdl.gui.notifications.shapes.data.Position;
+import wdl.gui.notifications.shapes.rectangle.RectangleFill;
+import wdl.gui.notifications.shapes.roundedcorner.RoundedCornerFill;
 
-// While this shape is technically rounded, it's just a collection
-// of multiple subshapes, so no need ot extend ShapeRounded.
-public class RoundedRectangleFill extends Shape {
+public class RoundedRectangleFill extends ShapeContainer {
     private RoundedCornerFill[] corners;
     private RectangleFill mainRectangle;
     private RectangleFill[] sideRectangles = new RectangleFill[2];
@@ -32,15 +32,15 @@ public class RoundedRectangleFill extends Shape {
         }
         // Create map w square corners
         for (CornerType cornerType : CornerType.getOtherCorners(enabledCorners)) {
-            straightCorners.put(cornerType, new RectangleFill(color));
+            straightCorners.put(cornerType, new RectangleFill(null, color));
         }
 
         // Create rectangle spanning from top to bottom in the middle
-        mainRectangle = new RectangleFill(color);
+        mainRectangle = new RectangleFill(null, color);
 
         // Create side rectangles
-        sideRectangles[0] = new RectangleFill(color);
-        sideRectangles[1] = new RectangleFill(color);
+        sideRectangles[0] = new RectangleFill(null, color);
+        sideRectangles[1] = new RectangleFill(null, color);
 
         // Finally, set the position of the rect
         setPosition(position);
