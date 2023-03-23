@@ -18,7 +18,7 @@ public class RoundedRectangleFill extends ShapeContainer {
     private RectangleFill mainRectangle;
     private RectangleFill[] sideRectangles = new RectangleFill[2];
     private Map<CornerType, RectangleFill> straightCorners = new HashMap<>();
-    // private Rectangle[] straightCorners;
+
     private int radius;
 
     public RoundedRectangleFill(Position position, int radius, int color, CornerType[] enabledCorners) {

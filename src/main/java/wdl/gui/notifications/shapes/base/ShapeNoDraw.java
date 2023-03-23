@@ -8,18 +8,18 @@ public interface ShapeNoDraw {
      * 
      * @param xOffset 
      */
-    public void drawPositions(int xOffset);
+    // public void drawPositions(int xOffset);
 
     /**
-     * Function to be overriden only in "xShape" classes, to be called to
-     * toggle on the GlStateManager/GL11 attributes.
+     * Function to be overriden only in "xShape" classes or classes without a Shape subclass, 
+     * to be called to toggle on the GlStateManager/GL11 attributes.
      * Use toggleOffAttribs() to revert
      */
     public void toggleOnAttribs();
 
     /**
-     * Function to be overriden only in "xShape" classes, to be called to
-     * toggle on the GlStateManager/GL11 attributes.
+     * Function to be overriden only in "xShape" classes or classes without a Shape subclass, 
+     * to be called to toggle on the GlStateManager/GL11 attributes.
      * Use after toggleOnAttribs() 
      */
     public void toggleOffAttribs();

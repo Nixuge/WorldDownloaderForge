@@ -21,6 +21,9 @@ public class Notification {
     private int maxTime;
 
     /* =============== Tasklist - Notifications ===============
+     * Black hotbar when drawing (push/popattrib?)
+     * 
+     * 
      * - Borders
      * - Proper centered header & text under
      * - Split text at the right moment to avoid

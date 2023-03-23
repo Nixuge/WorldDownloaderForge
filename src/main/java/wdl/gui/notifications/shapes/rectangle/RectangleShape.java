@@ -8,14 +8,6 @@ import wdl.gui.notifications.shapes.base.ShapeNoDraw;
 
 public abstract class RectangleShape extends Shape implements ShapeNoDraw {
     @Override
-    public void drawPositions(int xOffset) {
-        worldrenderer.pos(position.left() - xOffset, position.bottom(), 0).endVertex();
-        worldrenderer.pos(position.right() - xOffset, position.bottom(), 0).endVertex();
-        worldrenderer.pos(position.right() - xOffset, position.top(), 0).endVertex();
-        worldrenderer.pos(position.left() - xOffset, position.top(), 0).endVertex();
-    }
-
-    @Override
     public void drawToggleAttribs(int xOffset) {
         toggleOnAttribs();
         

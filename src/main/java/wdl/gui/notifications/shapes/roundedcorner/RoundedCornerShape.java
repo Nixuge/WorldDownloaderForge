@@ -62,7 +62,7 @@ public class RoundedCornerShape extends ShapeRounded implements ShapeNoDraw {
         toggleOffAttribs();
     }
 
-    @Override
+    // @Override
     public void drawPositions(int xOffset) {
         for (double[] position : this.positions) {
             worldrenderer.pos(position[0] - xOffset, position[1] , 0).endVertex();

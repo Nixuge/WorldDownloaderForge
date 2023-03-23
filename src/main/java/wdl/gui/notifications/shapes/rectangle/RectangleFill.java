@@ -18,7 +18,10 @@ public class RectangleFill extends RectangleShape {
 
         worldrenderer.begin(GL11.GL_QUADS, DefaultVertexFormats.POSITION);
 
-        drawPositions(xOffset);
+        worldrenderer.pos(position.left() - xOffset, position.bottom(), 0).endVertex();
+        worldrenderer.pos(position.right() - xOffset, position.bottom(), 0).endVertex();
+        worldrenderer.pos(position.right() - xOffset, position.top(), 0).endVertex();
+        worldrenderer.pos(position.left() - xOffset, position.top(), 0).endVertex();
 
         tessellator.draw();
     }

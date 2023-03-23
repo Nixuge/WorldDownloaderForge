@@ -8,6 +8,7 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import wdl.gui.notifications.shapes.builders.RoundedCornerBuilder;
 import wdl.gui.notifications.shapes.data.CornerType;
 import wdl.gui.notifications.shapes.data.Position;
 import wdl.gui.notifications.shapes.roundedcorner.RoundedCornerBorder;
@@ -75,7 +76,13 @@ public class NotificationWindow {
             new CornerType[] {CornerType.TOP_LEFT, CornerType.BOTTOM_LEFT}
         );
         // this.borderTest = new 
-        this.borderTest = new RoundedCornerBorder(CornerType.TOP_LEFT, null, 5, 0xFFFFFFFF);
+        this.borderTest = new RoundedCornerBuilder()
+                .setCornerType(CornerType.TOP_LEFT)
+                .setColor(0xFFFFFFFF)
+                .setRadius(5)
+                // .setBorderWidth(3)
+                .buildBorder();
+        // this.borderTest = new RoundedCornerBorder(CornerType.TOP_LEFT, null, 5, 0xFFFFFFFF, 3);
 
     }
 
