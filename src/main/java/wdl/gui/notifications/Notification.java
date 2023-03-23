@@ -21,18 +21,6 @@ public class Notification {
     private int maxTime;
 
     /* =============== Tasklist - Notifications ===============
-     *        ============= Priority todos =============
-     * - Think more through how I want to structure the whole thing
-     *   (honestly prolly re structure the whole thing)
-     *   notes:
-     *   -> Shape's fill & border have similar codes to actually write the positions
-     *   -> All borders have a "lineWidth" additional parameter
-     *   --> Could make subclasses implement both the Shape and a "Border" class
-     * 
-     * - Fix rounded corners not drawing anymore because of the new structure
-     * 
-     * 
-     *         ============= Normal todos =============
      * - Borders
      * - Proper centered header & text under
      * - Split text at the right moment to avoid
@@ -48,13 +36,13 @@ public class Notification {
      *   & even header text when already shown
      * - hover/click support
      * 
-     *        ============= Bug fixes to do =============
+     * ========== Bug fixes to do ==========
      * - Width can go over maxWidth
      * - Colors can flicker, "normal" mc GL11 behavior, just need to re check GlStateManager
      *   calls & make sure everything gets enabled/disabled at the right time.
      * 
      * 
-     *          ============= Unsure TODOs =============
+     * ========== Unsure TODOs ==========
      * - Animation when notifications go up (/down)
      * --> Can cause problems such as appearing one clipping + unneccessary rn, will see later
      * 

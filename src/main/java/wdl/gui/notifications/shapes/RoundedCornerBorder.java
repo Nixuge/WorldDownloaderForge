@@ -5,14 +5,17 @@ import org.lwjgl.opengl.GL11;
 import lombok.Getter;
 import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import wdl.gui.notifications.shapes.base.ShapeRounded;
 import wdl.gui.notifications.shapes.data.CornerType;
 import wdl.gui.notifications.shapes.data.Position;
-import wdl.gui.notifications.shapes.raw.RoundedCornerShape;
 
 @Getter
-public class RoundedCornerBorder extends RoundedCornerShape {
+public class RoundedCornerBorder extends ShapeRounded {
+    private CornerType cornerType;
+
     public RoundedCornerBorder(CornerType cornerType, int radius, int color) {
-        super(cornerType, color, radius);
+        super(color, radius);
+        this.cornerType = cornerType;
     }
 
     public RoundedCornerBorder(CornerType cornerType, Position position, int radius, int color) {
