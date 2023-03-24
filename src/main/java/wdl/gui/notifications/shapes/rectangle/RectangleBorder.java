@@ -1,5 +1,6 @@
 package wdl.gui.notifications.shapes.rectangle;
 
+import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -13,20 +14,34 @@ import wdl.gui.notifications.shapes.data.Position;
 import wdl.gui.notifications.shapes.line.LineFill;
 
 public class RectangleBorder extends RectangleShape {
-    Map<BorderPosition, LineFill> lines;
+    private static Map<BorderPosition, Method> borderPosMethodMap;
+    static {
+        borderPosMethodMap = new HashMap<>();
+        borderPosMethodMap.put(BorderPosition.TOP, null);
+        borderPosMethodMap.put(BorderPosition.BOTTOM, null);
+        borderPosMethodMap.put(BorderPosition.LEFT, null);
+        borderPosMethodMap.put(BorderPosition.RIGHT, null);
+    }
+
+    private Map<BorderPosition, LineFill> borderLines;
+
+    // public void 
+
+
+    
     
     public RectangleBorder(Position position, int color, Map<BorderPosition, Float> enabledBorders) {
         setColor(color);
         setPosition(position);
 
-        this.lines = new HashMap<>();
+        this.borderLines = new HashMap<>();
         for (Entry<BorderPosition, Float> entry : enabledBorders.entrySet()) {
-            this.lines.put(entry.getKey(), new LineFill(null, entry.getValue()));
+            this.borderLines.put(entry.getKey(), new LineFill(null, entry.getValue()));
         }
     }
 
     public void calculateLinePositions() {
-        for (Entry<BorderPosition, LineFill> entry : lines.entrySet()) {
+        for (Entry<BorderPosition, LineFill> entry : borderLines.entrySet()) {
             // kinda ugly but idk of another way to do it for now
             LineFill line = entry.getValue();
             switch (entry.getKey()) {
@@ -54,7 +69,7 @@ public class RectangleBorder extends RectangleShape {
         GlStateManager.color(red, green, blue, alpha);
         worldrenderer.begin(GL11.GL_LINE_LOOP, DefaultVertexFormats.POSITION);
 
-        for (LineFill line : this.lines.values()) {
+        for (LineFill line : this.borderLines.values()) {
             line.draw(xOffset);
         }
 

@@ -55,11 +55,11 @@ public class RoundedCornerShape extends ShapeRounded implements ShapeNoDraw {
 
     @Override
     public void drawToggleAttribs(int xOffset) {
-        toggleOnAttribs();
+        // toggleOnAttribs();
         
-        draw(xOffset);
+        // draw(xOffset);
 
-        toggleOffAttribs();
+        // toggleOffAttribs();
     }
 
     // @Override
