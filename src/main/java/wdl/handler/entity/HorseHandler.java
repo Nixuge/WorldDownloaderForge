@@ -19,8 +19,8 @@ import net.minecraft.inventory.ContainerHorseInventory;
 import net.minecraft.inventory.Slot;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ChatComponentTranslation;
-import wdl.ReflectionUtils;
 import wdl.handler.HandlerException;
+import wdl.reflection.ReflectionUtils;
 
 public class HorseHandler extends EntityHandler<EntityHorse, ContainerHorseInventory> {
 	/**

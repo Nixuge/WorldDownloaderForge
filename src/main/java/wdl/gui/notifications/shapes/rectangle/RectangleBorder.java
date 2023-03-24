@@ -12,20 +12,23 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import wdl.gui.notifications.shapes.data.BorderPosition;
 import wdl.gui.notifications.shapes.data.Position;
 import wdl.gui.notifications.shapes.line.LineFill;
+import wdl.reflection.ReflectionUtils;
 
 public class RectangleBorder extends RectangleShape {
     private static Map<BorderPosition, Method> borderPosMethodMap;
     static {
         borderPosMethodMap = new HashMap<>();
-        borderPosMethodMap.put(BorderPosition.TOP, null);
-        borderPosMethodMap.put(BorderPosition.BOTTOM, null);
-        borderPosMethodMap.put(BorderPosition.LEFT, null);
-        borderPosMethodMap.put(BorderPosition.RIGHT, null);
+        borderPosMethodMap.put(BorderPosition.TOP, ReflectionUtils.getMethodFromNameAlone(RectangleBorder.class, "topBorder"));
+        borderPosMethodMap.put(BorderPosition.BOTTOM, ReflectionUtils.getMethodFromNameAlone(RectangleBorder.class, "bottomBorder"));
+        borderPosMethodMap.put(BorderPosition.LEFT, ReflectionUtils.getMethodFromNameAlone(RectangleBorder.class, "leftBorder"));
+        borderPosMethodMap.put(BorderPosition.RIGHT, ReflectionUtils.getMethodFromNameAlone(RectangleBorder.class, "rightBorder"));
     }
 
     private Map<BorderPosition, LineFill> borderLines;
 
-    // public void 
+    public void topBorder(Position position) {
+
+    }
 
 
     

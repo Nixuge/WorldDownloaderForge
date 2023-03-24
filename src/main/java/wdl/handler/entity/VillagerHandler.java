@@ -26,9 +26,9 @@ import net.minecraft.inventory.ContainerMerchant;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.village.MerchantRecipeList;
-import wdl.ReflectionUtils;
 import wdl.functions.HandlerFunctions;
 import wdl.handler.HandlerException;
+import wdl.reflection.ReflectionUtils;
 
 public class VillagerHandler extends EntityHandler<EntityVillager, ContainerMerchant> {
 	public VillagerHandler() {

@@ -22,8 +22,8 @@ import net.minecraft.util.BlockPos;
 import net.minecraft.util.IChatComponent;
 import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.IBlockAccess;
-import wdl.ReflectionUtils;
 import wdl.handler.HandlerException;
+import wdl.reflection.ReflectionUtils;
 
 public class BrewingStandHandler extends BlockHandler<TileEntityBrewingStand, ContainerBrewingStand> {
 	public BrewingStandHandler() {

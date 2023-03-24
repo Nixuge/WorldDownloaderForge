@@ -101,6 +101,7 @@ import wdl.gui.GuiWDLMultiworld;
 import wdl.gui.GuiWDLMultiworldSelect;
 import wdl.gui.GuiWDLOverwriteChanges;
 import wdl.gui.GuiWDLSaveProgress;
+import wdl.reflection.ReflectionUtils;
 import wdl.update.GithubInfoGrabber;
 
 /**

@@ -71,20 +71,15 @@ public class RoundedCornerShape extends ShapeRounded implements ShapeNoDraw {
 
     @Override
     public void toggleOnAttribs() {
-        // GlStateManager.pushAttrib();
-        GlStateManager.enableBlend();
-        // GlStateManager.color(red, green, blue, alpha);
-        GlStateManager.disableTexture2D();
-        GlStateManager.disableCull();
-        GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
-        // GlStateManager.tryBlendFuncSeparate(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA, 1, 1);
+        GlStateManager.pushAttrib();
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_CULL_FACE);
     }
 
     @Override
     public void toggleOffAttribs() {
-        GlStateManager.enableTexture2D();
-        GlStateManager.enableCull();
-        GlStateManager.disableBlend();
-        // GlStateManager.popAttrib();
+        GlStateManager.popAttrib();
     }
 }

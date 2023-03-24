@@ -66,19 +66,18 @@ public class RoundedRectangleFill extends ShapeContainer {
     
     @Override
     public void drawToggleAttribs(int xOffset) {
-        // GlStateManager.pushAttrib();
-        // GlStateManager.enableBlend();
-        // GlStateManager.disableTexture2D();
-        // GlStateManager.disableCull();
-        // GlStateManager.blendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GlStateManager.pushAttrib();
+        GL11.glEnable(GL11.GL_BLEND);
+        GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
+        GL11.glDisable(GL11.GL_TEXTURE_2D);
+        GL11.glDisable(GL11.GL_CULL_FACE);
+        
 
         for (int i = 0; i < corners.length; i++) {
             corners[i].draw(xOffset);
         }
-        
-        // GlStateManager.enableCull();
 
-        mainRectangle.drawToggleAttribs(xOffset);
+        mainRectangle.draw(xOffset);
 
         sideRectangles[0].draw(xOffset);
         sideRectangles[1].draw(xOffset);
@@ -87,9 +86,7 @@ public class RoundedRectangleFill extends ShapeContainer {
             rectangle.draw(xOffset);
         }
 
-        // GlStateManager.enableTexture2D();
-        // GlStateManager.disableBlend();
-        // GlStateManager.popAttrib();
+        GlStateManager.popAttrib();
     }
 
     @Override

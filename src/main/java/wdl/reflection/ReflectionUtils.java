@@ -11,9 +11,10 @@
  *
  * Do not redistribute (in modified or unmodified form) without prior permission.
  */
-package wdl;
+package wdl.reflection;
 
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import net.minecraft.client.gui.inventory.GuiContainerCreative;
@@ -135,8 +136,7 @@ public class ReflectionUtils {
 	 * @param value
 	 *            The value to set the field to.
 	 */
-	public static <T> void findAndSetPrivateField(Object object, Class<T> typeOfField,
-			T value) {
+	public static <T> void findAndSetPrivateField(Object object, Class<T> typeOfField, T value) {
 		Class<?> typeOfObject;
 
 		if (object instanceof Class) { // User asked for static field:
@@ -170,8 +170,7 @@ public class ReflectionUtils {
 	 *            The type of the field
 	 * @return The value of the field
 	 */
-	public static <T, K> T findAndGetPrivateField(K object, Class<K> typeOfObject,
-			Class<T> typeOfField) {
+	public static <T, K> T findAndGetPrivateField(K object, Class<K> typeOfObject, Class<T> typeOfField) {
 		try {
 			Field f = findField(typeOfObject, typeOfField);
 			return typeOfField.cast(f.get(object));
@@ -197,8 +196,7 @@ public class ReflectionUtils {
 	 * @param value
 	 *            The value to set the field to.
 	 */
-	public static <T, K> void findAndSetPrivateField(K object, Class<K> typeOfObject,
-			Class<T> typeOfField, T value) {
+	public static <T, K> void findAndSetPrivateField(K object, Class<K> typeOfObject, Class<T> typeOfField, T value) {
 		try {
 			Field f = findField(typeOfObject, typeOfField);
 			f.set(object, value);
@@ -220,6 +218,8 @@ public class ReflectionUtils {
 	 * with <code>InnerClasses</code> data, but older versions of Minecraft
 	 * (1.8, but not 1.8.9) do not contain this data.  If 1.8 is eventually supported,
 	 * this method will not work for it.
+	 * Smh, will just ignore this for now
+	 * TODO: still fix this for 1.8.9
 	 *
 	 * @param containerClass
 	 *            The class to check
@@ -236,44 +236,55 @@ public class ReflectionUtils {
 		}
 	}
 
-	// Old names, provided for extensions that may be using them
-	@Deprecated
-	public static Field stealField(Class<?> typeOfClass, Class<?> typeOfField) {
-		return findField(typeOfClass, typeOfField);
-	}
-	@Deprecated
-	public static <T> T stealAndGetField(Object object, Class<T> typeOfField) {
-		return findAndGetPrivateField(object, typeOfField);
-	}
-	@SuppressWarnings("unchecked")
-	@Deprecated
-	public static <T> void stealAndSetField(Object object, Class<T> typeOfField,
-			Object value) {
-		findAndSetPrivateField(object, typeOfField, (T) value);
-	}
-	@SuppressWarnings("unchecked")
-	@Deprecated
-	public static <T> T stealAndGetField(Object object, Class<?> typeOfObject,
-			Class<T> typeOfField) {
-		// This is illegal... but needed.  And type erasure makes it fine.  Hopefully.
-		Class<Object> oClass = (Class<Object>) typeOfObject;
-		// Changed spec
-		if (object instanceof Class<?>) {
-			object = null;
-		}
-		return ReflectionUtils.findAndGetPrivateField(object, oClass, typeOfField);
-	}
-	@SuppressWarnings("unchecked")
-	@Deprecated
-	public static void stealAndSetField(Object object, Class<?> typeOfObject,
-			Class<?> typeOfField, Object value) {
-		// This is illegal... but needed.  And type erasure makes it fine.  Hopefully.
-		Class<Object> oClass = (Class<Object>) typeOfObject;
-		Class<Object> oField = (Class<Object>) typeOfField;
-		// Changed spec
-		if (object instanceof Class<?>) {
-			object = null;
-		}
-		findAndSetPrivateField(object, oClass, oField, value);
-	}
+
+
+	// ADDED FUNCTIONS
+
+
+
+	public static Method getMethodFromNameArgs(Class<?> clazz, String methodName, Class<?>... args) {
+        Method[] methods = clazz.getMethods();
+
+        for (Method method : methods) {
+            if (!method.getName().equals(methodName))
+                continue;
+
+            Class<?>[] paramTypes = method.getParameterTypes();
+            int argLength = paramTypes.length;
+
+            if (argLength != args.length)
+                continue;
+
+            boolean isMatching = true;
+
+            for (int i = 0; i < argLength; i++) {
+                Class<?> currentArg = args[i];
+                Class<?> currentParam = paramTypes[i];
+
+                if (args[i] == null) // Just skip if null
+                    continue;
+
+                if (currentArg != currentParam) {
+                    isMatching = false;
+                    break;
+                }
+            }
+            if (isMatching)
+                return method;
+        }
+
+        return null;
+    }
+
+	public static Method getMethodFromNameAlone(Class<?> clazz, String methodName) {
+        Method[] methods = clazz.getMethods();
+
+        for (Method method : methods) {
+            if (method.getName().equals(methodName))
+                return method;
+        }
+
+        return null;
+    }
+
 }

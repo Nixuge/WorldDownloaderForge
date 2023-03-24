@@ -60,6 +60,7 @@ import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
 import net.minecraft.world.chunk.NibbleArray;
 import wdl.config.settings.MiscSettings;
 import wdl.functions.HandlerFunctions;
+import wdl.reflection.ReflectionUtils;
 
 /**
  * Alternative implementation of {@link AnvilChunkLoader} that handles editing

@@ -35,8 +35,8 @@ import net.minecraft.network.play.server.S02PacketChat;
 import net.minecraft.network.play.server.S3FPacketCustomPayload;
 import net.minecraft.network.play.server.S34PacketMaps;
 import net.minecraft.util.IChatComponent;
-import wdl.ReflectionUtils;
 import wdl.ducks.IBaseChangesApplied;
+import wdl.reflection.ReflectionUtils;
 
 @Mixin(NetHandlerPlayClient.class)
 public abstract class MixinNetHandlerPlayClient implements INetHandlerPlayClient, IBaseChangesApplied {

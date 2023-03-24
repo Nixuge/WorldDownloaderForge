@@ -71,6 +71,7 @@ import wdl.handler.HandlerException;
 import wdl.handler.block.BlockHandler;
 import wdl.handler.blockaction.BlockActionHandler;
 import wdl.handler.entity.EntityHandler;
+import wdl.reflection.ReflectionUtils;
 import wdl.update.WDLUpdateChecker;
 
 /**
