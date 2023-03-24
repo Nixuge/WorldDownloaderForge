@@ -17,7 +17,7 @@ import java.util.List;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiListExtended;
-import wdl.gui.Utils;
+import wdl.gui.pages.Utils;
 
 /**
  * {@link GuiListExtended} that provides scrollable lines of text, and support

@@ -11,7 +11,7 @@
  *
  * Do not redistribute (in modified or unmodified form) without prior permission.
  */
-package wdl.gui;
+package wdl.gui.pages;
 
 import java.util.Set;
 import java.util.function.Supplier;

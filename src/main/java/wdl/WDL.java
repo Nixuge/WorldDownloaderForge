@@ -97,10 +97,10 @@ import wdl.functions.GameRuleFunctions;
 import wdl.functions.GeneratorFunctions;
 import wdl.functions.HandlerFunctions;
 import wdl.functions.NBTFunctions;
-import wdl.gui.GuiWDLMultiworld;
-import wdl.gui.GuiWDLMultiworldSelect;
-import wdl.gui.GuiWDLOverwriteChanges;
-import wdl.gui.GuiWDLSaveProgress;
+import wdl.gui.pages.GuiWDLMultiworld;
+import wdl.gui.pages.GuiWDLMultiworldSelect;
+import wdl.gui.pages.GuiWDLOverwriteChanges;
+import wdl.gui.pages.GuiWDLSaveProgress;
 import wdl.reflection.ReflectionUtils;
 import wdl.update.GithubInfoGrabber;
 
