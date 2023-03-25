@@ -167,15 +167,6 @@ public class NotificationWindow {
         // drawRect(left, top, right, bottom);
         int xOffset = getXoffset(partialTicks);
 
-        GlStateManager.pushAttrib();
-        // GL11.
-
-
-        GlStateManager.popAttrib();
-
-
-
-
         roundedRectangle.drawToggleAttribs(xOffset);
         borderTest.drawToggleAttribs(xOffset);
         // drawRect(left, top, right, bottom);
