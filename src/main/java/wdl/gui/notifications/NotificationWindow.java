@@ -1,5 +1,8 @@
 package wdl.gui.notifications;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
@@ -8,10 +11,15 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
+import wdl.gui.notifications.shapes.builders.RectangleBuilder;
 import wdl.gui.notifications.shapes.builders.RoundedCornerBuilder;
+import wdl.gui.notifications.shapes.data.Border;
+import wdl.gui.notifications.shapes.data.BorderPosition;
 import wdl.gui.notifications.shapes.data.CornerType;
 import wdl.gui.notifications.shapes.data.Position;
+import wdl.gui.notifications.shapes.rectangle.RectangleBorder;
 import wdl.gui.notifications.shapes.roundedcorner.RoundedCornerBorder;
+import wdl.gui.notifications.shapes.roundedrectangle.RoundedRectangleBorder;
 import wdl.gui.notifications.shapes.roundedrectangle.RoundedRectangleFill;
 
 public class NotificationWindow {
@@ -82,6 +90,9 @@ public class NotificationWindow {
                 .setRadius(5)
                 // .setBorderWidth(3)
                 .buildBorder();
+        
+
+
         // this.borderTest = new RoundedCornerBorder(CornerType.TOP_LEFT, null, 5, 0xFFFFFFFF, 3);
 
     }
@@ -163,6 +174,15 @@ public class NotificationWindow {
         
         // drawRect(left, top, right, bottom);
         int xOffset = getXoffset(partialTicks);
+
+        GlStateManager.pushAttrib();
+        // GL11.
+
+
+        GlStateManager.popAttrib();
+
+
+
 
         roundedRectangle.drawToggleAttribs(xOffset);
         borderTest.drawToggleAttribs(xOffset);

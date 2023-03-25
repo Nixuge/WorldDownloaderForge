@@ -11,6 +11,7 @@ public abstract class RectangleShape extends Shape implements ShapeNoDraw {
     public void drawToggleAttribs(int xOffset) {
         toggleOnAttribs();
         
+        // System.out.println("drawing");
         draw(xOffset);
 
         toggleOffAttribs();

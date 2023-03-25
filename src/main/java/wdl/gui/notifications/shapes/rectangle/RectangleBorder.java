@@ -28,19 +28,19 @@ public class RectangleBorder extends RectangleShape {
     private Map<BorderPosition, LineFill> borderLines;
 
     public RectangleBorder(Position position, int color, Map<BorderPosition, Float> enabledBorders) {
-        setColor(color);
-        setPosition(position);
-
         this.borderLines = new HashMap<>();
         for (Entry<BorderPosition, Float> entry : enabledBorders.entrySet()) {
             this.borderLines.put(entry.getKey(), new LineFill(null, entry.getValue()));
         }
+
+        setColor(color);
+        setPosition(position);
     }
 
     @Override
     public void draw(int xOffset) {
         GlStateManager.color(red, green, blue, alpha);
-        worldrenderer.begin(GL11.GL_LINE_LOOP, DefaultVertexFormats.POSITION);
+        worldrenderer.begin(GL11.GL_LINE, DefaultVertexFormats.POSITION);
 
         for (LineFill line : this.borderLines.values()) {
             line.draw(xOffset);

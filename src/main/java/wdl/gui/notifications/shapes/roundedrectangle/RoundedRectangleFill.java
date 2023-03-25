@@ -8,8 +8,11 @@ import org.lwjgl.opengl.GL11;
 
 import net.minecraft.client.renderer.GlStateManager;
 import wdl.gui.notifications.shapes.base.ShapeContainer;
+import wdl.gui.notifications.shapes.builders.RectangleBuilder;
+import wdl.gui.notifications.shapes.data.BorderPosition;
 import wdl.gui.notifications.shapes.data.CornerType;
 import wdl.gui.notifications.shapes.data.Position;
+import wdl.gui.notifications.shapes.rectangle.RectangleBorder;
 import wdl.gui.notifications.shapes.rectangle.RectangleFill;
 import wdl.gui.notifications.shapes.roundedcorner.RoundedCornerFill;
 
@@ -18,6 +21,8 @@ public class RoundedRectangleFill extends ShapeContainer {
     private RectangleFill mainRectangle;
     private RectangleFill[] sideRectangles = new RectangleFill[2];
     private Map<CornerType, RectangleFill> straightCorners = new HashMap<>();
+    
+    private RectangleBorder rectangleBorder;
 
     private int radius;
 
@@ -41,6 +46,16 @@ public class RoundedRectangleFill extends ShapeContainer {
         // Create side rectangles
         sideRectangles[0] = new RectangleFill(null, color);
         sideRectangles[1] = new RectangleFill(null, color);
+
+        Map<BorderPosition, Float> enabledBorders = new HashMap<>();
+        enabledBorders.put(BorderPosition.BOTTOM, 2f);
+        enabledBorders.put(BorderPosition.LEFT, 6f);
+
+        this.rectangleBorder = new RectangleBuilder()
+            .setEnabledBorders(enabledBorders)
+            .setColor(0x33FFFF55)
+            .buildBorder();
+
 
         // Finally, set the position of the rect
         setPosition(position);
@@ -78,6 +93,7 @@ public class RoundedRectangleFill extends ShapeContainer {
         }
 
         mainRectangle.draw(xOffset);
+        rectangleBorder.draw(xOffset);
 
         sideRectangles[0].draw(xOffset);
         sideRectangles[1].draw(xOffset);
@@ -117,5 +133,7 @@ public class RoundedRectangleFill extends ShapeContainer {
             entry.getValue().setPosition(
                 entry.getKey().getRectanglePosition(position, radius));
         }
+        rectangleBorder.setPosition(new Position(position.left() + radius, position.top(), position.right() - radius, position.bottom()));
+
     }
 }

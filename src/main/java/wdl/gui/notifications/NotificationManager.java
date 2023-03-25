@@ -32,6 +32,15 @@ public class NotificationManager {
     }
 
     public void addNotification(Notification note) {
+        if (note == null) {
+            notes.add(new Notification(
+                Level.ERROR,
+                "notification is null",
+                100
+            ));
+            System.out.println("Notification is null.");
+            return;
+        }
         try {
             notes.add(note);
         } catch (Exception e) {

@@ -97,6 +97,9 @@ import wdl.functions.GameRuleFunctions;
 import wdl.functions.GeneratorFunctions;
 import wdl.functions.HandlerFunctions;
 import wdl.functions.NBTFunctions;
+import wdl.gui.notifications.Level;
+import wdl.gui.notifications.Notification;
+import wdl.gui.notifications.NotificationManager;
 import wdl.gui.pages.GuiWDLMultiworld;
 import wdl.gui.pages.GuiWDLMultiworldSelect;
 import wdl.gui.pages.GuiWDLOverwriteChanges;
@@ -108,6 +111,7 @@ import wdl.update.GithubInfoGrabber;
  * This is the main class that does most of the work.
  */
 public class WDL {
+	NotificationManager notificationManager = NotificationManager.getInstance();
 	/**
 	 * Owning username for the github repository to check for updates against.
 	 *
@@ -457,6 +461,10 @@ public class WDL {
 		downloading = true;
 		WDLMessages.chatMessageTranslated(WDL.serverProps,
 				WDLMessageTypes.INFO, "wdl.messages.generalInfo.downloadStarted");
+		
+		notificationManager.addNotification(
+			new Notification(Level.INFO, "Started downloading world.")
+		);
 	}
 
 	/**
@@ -616,6 +624,11 @@ public class WDL {
 			return;
 		}
 
+		notificationManager.addNotification(
+			new Notification(Level.SUCCESS, "Successfully saved world !")
+		);
+		
+
 		WDLMessages.chatMessageTranslated(WDL.serverProps,
 				WDLMessageTypes.INFO, "wdl.messages.generalInfo.saveComplete.done");
 	}
@@ -633,6 +646,10 @@ public class WDL {
 
 		WorldBackupType backupType = serverProps.getValue(MiscSettings.BACKUP_TYPE);
 
+		// TODO: actually completely remove this system
+		// will do once the notification system is fully working.
+		// for now, only removing the displayGuiScreen call below.
+
 		final GuiWDLSaveProgress progressScreen = new GuiWDLSaveProgress(this,
 				new ChatComponentTranslation("wdl.saveProgress.title"),
 				(backupType != WorldBackupType.NONE ? 6 : 5)
@@ -641,7 +658,14 @@ public class WDL {
 		// Schedule this as a task to avoid threading issues.
 		// If directly displayed, in some rare cases the GUI will be drawn before it has been
 		// initialized, causing a crash.  Using a task stops that.
-		minecraft.addScheduledTask(() -> { minecraft.displayGuiScreen(progressScreen); });
+
+
+		notificationManager.addNotification(
+			new Notification(
+				Level.INFO, "Started saving the world")
+		);
+
+		// minecraft.addScheduledTask(() -> { minecraft.displayGuiScreen(progressScreen); });
 
 		saveProps();
 

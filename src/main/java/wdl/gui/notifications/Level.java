@@ -5,7 +5,8 @@ import lombok.Getter;
 @Getter
 public enum Level {
     // See https://htmlcolorcodes.com or another color picker
-    INFO("Info", 0x3498db), 
+    SUCCESS("Success", 0x32CD32 ),
+    INFO("Info", 0x3498db ), 
     WARNING("Warning", 0xf1c40f ), 
     ERROR("ERROR", 0xe74c3c ), 
     NONE("");
