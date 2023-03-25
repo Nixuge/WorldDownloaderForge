@@ -34,7 +34,7 @@ public final class WorldSettings {
 	public static final BooleanSetting ALLOW_CHEATS =
 			new BooleanSetting("AllowCheats", true, "wdl.gui.world.allowCheats");
 	public static final EnumSetting<GameMode> GAME_MODE =
-			new EnumSetting<>("GameType", GameMode.KEEP, "wdl.gui.world.gamemode", GameMode.values(), GameMode::fromString);
+			new EnumSetting<>("GameType", GameMode.CREATIVE, "wdl.gui.world.gamemode", GameMode.values(), GameMode::fromString);
 	public static final EnumSetting<Time> TIME =
 			new EnumSetting<>("Time", Time.KEEP, "wdl.gui.world.time", Time.values(), Time::fromString);
 	public static final EnumSetting<Weather> WEATHER =

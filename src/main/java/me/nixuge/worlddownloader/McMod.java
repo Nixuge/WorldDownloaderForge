@@ -4,7 +4,6 @@ import lombok.Getter;
 import lombok.Setter;
 import me.nixuge.worlddownloader.command.commands.ClearNotifications;
 import me.nixuge.worlddownloader.command.commands.ShowNotification;
-import me.nixuge.worlddownloader.events.RenderOverlayEventHandler;
 import net.minecraftforge.client.ClientCommandHandler;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.common.config.Configuration;
@@ -43,6 +42,5 @@ public class McMod {
     public void init(final FMLInitializationEvent event) {
         ClientCommandHandler.instance.registerCommand(new ShowNotification());
         ClientCommandHandler.instance.registerCommand(new ClearNotifications());
-        MinecraftForge.EVENT_BUS.register(new RenderOverlayEventHandler());
     }
 }

@@ -21,6 +21,8 @@ public class Notification {
     private int maxTime;
 
     /* =============== Tasklist - Notifications ===============
+     * 
+     * - See GuiInGameForge on how to use ScaledResolution a bit better
      * - Borders (rounded)
      * - Proper centered header & text under
      * - Split text at the right moment to avoid
@@ -37,6 +39,7 @@ public class Notification {
      * - hover/click support
      * 
      * ========== Bug fixes to do ==========
+     * (tested on prod) hunger bar goes bad when notification shows with LiquidBounce
      * - Width can go over maxWidth
      * 
      * ========== Unsure TODOs ==========

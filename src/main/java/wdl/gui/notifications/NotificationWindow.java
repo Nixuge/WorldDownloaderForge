@@ -72,7 +72,7 @@ public class NotificationWindow {
         this.roundedRectangle = new RoundedRectangleFill(
             null,
             5,
-            0x33111111, 
+            0xCC111111, 
             new CornerType[] {CornerType.TOP_LEFT, CornerType.BOTTOM_LEFT}
         );
         // this.borderTest = new 
@@ -168,7 +168,6 @@ public class NotificationWindow {
         int xOffset = getXoffset(partialTicks);
 
         roundedRectangle.drawToggleAttribs(xOffset);
-        borderTest.drawToggleAttribs(xOffset);
         // drawRect(left, top, right, bottom);
         // drawRounded(left, top, right, bottom);
 
@@ -228,8 +227,6 @@ public class NotificationWindow {
         }
         System.out.println(full);
     }
-
-    public void drawRounded(int left, int top, int right, int bottom) {}
 
     public void setPosition(int x, int y) {
         // + 1 because of scaling problems 

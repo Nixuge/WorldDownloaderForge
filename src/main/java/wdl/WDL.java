@@ -100,8 +100,8 @@ import wdl.functions.NBTFunctions;
 import wdl.gui.notifications.Level;
 import wdl.gui.notifications.Notification;
 import wdl.gui.notifications.NotificationManager;
-import wdl.gui.pages.GuiWDLMultiworld;
-import wdl.gui.pages.GuiWDLMultiworldSelect;
+// import wdl.gui.pages.GuiWDLMultiworld;
+// import wdl.gui.pages.GuiWDLMultiworldSelect;
 import wdl.gui.pages.GuiWDLOverwriteChanges;
 import wdl.gui.pages.GuiWDLSaveProgress;
 import wdl.reflection.ReflectionUtils;
@@ -345,51 +345,64 @@ public class WDL {
 		// will not have yet been loaded.  We want to ask this question next, and
 		// then the properties will finally be loaded.
 		// This code really needs to be redone.
-		if (isMultiworld && worldName.isEmpty()) {
-			minecraft.displayGuiScreen(new GuiWDLMultiworldSelect(this,
-					new ChatComponentTranslation("wdl.gui.multiworldSelect.title." + context),
-					new GuiWDLMultiworldSelect.WorldSelectionCallback() {
-				@Override
-				public void onWorldSelected(String selectedWorld) {
-					worldName = selectedWorld;
 
-					worldProps = loadWorldProps(selectedWorld);
-					propsFound = true; // Successfully loaded, even if the file doesn't exist.
-					gameRules = loadGameRules(selectedWorld);
-					loadEnderChest(selectedWorld, player);
-					callback.run();
-				}
 
-				@Override
-				public void onCancel() {
-					cancel.run();
-				}
-			}));
-			return true;
-		}
+		// if (isMultiworld && worldName.isEmpty()) {
+		// 	minecraft.displayGuiScreen(new GuiWDLMultiworldSelect(this,
+		// 			new ChatComponentTranslation("wdl.gui.multiworldSelect.title." + context),
+		// 			new GuiWDLMultiworldSelect.WorldSelectionCallback() {
+		// 		@Override
+		// 		public void onWorldSelected(String selectedWorld) {
+		// 			worldName = selectedWorld;
+
+		// 			worldProps = loadWorldProps(selectedWorld);
+		// 			propsFound = true; // Successfully loaded, even if the file doesn't exist.
+		// 			gameRules = loadGameRules(selectedWorld);
+		// 			loadEnderChest(selectedWorld, player);
+		// 			callback.run();
+		// 		}
+
+		// 		@Override
+		// 		public void onCancel() {
+		// 			cancel.run();
+		// 		}
+		// 	}));
+		// 	return true;
+		// }
+		//TODO URGENT: ZIP AFTER SAVING!!!!
+
 
 		if (!propsFound) {
-			minecraft.displayGuiScreen(new GuiWDLMultiworld(new GuiWDLMultiworld.MultiworldCallback() {
-				@Override
-				public void onSelect(boolean enableMutliworld) {
-					isMultiworld = enableMutliworld;
-
-					if (!isMultiworld) {
-						serverProps.setValue(MiscSettings.LINKED_WORLDS, "");
-						saveProps();
-						propsFound = true;
-					}
-
-					callback.run();
-				}
-
-				@Override
-				public void onCancel() {
-					cancel.run();
-				}
-			}));
-			return true;
+			// TODO: RE IMPLEMENT THIS W NOTIFICATIONS
+			// AS OF NOW I JUST REMOVED THE MULTIWORD PROMPT BC IT WAS GETTING ANNOYING
+			isMultiworld = false;
+			serverProps.setValue(MiscSettings.LINKED_WORLDS, "");
+			saveProps();
+			propsFound = true;
+			return false;
 		}
+
+		// if (!propsFound) {
+		// 	minecraft.displayGuiScreen(new GuiWDLMultiworld(new GuiWDLMultiworld.MultiworldCallback() {
+		// 		@Override
+		// 		public void onSelect(boolean enableMutliworld) {
+		// 			isMultiworld = enableMutliworld;
+
+		// 			if (!isMultiworld) {
+		// 				serverProps.setValue(MiscSettings.LINKED_WORLDS, "");
+		// 				saveProps();
+		// 				propsFound = true;
+		// 			}
+
+		// 			callback.run();
+		// 		}
+
+		// 		@Override
+		// 		public void onCancel() {
+		// 			cancel.run();
+		// 		}
+		// 	}));
+		// }
 
 		if (checkLastModified && !overrideLastModifiedCheck) {
 			long lastSaved = worldProps.getValue(MiscSettings.LAST_SAVED);
@@ -643,7 +656,7 @@ public class WDL {
 					WDLMessageTypes.ERROR, "wdl.messages.generalError.forbidden");
 			return;
 		}
-
+		
 		WorldBackupType backupType = serverProps.getValue(MiscSettings.BACKUP_TYPE);
 
 		// TODO: actually completely remove this system
@@ -720,7 +733,7 @@ public class WDL {
 
 
 
-			try {
+					try {
 				WorldBackup.backupWorld(saveHandler.getWorldDirectory(),
 						getWorldFolderName(worldName), backupType, new BackupState(progressScreen),
 						serverProps.getValue(MiscSettings.BACKUP_COMMAND_TEMPLATE),

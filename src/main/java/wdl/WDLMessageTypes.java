@@ -32,7 +32,7 @@ import wdl.api.IWDLMessageType;
  * it's a perfect fit.
  */
 public enum WDLMessageTypes implements IWDLMessageType {
-	INFO("wdl.messages.message.info", RED, GOLD, true, CORE_RECOMMENDED),
+	INFO("wdl.messages.message.info", RED, GOLD, false, CORE_RECOMMENDED),
 	ERROR("wdl.messages.message.error", DARK_GREEN, DARK_RED, true, CORE_RECOMMENDED),
 	UPDATES("wdl.messages.message.updates", RED, GOLD, true, CORE_RECOMMENDED),
 	LOAD_TILE_ENTITY("wdl.messages.message.loadingTileEntity", false),
@@ -42,7 +42,7 @@ public enum WDLMessageTypes implements IWDLMessageType {
 	ON_CHUNK_NO_LONGER_NEEDED("wdl.messages.message.chunkUnloaded", false),
 	ON_GUI_CLOSED_INFO("wdl.messages.message.guiClosedInfo", true),
 	ON_GUI_CLOSED_WARNING("wdl.messages.message.guiClosedWarning", true),
-	SAVING("wdl.messages.message.saving", true),
+	SAVING("wdl.messages.message.saving", false),
 	REMOVE_ENTITY("wdl.messages.message.removeEntity", false),
 	PLUGIN_CHANNEL_MESSAGE("wdl.messages.message.pluginChannel", false),
 	UPDATE_DEBUG("wdl.messages.message.updateDebug", false);
