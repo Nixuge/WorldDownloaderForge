@@ -662,7 +662,7 @@ public class WDL {
 
 		notificationManager.addNotification(
 			new Notification(
-				Level.INFO, "Started saving the world")
+				Level.PROGRESS, "Saving the world...")
 		);
 
 		// minecraft.addScheduledTask(() -> { minecraft.displayGuiScreen(progressScreen); });
