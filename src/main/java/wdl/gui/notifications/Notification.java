@@ -21,10 +21,7 @@ public class Notification {
     private int maxTime;
 
     /* =============== Tasklist - Notifications ===============
-     * Black hotbar when drawing (push/popattrib?)
-     * 
-     * 
-     * - Borders
+     * - Borders (rounded)
      * - Proper centered header & text under
      * - Split text at the right moment to avoid
      *   overflowing when above max size (see below)
@@ -41,9 +38,6 @@ public class Notification {
      * 
      * ========== Bug fixes to do ==========
      * - Width can go over maxWidth
-     * - Colors can flicker, "normal" mc GL11 behavior, just need to re check GlStateManager
-     *   calls & make sure everything gets enabled/disabled at the right time.
-     * 
      * 
      * ========== Unsure TODOs ==========
      * - Animation when notifications go up (/down)

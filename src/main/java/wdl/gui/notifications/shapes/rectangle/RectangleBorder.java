@@ -1,9 +1,9 @@
 package wdl.gui.notifications.shapes.rectangle;
 
-import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Map.Entry;
+import java.util.function.Function;
 
 import org.lwjgl.opengl.GL11;
 
@@ -12,27 +12,21 @@ import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
 import wdl.gui.notifications.shapes.data.BorderPosition;
 import wdl.gui.notifications.shapes.data.Position;
 import wdl.gui.notifications.shapes.line.LineFill;
-import wdl.reflection.ReflectionUtils;
 
 public class RectangleBorder extends RectangleShape {
-    private static Map<BorderPosition, Method> borderPosMethodMap;
+    // Honestly could've made a static function w a hashmap
+    // but this looks funnier
+    private static Map<BorderPosition, Function<Position, Position>> borderPosMap;
     static {
-        borderPosMethodMap = new HashMap<>();
-        borderPosMethodMap.put(BorderPosition.TOP, ReflectionUtils.getMethodFromNameAlone(RectangleBorder.class, "topBorder"));
-        borderPosMethodMap.put(BorderPosition.BOTTOM, ReflectionUtils.getMethodFromNameAlone(RectangleBorder.class, "bottomBorder"));
-        borderPosMethodMap.put(BorderPosition.LEFT, ReflectionUtils.getMethodFromNameAlone(RectangleBorder.class, "leftBorder"));
-        borderPosMethodMap.put(BorderPosition.RIGHT, ReflectionUtils.getMethodFromNameAlone(RectangleBorder.class, "rightBorder"));
+        borderPosMap = new HashMap<>();
+        borderPosMap.put(BorderPosition.TOP, (position) -> { return new Position(position.left(), position.top(), position.right(), position.top()); });
+        borderPosMap.put(BorderPosition.BOTTOM, (position) -> { return new Position(position.left(), position.bottom(), position.right(), position.bottom()); });
+        borderPosMap.put(BorderPosition.LEFT, (position) -> { return new Position(position.left(), position.top(), position.left(), position.bottom()); });
+        borderPosMap.put(BorderPosition.RIGHT, (position) -> { return new Position(position.right(), position.top(), position.right(), position.bottom()); });
     }
 
     private Map<BorderPosition, LineFill> borderLines;
 
-    public void topBorder(Position position) {
-
-    }
-
-
-    
-    
     public RectangleBorder(Position position, int color, Map<BorderPosition, Float> enabledBorders) {
         setColor(color);
         setPosition(position);
@@ -40,30 +34,6 @@ public class RectangleBorder extends RectangleShape {
         this.borderLines = new HashMap<>();
         for (Entry<BorderPosition, Float> entry : enabledBorders.entrySet()) {
             this.borderLines.put(entry.getKey(), new LineFill(null, entry.getValue()));
-        }
-    }
-
-    public void calculateLinePositions() {
-        for (Entry<BorderPosition, LineFill> entry : borderLines.entrySet()) {
-            // kinda ugly but idk of another way to do it for now
-            LineFill line = entry.getValue();
-            switch (entry.getKey()) {
-                case TOP:
-                    line.setPosition(new Position(position.left(), position.top(), position.right(), position.top()));
-                    break;
-                case BOTTOM:
-                    line.setPosition(new Position(position.left(), position.bottom(), position.right(), position.bottom()));
-                    break;
-                case LEFT:
-                    line.setPosition(new Position(position.left(), position.top(), position.left(), position.bottom()));
-                    break;
-                case RIGHT:
-                    line.setPosition(new Position(position.right(), position.top(), position.right(), position.bottom()));
-                    break;
-                default:
-                    break;
-            }
-            
         }
     }
 
@@ -85,6 +55,11 @@ public class RectangleBorder extends RectangleShape {
         if (position == null)
             return;
         this.position = position;
-        calculateLinePositions();
+        for (Entry<BorderPosition, LineFill> entry : this.borderLines.entrySet()) {
+            // one liner to get the position from the functions map & set it to the entry value
+            entry.getValue().setPosition(
+                borderPosMap.get(entry.getKey()).apply(position)
+            );
+        }
     }
 }
