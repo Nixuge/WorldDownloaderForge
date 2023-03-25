@@ -1,8 +1,5 @@
 package wdl.gui.notifications;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import lombok.Getter;
 import lombok.Setter;
 import net.minecraft.client.Minecraft;
@@ -11,15 +8,10 @@ import net.minecraft.client.renderer.GlStateManager;
 import net.minecraft.client.renderer.Tessellator;
 import net.minecraft.client.renderer.WorldRenderer;
 import net.minecraft.client.renderer.vertex.DefaultVertexFormats;
-import wdl.gui.notifications.shapes.builders.RectangleBuilder;
 import wdl.gui.notifications.shapes.builders.RoundedCornerBuilder;
-import wdl.gui.notifications.shapes.data.Border;
-import wdl.gui.notifications.shapes.data.BorderPosition;
 import wdl.gui.notifications.shapes.data.CornerType;
 import wdl.gui.notifications.shapes.data.Position;
-import wdl.gui.notifications.shapes.rectangle.RectangleBorder;
 import wdl.gui.notifications.shapes.roundedcorner.RoundedCornerBorder;
-import wdl.gui.notifications.shapes.roundedrectangle.RoundedRectangleBorder;
 import wdl.gui.notifications.shapes.roundedrectangle.RoundedRectangleFill;
 
 public class NotificationWindow {

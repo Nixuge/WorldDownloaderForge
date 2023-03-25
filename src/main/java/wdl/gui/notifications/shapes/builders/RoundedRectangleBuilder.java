@@ -1,7 +1,7 @@
 package wdl.gui.notifications.shapes.builders;
 
 import wdl.gui.notifications.shapes.data.CornerType;
-import wdl.gui.notifications.shapes.roundedrectangle.RoundedRectangleBorder;
+// import wdl.gui.notifications.shapes.roundedrectangle.RoundedRectangleBorder;
 import wdl.gui.notifications.shapes.roundedrectangle.RoundedRectangleFill;
 
 public class RoundedRectangleBuilder extends BaseBuilder<RoundedRectangleBuilder> {

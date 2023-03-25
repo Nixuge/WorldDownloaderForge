@@ -29,6 +29,7 @@ public class RoundedCornerFill extends RoundedCornerShape {
         // Note:
         // GL_POLYGON_SMOOTH is having an issue. When used, the opacity is greatly reduced.
         // I can't seem to find any easy fix. However, this already looks "good enough".
+        // GL11.glHint(GL11.GL_POLYGON_SMOOTH_HINT, GL11.GL_NICEST);
         // GL11.glEnable(GL11.GL_POLYGON_SMOOTH);
         tessellator.draw();
         // GL11.glDisable(GL11.GL_POLYGON_SMOOTH);
