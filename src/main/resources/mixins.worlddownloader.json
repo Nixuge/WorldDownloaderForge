@@ -8,8 +8,6 @@
       "MixinWorldClient",
       "MixinNetHandlerPlayClient",
       "MixinCrashReport",
-      "MixinInventoryBasic",
-      "MixinGuiIngameForge"
+      "MixinInventoryBasic"
     ]
-
 }
