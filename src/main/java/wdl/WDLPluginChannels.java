@@ -13,10 +13,8 @@
  */
 package wdl;
 
-import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
@@ -30,22 +28,16 @@ import javax.annotation.Nullable;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import com.google.common.collect.HashMultimap;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
-import com.google.common.io.ByteStreams;
-import com.google.gson.JsonObject;
 
-import net.minecraft.client.Minecraft;
 import net.minecraft.client.network.NetHandlerPlayClient;
 import net.minecraft.network.NetworkManager;
-import net.minecraft.network.play.client.C17PacketCustomPayload;
 import net.minecraft.world.chunk.Chunk;
-import wdl.functions.PacketFunctions;
 import wdl.functions.PacketFunctions.ChannelName;
 
 /**
@@ -83,7 +75,7 @@ import wdl.functions.PacketFunctions.ChannelName;
  * documentation is on wiki.vg</a>, if you're interested.
  */
 public class WDLPluginChannels {
-	private static final Logger LOGGER = LogManager.getLogger();
+	// private static final Logger LOGGER = LogManager.getLogger();
 	/**
 	 * Packets that have been received.
 	 */
@@ -100,29 +92,9 @@ public class WDLPluginChannels {
 			new HashMap<>();
 
 	/**
-	 * Whether players can request permissions.
-	 *
-	 * With the default implementation, this is always <i>sent</i> as
-	 * <code>true</code>.  However, this needs to be sent for it to be useful -
-	 * if the plugin does NOT send it, it does not support permission requests.
-	 */
-	private static boolean canRequestPermissions = false;
-
-	/**
-	 * Message to display when requesting.  If empty, nothing
-	 * is displayed.
-	 */
-	private static String requestMessage = "";
-
-	/**
 	 * Chunk overrides. Any chunk within a range is allowed to be downloaded in.
 	 */
 	private static Map<String, Multimap<String, ChunkRange>> chunkOverrides = new HashMap<>();
-
-	/**
-	 * Active permission requests.
-	 */
-	private static Map<String, String> requests = new HashMap<>();
 
 	/**
 	 * Permission request fields that take boolean parameters.
@@ -181,27 +153,6 @@ public class WDLPluginChannels {
 
 	public static Map<String, Integer> getEntityRanges() {
 		return new HashMap<>(entityRanges);
-	}
-
-
-
-	/**
-	 * Gets whether permissions are available.
-	 */
-	public static boolean canRequestPermissions() {
-		return receivedPackets.contains(3) && canRequestPermissions;
-	}
-
-	/**
-	 * Gets the request message.
-	 * @return The {@link #requestMessage}.
-	 */
-	public static String getRequestMessage() {
-		if (receivedPackets.contains(3)) {
-			return requestMessage;
-		} else {
-			return null;
-		}
 	}
 
 	/**
@@ -297,70 +248,10 @@ public class WDLPluginChannels {
 	private static final Map<NetworkManager, Set<@ChannelName String>> REGISTERED_CHANNELS = new WeakHashMap<>();
 
 	/**
-	 * Gets the current set of registered channels for this server.
-	 */
-	private static Set<@ChannelName String> getRegisteredChannels(NetHandlerPlayClient nhpc) {
-		return REGISTERED_CHANNELS.computeIfAbsent(
-				nhpc.getNetworkManager(),
-				key -> new HashSet<>());
-	}
-
-	/**
-	 * Checks if the given channel is registered on this server.
-	 */
-	private static boolean isRegistered(NetHandlerPlayClient nhpc, String channelName) {
-		return getRegisteredChannels(nhpc).contains(channelName);
-	}
-
-	private static final String UPDATE_NOTE = "For 1.13 compatibility, please update your plugin as channel names have changed.";
-
-	/**
 	 * The state for {@link #sendInitPacket(String)} if it was called when no channels were registered.
 	 */
 	@Nullable
 	private static String deferredInitState = null;
-
-	static void onPluginChannelPacket(NetHandlerPlayClient sender, @ChannelName String channel, byte[] bytes) {
-		if ("REGISTER".equals(channel) || "minecraft:register".equals(channel)) {
-			registerChannels(sender, bytes);
-		} else if ("UNREGISTER".equals(channel) || "minecraft:unregister".equals(channel)) {
-			unregisterChannels(sender, bytes);
-		} 
-	}
-
-	private static void registerChannels(NetHandlerPlayClient nhpc, byte[] bytes) {
-		String existing = LOGGER.isDebugEnabled() ? REGISTERED_CHANNELS.toString() : null;
-
-		String str = new String(bytes, StandardCharsets.UTF_8);
-
-		List<String> channels = Arrays.asList(str.split("\0"));
-		channels.stream()
-				// .filter(WDL_CHANNELS::contains)
-				.forEach(getRegisteredChannels(nhpc)::add);
-
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("[WDL] REGISTER: " + str + "/" + channels + ": " + existing + " => " + REGISTERED_CHANNELS);
-		}
-
-		if (deferredInitState != null) {
-			LOGGER.debug("[WDL] REGISTER: Trying to resolve deferred {}, REMOVED", deferredInitState);
-			// sendInitPacket(nhpc, deferredInitState);
-		}
-	}
-
-	private static void unregisterChannels(NetHandlerPlayClient nhpc, byte[] bytes) {
-		String existing = LOGGER.isDebugEnabled() ? REGISTERED_CHANNELS.toString() : null;
-
-		String str = new String(bytes, StandardCharsets.UTF_8);
-		List<String> channels = Arrays.asList(str.split("\0"));
-		channels.stream()
-				// .filter(WDL_CHANNELS::contains)
-				.forEach(getRegisteredChannels(nhpc)::remove);
-
-		if (LOGGER.isDebugEnabled()) {
-			LOGGER.debug("[WDL] UNREGISTER: " + str + "/" + channels + ": " + existing + " => " + REGISTERED_CHANNELS);
-		}
-	}
 
 	/**
 	 * A range of chunks.
