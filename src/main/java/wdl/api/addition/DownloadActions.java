@@ -6,7 +6,6 @@ import wdl.gui.notifications.Level;
 import wdl.gui.notifications.Notification;
 import wdl.gui.notifications.NotificationManager;
 import wdl.gui.pages.GuiWDLChunkOverrides;
-import wdl.gui.pages.GuiWDLPermissions;
 
 // TODO: clean up both the current api & this
 
@@ -28,12 +27,13 @@ public class DownloadActions {
             return true;
         }
 
-        if (WDLPluginChannels.hasChunkOverrides()
-                && !WDLPluginChannels.canDownloadInGeneral()) {
-            wdl.minecraft.displayGuiScreen(new GuiWDLChunkOverrides(null, wdl));
-        } else {
+        // if (WDLPluginChannels.hasChunkOverrides()
+        //         && !WDLPluginChannels.canDownloadInGeneral()
+        //         ) {
+        //     wdl.minecraft.displayGuiScreen(new GuiWDLChunkOverrides(null, wdl));
+        // } else {
             wdl.startDownload();
-        }
+        // }
         return true;
     }
 
@@ -63,22 +63,22 @@ public class DownloadActions {
         if (WDL.downloading) {
             wdl.stopDownload();
         } else {
-            if (!WDLPluginChannels.canDownloadAtAll()) {
-                // If they don't have any permissions, let the player
-                // request some.
-                if (WDLPluginChannels.canRequestPermissions()) {
-                    wdl.minecraft.displayGuiScreen(new GuiWDLPermissions(null, wdl));
-                } else {
-                    // Should never happen
-                }
-            } else if (WDLPluginChannels.hasChunkOverrides()
-                    && !WDLPluginChannels.canDownloadInGeneral()) {
-                // Handle the "only has chunk overrides" state - notify
-                // the player of limited areas.
-                wdl.minecraft.displayGuiScreen(new GuiWDLChunkOverrides(null, wdl));
-            } else {
+            // if (!WDLPluginChannels.canDownloadAtAll()) {
+            //     // If they don't have any permissions, let the player
+            //     // request some.
+            //     if (WDLPluginChannels.canRequestPermissions()) {
+            //         wdl.minecraft.displayGuiScreen(new GuiWDLPermissions(null, wdl));
+            //     } else {
+            //         // Should never happen
+            //     }
+            // } else if (WDLPluginChannels.hasChunkOverrides()
+            //         && !WDLPluginChannels.canDownloadInGeneral()) {
+            //     // Handle the "only has chunk overrides" state - notify
+            //     // the player of limited areas.
+            //     wdl.minecraft.displayGuiScreen(new GuiWDLChunkOverrides(null, wdl));
+            // } else {
                 wdl.startDownload();
-            }
+            // }
         }
         return false;
     }

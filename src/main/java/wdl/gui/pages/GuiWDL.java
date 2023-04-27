@@ -68,7 +68,7 @@ public class GuiWDL extends WDLScreen {
 						I18n.format("wdl.gui.wdl." + key + ".name"),
 						() -> openFunc.apply(GuiWDL.this, GuiWDL.this.wdl)), -100, 0);
 				if (needsPerms) {
-					button.setEnabled(WDLPluginChannels.canDownloadAtAll());
+					button.setEnabled(true);
 				}
 
 				this.tooltip = I18n.format("wdl.gui.wdl." + key + ".description");
@@ -94,7 +94,6 @@ public class GuiWDL extends WDLScreen {
 			entries.add(new ButtonEntry("backupOptions", GuiWDLBackup::new, true));
 			entries.add(new ButtonEntry("messageOptions", GuiWDLMessages::new, false));
 			entries.add(new ButtonEntry("savedChunks", GuiSavedChunks::new, true));
-			entries.add(new ButtonEntry("permissionsInfo", GuiWDLPermissions::new, false));
 			entries.add(new ButtonEntry("about", GuiWDLAbout::new, false));
 			if (WDLUpdateChecker.hasNewVersion()) {
 				// Put at start

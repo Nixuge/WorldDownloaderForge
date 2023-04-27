@@ -22,7 +22,6 @@ import javax.annotation.Nonnull;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.block.Block;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
@@ -55,7 +54,6 @@ import wdl.MapDataHandler.MapDataResult;
 import wdl.api.IBlockEventListener;
 import wdl.api.IChatMessageListener;
 import wdl.api.IGuiHooksListener;
-import wdl.api.IPluginChannelListener;
 import wdl.api.IWorldLoadListener;
 import wdl.api.WDLApi;
 import wdl.api.WDLApi.ModInfo;
@@ -64,8 +62,6 @@ import wdl.functions.MapFunctions;
 import wdl.gui.pages.GuiTurningCameraBase;
 import wdl.gui.pages.GuiWDL;
 import wdl.gui.pages.GuiWDLAbout;
-import wdl.gui.pages.GuiWDLChunkOverrides;
-import wdl.gui.pages.GuiWDLPermissions;
 import wdl.gui.widget.WDLButton;
 import wdl.handler.HandlerException;
 import wdl.handler.block.BlockHandler;
@@ -160,18 +156,18 @@ public class WDLEvents {
 			return;
 		}
 
-		if (WDLPluginChannels.canSaveChunk(unneededChunk)) {
+		// if (WDLPluginChannels.canSaveChunk(unneededChunk)) {
 			WDLMessages.chatMessageTranslated(
 					WDL.serverProps,
 					WDLMessageTypes.ON_CHUNK_NO_LONGER_NEEDED,
 					"wdl.messages.onChunkNoLongerNeeded.saved", unneededChunk.getChunkCoordIntPair().chunkXPos, unneededChunk.getChunkCoordIntPair().chunkZPos);
 			wdl.saveChunk(unneededChunk);
-		} else {
-			WDLMessages.chatMessageTranslated(
-					WDL.serverProps,
-					WDLMessageTypes.ON_CHUNK_NO_LONGER_NEEDED,
-					"wdl.messages.onChunkNoLongerNeeded.didNotSave", unneededChunk.getChunkCoordIntPair().chunkXPos, unneededChunk.getChunkCoordIntPair().chunkZPos);
-		}
+		// } else {
+		// 	WDLMessages.chatMessageTranslated(
+		// 			WDL.serverProps,
+		// 			WDLMessageTypes.ON_CHUNK_NO_LONGER_NEEDED,
+		// 			"wdl.messages.onChunkNoLongerNeeded.didNotSave", unneededChunk.getChunkCoordIntPair().chunkXPos, unneededChunk.getChunkCoordIntPair().chunkZPos);
+		// }
 	}
 
 	/**
@@ -226,16 +222,16 @@ public class WDLEvents {
 			EntityHandler<?, ?> handler = EntityHandler.getHandler(ridingEntity.getClass(), windowContainer.getClass());
 			if (handler != null) {
 				if (handler.checkRidingCasting(windowContainer, ridingEntity)) {
-					if (!WDLPluginChannels.canSaveEntities(
-							ridingEntity.chunkCoordX,
-							ridingEntity.chunkCoordZ)) {
-						// Run this check now that we've confirmed that we're saving
-						// the entity being ridden. If we're riding a pig but opening
-						// a chest in another chunk, that should go to the other check.
-						WDLMessages.chatMessageTranslated(WDL.serverProps,
-								WDLMessageTypes.ON_GUI_CLOSED_INFO, "wdl.messages.onGuiClosedInfo.cannotSaveEntities");
-						return true;
-					}
+					// if (!WDLPluginChannels.canSaveEntities(
+					// 		ridingEntity.chunkCoordX,
+					// 		ridingEntity.chunkCoordZ)) {
+					// 	// Run this check now that we've confirmed that we're saving
+					// 	// the entity being ridden. If we're riding a pig but opening
+					// 	// a chest in another chunk, that should go to the other check.
+					// 	WDLMessages.chatMessageTranslated(WDL.serverProps,
+					// 			WDLMessageTypes.ON_GUI_CLOSED_INFO, "wdl.messages.onGuiClosedInfo.cannotSaveEntities");
+					// 	return true;
+					// }
 
 					try {
 						IChatComponent msg = handler.copyDataCasting(windowContainer, ridingEntity, true);
@@ -255,11 +251,11 @@ public class WDLEvents {
 		// If the last thing clicked was an ENTITY
 		Entity entity = wdl.lastEntity;
 		if (entity != null) {
-			if (!WDLPluginChannels.canSaveEntities(entity.chunkCoordX, entity.chunkCoordZ)) {
-				WDLMessages.chatMessageTranslated(WDL.serverProps,
-						WDLMessageTypes.ON_GUI_CLOSED_INFO, "wdl.messages.onGuiClosedInfo.cannotSaveEntities");
-				return true;
-			}
+			// if (!WDLPluginChannels.canSaveEntities(entity.chunkCoordX, entity.chunkCoordZ)) {
+			// 	WDLMessages.chatMessageTranslated(WDL.serverProps,
+			// 			WDLMessageTypes.ON_GUI_CLOSED_INFO, "wdl.messages.onGuiClosedInfo.cannotSaveEntities");
+			// 	return true;
+			// }
 
 			EntityHandler<?, ?> handler = EntityHandler.getHandler(entity.getClass(), windowContainer.getClass());
 			if (handler != null) {
@@ -297,12 +293,12 @@ public class WDLEvents {
 		}
 
 		//Permissions check.
-		if (!WDLPluginChannels.canSaveContainers(te.getPos().getX() >> 4, te
-				.getPos().getZ() >> 4)) {
-			WDLMessages.chatMessageTranslated(WDL.serverProps,
-					WDLMessageTypes.ON_GUI_CLOSED_INFO, "wdl.messages.onGuiClosedInfo.cannotSaveTileEntities");
-			return true;
-		}
+		// if (!WDLPluginChannels.canSaveContainers(te.getPos().getX() >> 4, te
+		// 		.getPos().getZ() >> 4)) {
+		// 	WDLMessages.chatMessageTranslated(WDL.serverProps,
+		// 			WDLMessageTypes.ON_GUI_CLOSED_INFO, "wdl.messages.onGuiClosedInfo.cannotSaveTileEntities");
+		// 	return true;
+		// }
 
 		BlockHandler<? extends TileEntity, ? extends Container> handler =
 				BlockHandler.getHandler(te.getClass(), wdl.windowContainer.getClass());
@@ -346,10 +342,10 @@ public class WDLEvents {
 	public void onBlockEvent(BlockPos pos, Block block, int data1, int data2) {
 		if (!WDL.downloading) { return; }
 
-		if (!WDLPluginChannels.canSaveTileEntities(pos.getX() >> 4,
-				pos.getZ() >> 4)) {
-			return;
-		}
+		// if (!WDLPluginChannels.canSaveTileEntities(pos.getX() >> 4,
+		// 		pos.getZ() >> 4)) {
+		// 	return;
+		// }
 
 		TileEntity blockEntity = wdl.worldClient.getTileEntity(pos);
 		if (blockEntity == null) {
@@ -377,9 +373,9 @@ public class WDLEvents {
 	public void onMapDataLoaded(int mapID, @Nonnull MapData mapData) {
 		if (!WDL.downloading) { return; }
 
-		if (!WDLPluginChannels.canSaveMaps()) {
-			return;
-		}
+		// if (!WDLPluginChannels.canSaveMaps()) {
+		// 	return;
+		// }
 
 		// Assume that the current dimension is the right one
 		EntityPlayerSP player = wdl.player;
@@ -393,23 +389,15 @@ public class WDLEvents {
 	}
 
 	/**
-	 * Must be called whenever a plugin channel message / custom payload packet
-	 * is received.
-	 */
-	public void onPluginChannelPacket(NetHandlerPlayClient sender,
-			String channel, byte[] bytes) {
-		WDLPluginChannels.onPluginChannelPacket(sender, channel, bytes);
-	}
-
-	/**
 	 * Must be called when an entity is about to be removed from the world.
 	 */
 	public void onRemoveEntityFromWorld(Entity entity) {
 		// If the entity is being removed and it's outside the default tracking
 		// range, go ahead and remember it until the chunk is saved.
 		if (WDL.downloading && entity != null
-				&& WDLPluginChannels.canSaveEntities(entity.chunkCoordX,
-						entity.chunkCoordZ)) {
+				// && WDLPluginChannels.canSaveEntities(entity.chunkCoordX,
+				// 		entity.chunkCoordZ)
+						) {
 			if (!EntityUtils.isEntityEnabled(entity)) {
 				WDLMessages.chatMessageTranslated(
 						WDL.serverProps,
@@ -665,62 +653,63 @@ public class WDLEvents {
 		}
 		@Override
 		public void onNHPCHandleCustomPayload(NetHandlerPlayClient sender,
-				S3FPacketCustomPayload packet) {
-			try {
-				if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
-					return;
-				}
-				if (ENABLE_PROFILER) PROFILER.startSection("wdl.onPluginMessage");
+				S3FPacketCustomPayload packet) {}
+		// 	try {
+		// 		if (!Minecraft.getMinecraft().isCallingFromMinecraftThread()) {
+		// 			return;
+		// 		}
+		// 		if (ENABLE_PROFILER) PROFILER.startSection("wdl.onPluginMessage");
 
-				if (ENABLE_PROFILER) PROFILER.startSection("Parse");
-				String channel = packet.getChannelName().toString(); // 1.13: ResourceLocation -> String; otherwise no-op
-				ByteBuf buf = packet.getBufferData();
-				int refCnt = buf.refCnt();
-				if (refCnt <= 0) {
-					// The buffer has already been released.  Just break out now.
-					// This happens with e.g. the MC|TrList packet (villager trade list),
-					// which closes the buffer after reading it.
-					if (ENABLE_PROFILER) PROFILER.endSection();  // "Parse"
-					if (ENABLE_PROFILER) PROFILER.endSection();  // "wdl.onPluginMessage"
-					return;
-				}
+		// 		if (ENABLE_PROFILER) PROFILER.startSection("Parse");
+		// 		String channel = packet.getChannelName().toString(); // 1.13: ResourceLocation -> String; otherwise no-op
+		// 		ByteBuf buf = packet.getBufferData();
+		// 		int refCnt = buf.refCnt();
+		// 		if (refCnt <= 0) {
+		// 			// The buffer has already been released.  Just break out now.
+		// 			// This happens with e.g. the MC|TrList packet (villager trade list),
+		// 			// which closes the buffer after reading it.
+		// 			if (ENABLE_PROFILER) PROFILER.endSection();  // "Parse"
+		// 			if (ENABLE_PROFILER) PROFILER.endSection();  // "wdl.onPluginMessage"
+		// 			return;
+		// 		}
 
-				// Something else may have already read the payload; return to the start
-				buf.markReaderIndex();
-				buf.readerIndex(0);
-				byte[] payload = new byte[buf.readableBytes()];
-				buf.readBytes(payload);
-				// OK, now that we've done our reading, return to where it was before
-				// (which could be the end, or other code might not have read it yet)
-				buf.resetReaderIndex();
-				// buf will be released by the packet handler, eventually.
-				// It definitely is NOT our responsibility to release it, as
-				// doing so would probably break other code outside of wdl.
-				// Perhaps we might want to call retain once at the start of this method
-				// and then release at the end, but that feels excessive (since there
-				// _shouldn't_ be multiple threads at play at this point, and if there
-				// were we'd be in trouble anyways).
+		// 		// Something else may have already read the payload; return to the start
+		// 		buf.markReaderIndex();
+		// 		buf.readerIndex(0);
+		// 		byte[] payload = new byte[buf.readableBytes()];
+		// 		buf.readBytes(payload);
+		// 		// OK, now that we've done our reading, return to where it was before
+		// 		// (which could be the end, or other code might not have read it yet)
+		// 		buf.resetReaderIndex();
+		// 		// buf will be released by the packet handler, eventually.
+		// 		// It definitely is NOT our responsibility to release it, as
+		// 		// doing so would probably break other code outside of wdl.
+		// 		// Perhaps we might want to call retain once at the start of this method
+		// 		// and then release at the end, but that feels excessive (since there
+		// 		// _shouldn't_ be multiple threads at play at this point, and if there
+		// 		// were we'd be in trouble anyways).
 
-				if (ENABLE_PROFILER) PROFILER.endSection();  // "Parse"
+		// 		if (ENABLE_PROFILER) PROFILER.endSection();  // "Parse"
 
-				if (ENABLE_PROFILER) PROFILER.startSection("Core");
-				wdlEvents.onPluginChannelPacket(sender, channel, payload);
-				if (ENABLE_PROFILER) PROFILER.endSection();  // "Core"
+		// 		if (ENABLE_PROFILER) PROFILER.startSection("Core");
+		// 		wdlEvents.onPluginChannelPacket(sender, channel, payload);
+		// 		if (ENABLE_PROFILER) PROFILER.endSection();  // "Core"
 
-				for (ModInfo<IPluginChannelListener> info : WDLApi
-						.getImplementingExtensions(IPluginChannelListener.class)) {
-					if (ENABLE_PROFILER) PROFILER.startSection(info.id);
-					info.mod.onPluginChannelPacket(wdl.worldClient, channel,
-							payload);
-					if (ENABLE_PROFILER) PROFILER.endSection();  // info.id
-				}
+		// 		for (ModInfo<IPluginChannelListener> info : WDLApi
+		// 				.getImplementingExtensions(IPluginChannelListener.class)) {
+		// 			if (ENABLE_PROFILER) PROFILER.startSection(info.id);
+		// 			info.mod.onPluginChannelPacket(wdl.worldClient, channel,
+		// 					payload);
+		// 			if (ENABLE_PROFILER) PROFILER.endSection();  // info.id
+		// 		}
 
-				if (ENABLE_PROFILER) PROFILER.endSection();  // "wdl.onPluginMessage"
-			} catch (Throwable e) {
-				wdl.crashed(e,
-						"WDL mod: exception in onNHPCHandleCustomPayload event");
-			}
-		}
+		// 		if (ENABLE_PROFILER) PROFILER.endSection();  // "wdl.onPluginMessage"
+		// 	} catch (Throwable e) {
+		// 		wdl.crashed(e,
+		// 				"WDL mod: exception in onNHPCHandleCustomPayload event");
+		// 	}
+		// }
+
 		@Override
 		public void onNHPCHandleBlockAction(NetHandlerPlayClient sender,
 				S24PacketBlockAction packet) {
@@ -807,19 +796,21 @@ public class WDLEvents {
 					displayString = I18n
 							.format("wdl.gui.ingameMenu.downloadStatus.singlePlayer");
 					enabled = false;
-				} else if (!WDLPluginChannels.canDownloadAtAll()) {
-					if (WDLPluginChannels.canRequestPermissions()) {
-						// Allow requesting permissions.
-						displayString = I18n
-								.format("wdl.gui.ingameMenu.downloadStatus.request");
-						enabled = true;
-					} else {
-						// Out of date plugin :/
-						displayString = I18n
-								.format("wdl.gui.ingameMenu.downloadStatus.disabled");
-						enabled = false;
-					}
-				} else if (WDL.saving) {
+				} 
+				// else if (!WDLPluginChannels.canDownloadAtAll()) {
+				// 	if (WDLPluginChannels.canRequestPermissions()) {
+				// 		// Allow requesting permissions.
+				// 		displayString = I18n
+				// 				.format("wdl.gui.ingameMenu.downloadStatus.request");
+				// 		enabled = true;
+				// 	} else {
+				// 		// Out of date plugin :/
+				// 		displayString = I18n
+				// 				.format("wdl.gui.ingameMenu.downloadStatus.disabled");
+				// 		enabled = false;
+				// 	}
+				// } 
+				else if (WDL.saving) {
 					// Normally not accessible; only happens as a major fallback...
 					displayString = I18n
 							.format("wdl.gui.ingameMenu.downloadStatus.saving");
@@ -847,23 +838,25 @@ public class WDLEvents {
 					wdl.stopDownload();
 					setEnabled(false); // Disable to stop double-clicks
 				} else {
-					if (!WDLPluginChannels.canDownloadAtAll()) {
-						// If they don't have any permissions, let the player
-						// request some.
-						if (WDLPluginChannels.canRequestPermissions()) {
-							wdl.minecraft.displayGuiScreen(new GuiWDLPermissions(menu, wdl));
-						} else {
-							// Should never happen
-						}
-					} else if (WDLPluginChannels.hasChunkOverrides()
-							&& !WDLPluginChannels.canDownloadInGeneral()) {
+					// if (!WDLPluginChannels.canDownloadAtAll()) {
+					// 	// If they don't have any permissions, let the player
+					// 	// request some.
+					// 	if (WDLPluginChannels.canRequestPermissions()) {
+					// 		wdl.minecraft.displayGuiScreen(new GuiWDLPermissions(menu, wdl));
+					// 	} else {
+					// 		// Should never happen
+					// 	}
+					// } else if (WDLPluginChannels.hasChunkOverrides()
+							// && 
+							// !WDLPluginChannels.canDownloadInGeneral()
+							// ) {
 						// Handle the "only has chunk overrides" state - notify
 						// the player of limited areas.
-						wdl.minecraft.displayGuiScreen(new GuiWDLChunkOverrides(menu, wdl));
-					} else {
+						// wdl.minecraft.displayGuiScreen(new GuiWDLChunkOverrides(menu, wdl));
+					// } else {
 						wdl.startDownload();
 						setEnabled(false); // Disable to stop double-clicks
-					}
+					// }
 				}
 			}
 		}

@@ -89,45 +89,8 @@ public class WDLPluginChannels {
 	 */
 	private static HashSet<Integer> receivedPackets = new HashSet<>();
 
-	/**
-	 * Whether functions that the server is not aware of can be used.
-	 * (Packet #0)
-	 */
-	private static boolean canUseFunctionsUnknownToServer = true;
-	/**
-	 * Whether all players are allowed to download the world in general.
-	 * If false, they aren't allowed, regardless of the other values below.
-	 */
-	private static boolean canDownloadInGeneral = true;
-	/**
-	 * The distance from a player that WDL can save chunks.
-	 *
-	 * This is only used when {@link #canCacheChunks} is false.
-	 */
 	private static int saveRadius = -1;
-	/**
-	 * Whether a player can cache chunks as they move.  In essence, this means
-	 * that if the value is true, the player can download the entire map while
-	 * moving about, but if false, the player will only save the nearby chunks
-	 * when they stop download.
-	 */
-	private static boolean canCacheChunks = true;
-	/**
-	 * Whether or not a player can save entities in the map.
-	 */
-	private static boolean canSaveEntities = true;
-	/**
-	 * Whether or not a player can save TileEntities in general.
-	 * <br/>
-	 * Chests and other containers also require {@link #canSaveContainers}.
-	 */
-	private static boolean canSaveTileEntities = true;
-	/**
-	 * Whether a player can save containers that require opening to save their
-	 * contents, such as chests.  For this value to have meaning, the value of
-	 * {@link #canSaveTileEntities} must also be true.
-	 */
-	private static boolean canSaveContainers = true;
+
 	/**
 	 * Map of entity ranges.
 	 *
@@ -179,200 +142,6 @@ public class WDLPluginChannels {
 	private static List<ChunkRange> chunkOverrideRequests = new ArrayList<>();
 
 	/**
-	 * Checks whether players can use functions unknown to the server.
-	 */
-	public static boolean canUseFunctionsUnknownToServer() {
-		if (receivedPackets.contains(0)) {
-			return canUseFunctionsUnknownToServer;
-		} else {
-			return true;
-		}
-	}
-
-	/**
-	 * Checks whether the player should be able to start download at all: Either
-	 * {@link #canDownloadInGeneral()} is true, or the player has some chunks
-	 * overridden.
-	 */
-	public static boolean canDownloadAtAll() {
-		if (hasChunkOverrides()) {
-			return true;
-		} else {
-			return canDownloadInGeneral();
-		}
-	}
-
-	/**
-	 * Checks whether players are allowed to download in general (outside of
-	 * overridden chunks).
-	 */
-	public static boolean canDownloadInGeneral() {
-		if (receivedPackets.contains(1)) {
-			return canDownloadInGeneral;
-		} else {
-			return canUseFunctionsUnknownToServer();
-		}
-	}
-
-	/**
-	 * Checks if a chunk is within the saveRadius
-	 * (and chunk caching is disabled).
-	 */
-	public static boolean canSaveChunk(Chunk chunk) {
-		if (isChunkOverridden(chunk)) {
-			return true;
-		}
-
-		if (!canDownloadInGeneral()) {
-			return false;
-		}
-
-		if (receivedPackets.contains(1)) {
-			if (!canCacheChunks && saveRadius >= 0) {
-				int distanceX = chunk.getChunkCoordIntPair().chunkXPos - WDL.getInstance().player.chunkCoordX;
-				int distanceZ = chunk.getChunkCoordIntPair().chunkZPos - WDL.getInstance().player.chunkCoordZ;
-
-				if (Math.abs(distanceX) > saveRadius ||
-						Math.abs(distanceZ) > saveRadius) {
-					return false;
-				}
-			}
-
-			return true;
-		} else {
-			return canUseFunctionsUnknownToServer();
-		}
-	}
-
-	/**
-	 * Checks whether entities are allowed to be saved.
-	 */
-	public static boolean canSaveEntities() {
-		if (!canDownloadInGeneral()) {
-			return false;
-		}
-
-		if (receivedPackets.contains(1)) {
-			return canSaveEntities;
-		} else {
-			return canUseFunctionsUnknownToServer();
-		}
-	}
-
-	/**
-	 * Checks whether entities are allowed to be saved in the given chunk.
-	 */
-	public static boolean canSaveEntities(Chunk chunk) {
-		if (isChunkOverridden(chunk)) {
-			return true;
-		}
-
-		return canSaveEntities();
-	}
-
-	/**
-	 * Checks whether entities are allowed to be saved in the given chunk.
-	 */
-	public static boolean canSaveEntities(int chunkX, int chunkZ) {
-		if (isChunkOverridden(chunkX, chunkZ)) {
-			return true;
-		}
-
-		return canSaveEntities();
-	}
-
-	/**
-	 * Checks whether a player can save tile entities.
-	 */
-	public static boolean canSaveTileEntities() {
-		if (!canDownloadInGeneral()) {
-			return false;
-		}
-
-		if (receivedPackets.contains(1)) {
-			return canSaveTileEntities;
-		} else {
-			return canUseFunctionsUnknownToServer();
-		}
-	}
-
-	/**
-	 * Checks whether a player can save tile entities in the given chunk.
-	 */
-	public static boolean canSaveTileEntities(Chunk chunk) {
-		if (isChunkOverridden(chunk)) {
-			return true;
-		}
-
-		return canSaveTileEntities();
-	}
-
-	/**
-	 * Checks whether a player can save tile entities in the given chunk.
-	 */
-	public static boolean canSaveTileEntities(int chunkX, int chunkZ) {
-		if (isChunkOverridden(chunkX, chunkZ)) {
-			return true;
-		}
-
-		return canSaveTileEntities();
-	}
-
-	/**
-	 * Checks whether containers (such as chests) can be saved.
-	 */
-	public static boolean canSaveContainers() {
-		if (!canDownloadInGeneral()) {
-			return false;
-		}
-		if (!canSaveTileEntities()) {
-			return false;
-		}
-		if (receivedPackets.contains(1)) {
-			return canSaveContainers;
-		} else {
-			return canUseFunctionsUnknownToServer();
-		}
-	}
-
-	/**
-	 * Checks whether containers (such as chests) can be saved.
-	 */
-	public static boolean canSaveContainers(Chunk chunk) {
-		if (isChunkOverridden(chunk)) {
-			return true;
-		}
-
-		return canSaveContainers();
-	}
-
-	/**
-	 * Checks whether containers (such as chests) can be saved.
-	 */
-	public static boolean canSaveContainers(int chunkX, int chunkZ) {
-		if (isChunkOverridden(chunkX, chunkZ)) {
-			return true;
-		}
-
-		return canSaveContainers();
-	}
-
-	/**
-	 * Checks whether maps (the map item, not the world itself) can be saved.
-	 */
-	public static boolean canSaveMaps() {
-		if (!canDownloadInGeneral()) {
-			return false;
-		}
-		//TODO: Better value than 'canSaveTileEntities'.
-		if (receivedPackets.contains(1)) {
-			return canSaveTileEntities;
-		} else {
-			return canUseFunctionsUnknownToServer();
-		}
-	}
-
-	/**
 	 * Gets the server-set range for the given entity.
 	 *
 	 * @param entity The entity's name (via {@link EntityUtils#getEntityType}).
@@ -380,9 +149,6 @@ public class WDLPluginChannels {
 	 */
 	@CheckForSigned
 	public static int getEntityRange(String entity) {
-		if (!canSaveEntities(null)) {
-			return -1;
-		}
 		if (receivedPackets.contains(2)) {
 			if (entityRanges.containsKey(entity)) {
 				return entityRanges.get(entity);
@@ -407,18 +173,6 @@ public class WDLPluginChannels {
 	}
 
 	/**
-	 * Gets whether chunks can be cached.
-	 *
-	 * Note that using {@link #canSaveChunk(Chunk)} is generally better
-	 * as it handles most of the radius logic.
-	 *
-	 * @return {@link #canCacheChunks}.
-	 */
-	public static boolean canCacheChunks() {
-		return canCacheChunks;
-	}
-
-	/**
 	 * Checks if the server-set entity range is configured.
 	 */
 	public static boolean hasServerEntityRange() {
@@ -429,12 +183,7 @@ public class WDLPluginChannels {
 		return new HashMap<>(entityRanges);
 	}
 
-	/**
-	 * Gets whether permissions are available.
-	 */
-	public static boolean hasPermissions() {
-		return receivedPackets != null && !receivedPackets.isEmpty();
-	}
+
 
 	/**
 	 * Gets whether permissions are available.
@@ -523,53 +272,6 @@ public class WDLPluginChannels {
 	}
 
 	/**
-	 * Create a new permission request.
-	 * @param key The key for the request.
-	 * @param value The wanted value.
-	 */
-	public static void addRequest(String key, String value) {
-		if (!isValidRequest(key, value)) {
-			return;
-		}
-
-		requests.put(key, value);
-	}
-
-	/**
-	 * Gets an immutable copy of the current requests.
-	 */
-	public static Map<String, String> getRequests() {
-		return ImmutableMap.copyOf(requests);
-	}
-
-	/**
-	 * Is the given set of values valid for the given request?
-	 *
-	 * Handles checking if the key exists and if the value is valid.
-	 *
-	 * @param key The key for the request.
-	 * @param value The wanted value.
-	 */
-	public static boolean isValidRequest(String key, String value) {
-		if (key == null || value == null) {
-			return false;
-		}
-
-		if (BOOLEAN_REQUEST_FIELDS.contains(key)) {
-			return value.equals("true") || value.equals("false");
-		} else if (INTEGER_REQUEST_FIELDS.contains(key)) {
-			try {
-				Integer.parseInt(value);
-				return true;
-			} catch (NumberFormatException e) {
-				return false;
-			}
-		}
-
-		return false;
-	}
-
-	/**
 	 * Gets the current list of chunk override requests.
 	 */
 	public static List<ChunkRange> getChunkOverrideRequests() {
@@ -583,42 +285,6 @@ public class WDLPluginChannels {
 	}
 
 	/**
-	 * Sends the current requests to the server.
-	 */
-	public static void sendRequests() {
-		if (requests.isEmpty() && chunkOverrideRequests.isEmpty()) {
-			return;
-		}
-
-		ByteArrayDataOutput output = ByteStreams.newDataOutput();
-
-		output.writeUTF("REQUEST REASON WILL GO HERE"); //TODO
-		output.writeInt(requests.size());
-		for (Map.Entry<String, String> request : requests.entrySet()) {
-			output.writeUTF(request.getKey());
-			output.writeUTF(request.getValue());
-		}
-
-		output.writeInt(chunkOverrideRequests.size());
-		for (ChunkRange range : chunkOverrideRequests) {
-			range.writeToOutput(output);
-		}
-
-		NetHandlerPlayClient nhpc = Minecraft.getMinecraft().getNetHandler();
-		NetworkManager nmgr = nhpc.getNetworkManager();
-		final String channel;
-		if (isRegistered(nhpc, REQUEST_CHANNEL_NEW)) {
-			channel = REQUEST_CHANNEL_NEW;
-		} else if (isRegistered(nhpc, REQUEST_CHANNEL_OLD)) {
-			channel = REQUEST_CHANNEL_OLD;
-		} else {
-			throw new RuntimeException("No request channel has been registered :("); // XXX
-		}
-		C17PacketCustomPayload requestPacket = PacketFunctions.makePluginMessagePacket(channel, output.toByteArray());
-		nmgr.sendPacket(requestPacket);
-	}
-
-	/**
 	 * Channels that the server has registered/unregistered.
 	 *
 	 * A map from a NetworkManager instance to a String, so that data is kept per-server.
@@ -629,19 +295,6 @@ public class WDLPluginChannels {
 	 * XXX Equally unfortunately, the server never bothers to tell the client what channels it will send on...
 	 */
 	private static final Map<NetworkManager, Set<@ChannelName String>> REGISTERED_CHANNELS = new WeakHashMap<>();
-
-	/** Channels for the init packet */
-	private static final String INIT_CHANNEL_OLD = "WDL|INIT", INIT_CHANNEL_NEW = "wdl:init";
-	/** Channels for the control packet */
-	private static final String CONTROL_CHANNEL_OLD = "WDL|CONTROL", CONTROL_CHANNEL_NEW = "wdl:control";
-	/** Channels for the request packet */
-	private static final String REQUEST_CHANNEL_OLD = "WDL|REQUEST", REQUEST_CHANNEL_NEW = "wdl:request";
-
-	/** All known channels */
-	private static final List<@ChannelName String> WDL_CHANNELS = PacketFunctions.removeInvalidChannelNames(
-			INIT_CHANNEL_NEW, CONTROL_CHANNEL_NEW, REQUEST_CHANNEL_NEW,
-			INIT_CHANNEL_OLD, CONTROL_CHANNEL_OLD, REQUEST_CHANNEL_OLD
-			);
 
 	/**
 	 * Gets the current set of registered channels for this server.
@@ -667,77 +320,12 @@ public class WDLPluginChannels {
 	@Nullable
 	private static String deferredInitState = null;
 
-	public static void sendInitPacket(String state) {
-		sendInitPacket(Minecraft.getMinecraft().getNetHandler(), state);
-	}
-	private static void sendInitPacket(NetHandlerPlayClient nhpc, String state) {
-		assert nhpc != null : "Unexpected null nhpc: state=" + state + ", chans=" + REGISTERED_CHANNELS;
-		NetworkManager nmgr = nhpc.getNetworkManager();
-		final String channel;
-		if (isRegistered(nhpc, INIT_CHANNEL_NEW)) {
-			channel = INIT_CHANNEL_NEW;
-		} else if (isRegistered(nhpc, INIT_CHANNEL_OLD)) {
-			channel = INIT_CHANNEL_OLD;
-		} else {
-			if (LOGGER.isDebugEnabled()) {
-				LOGGER.debug("[WDL] Deferring init packet for state {} (existing deferred state is {} -- should be null), as no registered channel: {}", state, deferredInitState, REGISTERED_CHANNELS);
-			}
-			deferredInitState = state;
-			return;
-		}
-
-		LOGGER.debug("[WDL] Sending init packet for state {} on {}", state, channel);
-
-		JsonObject object = new JsonObject();
-		object.addProperty("X-RTFM", "https://wiki.vg/Plugin_channels/World_downloader");
-		object.addProperty("X-UpdateNote", UPDATE_NOTE);
-		object.addProperty("Version", VersionConstants.getModFullVersion());
-		object.addProperty("State", state);
-		byte[] bytes = object.toString().getBytes(StandardCharsets.UTF_8);
-
-		C17PacketCustomPayload initPacket = PacketFunctions.makePluginMessagePacket(channel, bytes);
-
-		nmgr.sendPacket(initPacket);
-
-		deferredInitState = null;
-	}
-
-	/**
-	 * Event that is called when the world is loaded.
-	 * Sets the default values, and then asks the server to give the
-	 * correct ones.
-	 */
-	static void onWorldLoad() {
-		Minecraft minecraft = Minecraft.getMinecraft();
-
-		receivedPackets = new HashSet<>();
-		requests = new HashMap<>();
-		chunkOverrideRequests = new ArrayList<>();
-
-		canUseFunctionsUnknownToServer = true;
-
-		WDLMessages.chatMessageTranslated(
-				WDL.serverProps,
-				WDLMessageTypes.PLUGIN_CHANNEL_MESSAGE, "wdl.messages.permissions.init");
-
-		// Register the WDL messages.
-		byte[] registerBytes = String.join("\0", WDL_CHANNELS).getBytes();
-
-		C17PacketCustomPayload registerPacket = PacketFunctions.makePluginMessagePacket(PacketFunctions.getRegisterChannel(), registerBytes);
-		minecraft.getNetHandler().getNetworkManager().sendPacket(registerPacket);
-
-		// Send the init message.
-		sendInitPacket("Init?");
-	}
-
 	static void onPluginChannelPacket(NetHandlerPlayClient sender, @ChannelName String channel, byte[] bytes) {
 		if ("REGISTER".equals(channel) || "minecraft:register".equals(channel)) {
 			registerChannels(sender, bytes);
 		} else if ("UNREGISTER".equals(channel) || "minecraft:unregister".equals(channel)) {
 			unregisterChannels(sender, bytes);
-		} else if (CONTROL_CHANNEL_NEW.equals(channel) || CONTROL_CHANNEL_OLD.equals(channel)) {
-			handleControlPacket(bytes);
-		}
+		} 
 	}
 
 	private static void registerChannels(NetHandlerPlayClient nhpc, byte[] bytes) {
@@ -747,7 +335,7 @@ public class WDLPluginChannels {
 
 		List<String> channels = Arrays.asList(str.split("\0"));
 		channels.stream()
-				.filter(WDL_CHANNELS::contains)
+				// .filter(WDL_CHANNELS::contains)
 				.forEach(getRegisteredChannels(nhpc)::add);
 
 		if (LOGGER.isDebugEnabled()) {
@@ -755,8 +343,8 @@ public class WDLPluginChannels {
 		}
 
 		if (deferredInitState != null) {
-			LOGGER.debug("[WDL] REGISTER: Trying to resolve deferred {}", deferredInitState);
-			sendInitPacket(nhpc, deferredInitState);
+			LOGGER.debug("[WDL] REGISTER: Trying to resolve deferred {}, REMOVED", deferredInitState);
+			// sendInitPacket(nhpc, deferredInitState);
 		}
 	}
 
@@ -766,203 +354,12 @@ public class WDLPluginChannels {
 		String str = new String(bytes, StandardCharsets.UTF_8);
 		List<String> channels = Arrays.asList(str.split("\0"));
 		channels.stream()
-				.filter(WDL_CHANNELS::contains)
+				// .filter(WDL_CHANNELS::contains)
 				.forEach(getRegisteredChannels(nhpc)::remove);
 
 		if (LOGGER.isDebugEnabled()) {
 			LOGGER.debug("[WDL] UNREGISTER: " + str + "/" + channels + ": " + existing + " => " + REGISTERED_CHANNELS);
 		}
-	}
-
-	private static void handleControlPacket(byte[] bytes) {
-		try {
-			ByteArrayDataInput input = ByteStreams.newDataInput(bytes);
-
-			int section = input.readInt();
-
-			receivedPackets.add(section);
-
-			switch (section) {
-			case 0:
-				canUseFunctionsUnknownToServer = input.readBoolean();
-
-				WDLMessages.chatMessageTranslated(
-						WDL.serverProps,
-						WDLMessageTypes.PLUGIN_CHANNEL_MESSAGE,
-						"wdl.messages.permissions.packet0", canUseFunctionsUnknownToServer);
-
-				break;
-			case 1:
-				canDownloadInGeneral = input.readBoolean();
-				saveRadius = input.readInt();
-				canCacheChunks = input.readBoolean();
-				canSaveEntities = input.readBoolean();
-				canSaveTileEntities = input.readBoolean();
-				canSaveContainers = input.readBoolean();
-
-				WDLMessages.chatMessageTranslated(
-						WDL.serverProps,
-						WDLMessageTypes.PLUGIN_CHANNEL_MESSAGE,
-						"wdl.messages.permissions.packet1", canDownloadInGeneral,
-						saveRadius, canCacheChunks,
-						canSaveEntities, canSaveTileEntities, canSaveContainers);
-
-				//Cancel a download if it is occurring.
-				if (!canDownloadInGeneral) {
-					if (WDL.downloading) {
-						WDLMessages.chatMessageTranslated(
-								WDL.serverProps,
-								WDLMessageTypes.ERROR, "wdl.messages.generalError.forbidden");
-						WDL.getInstance().cancelDownload();
-					}
-				}
-				break;
-			case 2:
-				entityRanges.clear();
-
-				int count = input.readInt();
-				for (int i = 0; i < count; i++) {
-					String name = input.readUTF();
-					int range = input.readInt();
-
-					entityRanges.put(name, range);
-				}
-
-				WDLMessages.chatMessageTranslated(
-						WDL.serverProps,
-						WDLMessageTypes.PLUGIN_CHANNEL_MESSAGE,
-						"wdl.messages.permissions.packet2", entityRanges.size());
-				break;
-			case 3:
-				canRequestPermissions = input.readBoolean();
-				requestMessage = input.readUTF();
-
-				WDLMessages.chatMessageTranslated(
-						WDL.serverProps,
-						WDLMessageTypes.PLUGIN_CHANNEL_MESSAGE,
-						"wdl.messages.permissions.packet3", canRequestPermissions,
-						requestMessage.length(), Integer.toHexString(requestMessage.hashCode()));
-				// Don't include the exact message because it's too long and would be spammy.
-				break;
-			case 4:
-				chunkOverrides.clear();
-
-				int numRangeGroups = input.readInt();
-				int totalRanges = 0;
-				for (int i = 0; i < numRangeGroups; i++) {
-					String groupName = input.readUTF();
-					int groupSize = input.readInt();
-
-					Multimap<String, ChunkRange> ranges = HashMultimap
-							.<String, ChunkRange> create();
-
-					for (int j = 0; j < groupSize; j++) {
-						ChunkRange range = ChunkRange.readFromInput(input);
-						ranges.put(range.tag, range);
-					}
-
-					chunkOverrides.put(groupName, ranges);
-
-					totalRanges += groupSize;
-				}
-
-				WDLMessages.chatMessageTranslated(
-						WDL.serverProps,
-						WDLMessageTypes.PLUGIN_CHANNEL_MESSAGE,
-						"wdl.messages.permissions.packet4", numRangeGroups, totalRanges);
-				break;
-			case 5:
-
-				String groupToEdit = input.readUTF();
-				boolean replaceGroups = input.readBoolean();
-				int numNewGroups = input.readInt();
-
-				Multimap<String, ChunkRange> newRanges = HashMultimap
-						.<String, ChunkRange> create();
-				if (!replaceGroups) {
-					newRanges.putAll(chunkOverrides.get(groupToEdit));
-				}
-
-				for (int i = 0; i < numNewGroups; i++) {
-					ChunkRange range = ChunkRange.readFromInput(input);
-
-					newRanges.put(range.tag, range);
-				}
-				chunkOverrides.put(groupToEdit, newRanges);
-
-				if (replaceGroups) {
-					WDLMessages.chatMessageTranslated(
-							WDL.serverProps,
-							WDLMessageTypes.PLUGIN_CHANNEL_MESSAGE,
-							"wdl.messages.permissions.packet5.set", numNewGroups, groupToEdit);
-				} else {
-					WDLMessages.chatMessageTranslated(
-							WDL.serverProps,
-							WDLMessageTypes.PLUGIN_CHANNEL_MESSAGE,
-							"wdl.messages.permissions.packet5.added", numNewGroups, groupToEdit);
-				}
-				break;
-			case 6:
-				String groupToChangeTagsFor = input.readUTF();
-				int numTags = input.readInt();
-				String[] tags = new String[numTags];
-
-				for (int i = 0; i < numTags; i++) {
-					tags[i] = input.readUTF();
-				}
-
-				int oldCount = 0;
-				for (String tag : tags) {
-					oldCount += chunkOverrides.get(groupToChangeTagsFor)
-							.get(tag).size();
-					chunkOverrides.get(groupToChangeTagsFor).removeAll(tag);
-				}
-
-				WDLMessages.chatMessageTranslated(
-						WDL.serverProps,
-						WDLMessageTypes.PLUGIN_CHANNEL_MESSAGE,
-						"wdl.messages.permissions.packet6", oldCount, groupToChangeTagsFor, Arrays.toString(tags));
-				break;
-			case 7:
-				String groupToSetTagFor = input.readUTF();
-				String tag = input.readUTF();
-				int numNewRanges = input.readInt();
-
-				Collection<ChunkRange> oldRanges = chunkOverrides.get(
-						groupToSetTagFor).removeAll(tag);
-				int numRangesRemoved = oldRanges.size();
-
-				for (int i = 0; i < numNewRanges; i++) {
-					//TODO: Ensure that the range has the right tag.
-
-					chunkOverrides.get(groupToSetTagFor).put(tag,
-							ChunkRange.readFromInput(input));
-				}
-
-				WDLMessages.chatMessageTranslated(
-						WDL.serverProps,
-						WDLMessageTypes.PLUGIN_CHANNEL_MESSAGE,
-						"wdl.messages.permissions.packet7", numRangesRemoved, groupToSetTagFor, tag, numNewRanges);
-				break;
-			default:
-				WDLMessages.chatMessageTranslated(
-						WDL.serverProps,
-						WDLMessageTypes.PLUGIN_CHANNEL_MESSAGE, "wdl.messages.permissions.unknownPacket", section);
-				dump(bytes);
-			}
-		} catch (Exception ex) {
-			WDLMessages.chatMessageTranslated(WDL.serverProps, WDLMessageTypes.PLUGIN_CHANNEL_MESSAGE,
-					"wdl.messages.permissions.badPacket", ex);
-		}
-	}
-
-	private static void dump(byte[] bytes) {
-		StringBuilder messageBuilder = new StringBuilder();
-		for (byte b : bytes) {
-			messageBuilder.append(b).append(' ');
-		}
-
-		LOGGER.info(messageBuilder.toString());
 	}
 
 	/**

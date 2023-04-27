@@ -136,31 +136,27 @@ public class GuiWDLChunkOverrides extends WDLScreen {
 		});
 
 		this.addButton(new WDLButton(width / 2 - 80, 18, 80, 20,
-				"Send request") {
+				"Send request (nonfuctionnal as of now)") {
 			public @Override void performAction() {
-				WDLPluginChannels.sendRequests();
+				// WDLPluginChannels.sendRequests();
 			}
 		});
 
 		this.startDownloadButton = this.addButton(new WDLButton(width / 2 + 5, 18, 150, 20,
 				"Start download in these ranges") {
 			public @Override void performAction() {
-				if (!WDLPluginChannels.canDownloadAtAll()) {
-					setEnabled(false);
-					return;
-				}
+				// if (!WDLPluginChannels.canDownloadAtAll()) {
+				// 	setEnabled(false);
+				// 	return;
+				// }
 				wdl.startDownload();
 			}
 		});
-		startDownloadButton.setEnabled(WDLPluginChannels.canDownloadAtAll());
+		startDownloadButton.setEnabled(true);
 
 		this.addButton(new ButtonDisplayGui(width / 2 - 100, height - 29,
 				200, 20, this.parent));
 
-		this.addButton(new ButtonDisplayGui(this.width / 2 - 155, 39, 100, 20,
-				I18n.format("wdl.gui.permissions.current"), () -> new GuiWDLPermissions(this.parent, this.wdl)));
-		this.addButton(new ButtonDisplayGui(this.width / 2 - 50, 39, 100, 20,
-				I18n.format("wdl.gui.permissions.request"), () -> new GuiWDLPermissionRequest(this.parent, this.wdl)));
 		this.addButton(new WDLButton(this.width / 2 + 55, 39, 100, 20,
 				I18n.format("wdl.gui.permissions.overrides")) {
 			public @Override void performAction() {
