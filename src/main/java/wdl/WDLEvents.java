@@ -778,14 +778,10 @@ public class WDLEvents {
 		private static final int WDLo = ('W' << 24) | ('D' << 16) | ('L' << 8) | ('o');
 
 		private class StartDownloadButton extends WDLButton {
-			public StartDownloadButton(GuiScreen menu, int x, int y, int width, int height) {
+			public StartDownloadButton(GuiScreen _menu, int x, int y, int width, int height) {
 				super(x, y, width, height, null);
-				this.menu = menu;
 				this.id = WDLs; // keep unique, even though this isn't used by WDL
 			}
-
-			// The GuiScreen containing this button, as a parent for other GUIs
-			private final GuiScreen menu;
 
 			@Override
 			public void beforeDraw() {

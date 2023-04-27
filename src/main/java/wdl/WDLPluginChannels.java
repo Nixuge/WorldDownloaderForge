@@ -19,14 +19,8 @@ import java.util.HashMap;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
-import java.util.Set;
-import java.util.WeakHashMap;
-
 import javax.annotation.CheckForSigned;
 import javax.annotation.Nullable;
-
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
 
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -35,10 +29,7 @@ import com.google.common.collect.Multimap;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteArrayDataOutput;
 
-import net.minecraft.client.network.NetHandlerPlayClient;
-import net.minecraft.network.NetworkManager;
 import net.minecraft.world.chunk.Chunk;
-import wdl.functions.PacketFunctions.ChannelName;
 
 /**
  * World Downloader permission system implemented with Plugin Channels.
@@ -234,18 +225,6 @@ public class WDLPluginChannels {
 	public static void addChunkOverrideRequest(ChunkRange range) {
 		chunkOverrideRequests.add(range);
 	}
-
-	/**
-	 * Channels that the server has registered/unregistered.
-	 *
-	 * A map from a NetworkManager instance to a String, so that data is kept per-server.
-	 *
-	 * Unfortunately, clearing in onWorldLoad -> newServer doesn't work right, as that happens
-	 * after (possibly far after) plugin messages are handled.
-	 *
-	 * XXX Equally unfortunately, the server never bothers to tell the client what channels it will send on...
-	 */
-	private static final Map<NetworkManager, Set<@ChannelName String>> REGISTERED_CHANNELS = new WeakHashMap<>();
 
 	/**
 	 * The state for {@link #sendInitPacket(String)} if it was called when no channels were registered.
