@@ -1362,33 +1362,6 @@ public class WDL {
 			gamerules.setString(e.getKey(), e.getValue());
 		}
 		worldInfoNBT.setTag("GameRules", gamerules);
-
-		addForgeDataToWorldInfo(rootWorldInfoNBT, worldInfoNBT);
-	}
-
-	private void addForgeDataToWorldInfo(NBTTagCompound rootWorldInfoNBT, NBTTagCompound worldInfoNBT) {
-		try {
-			NBTTagCompound versionInfo = worldInfoNBT.getCompoundTag("Version");
-
-			Class<?> fmlCommonHandler = Class.forName("net.minecraftforge.fml.common.FMLCommonHandler");
-			Object instance = fmlCommonHandler.getMethod("instance").invoke(null);
-			Object dataFixer = fmlCommonHandler.getMethod("getDataFixer").invoke(instance);
-			Method writeVersionData = dataFixer.getClass()
-					.getMethod("writeVersionData", NBTTagCompound.class);
-			writeVersionData.invoke(dataFixer, versionInfo);
-		} catch (Throwable ex) {
-			LOGGER.info("Failed to call FML writeVersionData", ex);
-		}
-
-		try {
-			Class<?> fmlCommonHandler = Class.forName("net.minecraftforge.fml.common.FMLCommonHandler");
-			Object instance = fmlCommonHandler.getMethod("instance").invoke(null);
-			Method handleWorldDataSave = fmlCommonHandler.getMethod("handleWorldDataSave",
-					SaveHandler.class, WorldInfo.class, NBTTagCompound.class);
-			handleWorldDataSave.invoke(instance, saveHandler, worldClient.getWorldInfo(), rootWorldInfoNBT);
-		} catch (Throwable ex) {
-			LOGGER.info("Failed to call FML handleWorldDataSave", ex);
-		}
 	}
 
 	/**
