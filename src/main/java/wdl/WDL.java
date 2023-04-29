@@ -44,9 +44,6 @@ import com.google.common.collect.Maps;
 import com.google.common.collect.Multimap;
 
 import me.nixuge.worlddownloader.McMod;
-import net.minecraft.block.Block;
-import net.minecraft.block.BlockAir;
-import net.minecraft.block.BlockBed;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.entity.EntityPlayerSP;
 import net.minecraft.client.multiplayer.ChunkProviderClient;
@@ -72,8 +69,6 @@ import net.minecraft.util.ChatComponentTranslation;
 import net.minecraft.world.GameRules;
 import net.minecraft.world.MinecraftException;
 import net.minecraft.world.chunk.Chunk;
-import net.minecraft.world.chunk.storage.ExtendedBlockStorage;
-import net.minecraft.world.chunk.EmptyChunk;
 import net.minecraft.world.chunk.storage.RegionFileCache;
 import net.minecraft.world.storage.MapData;
 import net.minecraft.world.storage.SaveHandler;
@@ -980,10 +975,10 @@ public class WDL {
 		
 		try {
 			savedChunks.add(c.getChunkCoordIntPair());
-			if (isEmpty(c)) {
-				LOGGER.warn("[WDL] Tried to save empty chunk! (" + c + "@" + c.getChunkCoordIntPair().chunkXPos + "," + c.getChunkCoordIntPair().chunkZPos + ")");
-				return;
-			}
+			// if (isEmpty(c)) {
+			// 	LOGGER.warn("[WDL] Tried to save empty chunk! (" + c + "@" + c.getChunkCoordIntPair().chunkXPos + "," + c.getChunkCoordIntPair().chunkZPos + ")");
+			// 	return;
+			// }
 			chunkLoader.saveChunk(worldClient, c);
 		} catch (Exception e) {
 			// Better tell the player that something didn't work:
@@ -993,43 +988,43 @@ public class WDL {
 		}
 	}
 
-	private boolean isEmpty(Chunk c) {
-		if (c.isEmpty() || c instanceof EmptyChunk) {
-			return true;
-		}
+	// private boolean isEmpty(Chunk c) {
+	// 	if (c.isEmpty() || c instanceof EmptyChunk) {
+	// 		return true;
+	// 	}
 	
-		ExtendedBlockStorage[] array = c.getBlockStorageArray();
-		if (array.length == 0) {
-			return true;
-		}
-		for (int i = 1; i < array.length; i++) {
-			if (array[i] != null && (!array[i].isEmpty())) {
-				return false;
-			}
-		}
+	// 	ExtendedBlockStorage[] array = c.getBlockStorageArray();
+	// 	if (array.length == 0) {
+	// 		return true;
+	// 	}
+	// 	for (int i = 1; i < array.length; i++) {
+	// 		if (array[i] != null && (!array[i].isEmpty())) {
+	// 			return false;
+	// 		}
+	// 	}
 
-		if (array[0] != null && !array[0].isEmpty()) {
-			// All-air empty chunks sometimes are sent with a bottom section;
-			// handle that and a few other special cases.
-			for (int y = 0; y < 16; y++) {
-				for (int z = 0; z < 16; z++) {
-					for (int x = 0; x < 16; x++) {
-						Block block = array[0].get(x, y, z).getBlock(); 
-						if (!(block instanceof BlockAir || block instanceof BlockBed)) {
-							// Contains a non-airoid; stop
-							return false;
-						}
-					}
-				}
-			}
-			// Only composed of airoids; treat as empty
-			LOGGER.warn("[WDL] Skipping airoid empty chunk at " + c.getChunkCoordIntPair().chunkXPos + ", " + c.getChunkCoordIntPair().chunkZPos);
-		} else {
-			// Definitely empty
-			LOGGER.warn("[WDL] Skipping chunk with all null sections at " + c.getChunkCoordIntPair().chunkXPos + ", " + c.getChunkCoordIntPair().chunkZPos);
-		}
-		return true;
-	}
+	// 	if (array[0] != null && !array[0].isEmpty()) {
+	// 		// All-air empty chunks sometimes are sent with a bottom section;
+	// 		// handle that and a few other special cases.
+	// 		for (int y = 0; y < 16; y++) {
+	// 			for (int z = 0; z < 16; z++) {
+	// 				for (int x = 0; x < 16; x++) {
+	// 					Block block = array[0].get(x, y, z).getBlock(); 
+	// 					if (!(block instanceof BlockAir || block instanceof BlockBed)) {
+	// 						// Contains a non-airoid; stop
+	// 						return false;
+	// 					}
+	// 				}
+	// 			}
+	// 		}
+	// 		// Only composed of airoids; treat as empty
+	// 		LOGGER.warn("[WDL] Skipping airoid empty chunk at " + c.getChunkCoordIntPair().chunkXPos + ", " + c.getChunkCoordIntPair().chunkZPos);
+	// 	} else {
+	// 		// Definitely empty
+	// 		LOGGER.warn("[WDL] Skipping chunk with all null sections at " + c.getChunkCoordIntPair().chunkXPos + ", " + c.getChunkCoordIntPair().chunkZPos);
+	// 	}
+	// 	return true;
+	// }
 
 	/**
 	 * Loads the sever-shared properties, which act as a default
