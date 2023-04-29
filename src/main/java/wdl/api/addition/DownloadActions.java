@@ -1,11 +1,9 @@
 package wdl.api.addition;
 
 import wdl.WDL;
-import wdl.WDLPluginChannels;
 import wdl.gui.notifications.Level;
 import wdl.gui.notifications.Notification;
 import wdl.gui.notifications.NotificationManager;
-import wdl.gui.pages.GuiWDLChunkOverrides;
 
 // TODO: clean up both the current api & this
 
