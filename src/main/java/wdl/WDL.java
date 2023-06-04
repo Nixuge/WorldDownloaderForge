@@ -1189,6 +1189,7 @@ public class WDL {
 			File worldPropsFile = new File(worldFolder, "WorldDownloader.txt");
 			try {
 				worldProps.store(worldPropsFile, I18n.format("wdl.props.world.title"));
+				worldProps.store(worldPropsFile, "Version: " + McMod.getFullVersionString() + " - Minecraft 1.8.9");
 			} catch (Exception e) {
 				LOGGER.warn("Failed to write world props!", e);
 			}
@@ -1200,6 +1201,7 @@ public class WDL {
 		File serverPropsFile = new File(baseFolder, "WorldDownloader.txt");
 		try {
 			serverProps.store(serverPropsFile, I18n.format("wdl.props.base.title"));
+			serverProps.store(serverPropsFile, "Version: " + McMod.getFullVersionString() + " - Minecraft 1.8.9");
 		} catch (Exception e) {
 			LOGGER.warn("Failed to write server props!", e);
 		}

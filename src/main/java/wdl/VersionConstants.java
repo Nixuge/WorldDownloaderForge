@@ -86,7 +86,7 @@ public class VersionConstants {
 	 * @return A version string, eg <samp>4.0.0.0</samp>
 	 */
 	public static String getModFullVersion() {
-		return McMod.getFullConfigString();
+		return McMod.getFullVersionString();
 	}
 
 	public static String getOriginalModVersion() {
