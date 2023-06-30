@@ -5,11 +5,17 @@ This port was intended to run on Forge 1.8.9, but I ended up doing:  `1.9.4-lite
 I'll maybe eventually port 1.12.2.  
 
 # Credits/License
-I did not remove any credit in the files in this repo, nor did I change the license in them.  
-You can view the license in this repo's files. If some license is specified on top, you have to respect it. Otherwise, the file is from me and not the original project, in which case do whathever you want with it.  
-Note that since the compiled project includes all of the files in the src/ folder from this repo, you have to respect each of their licenses if you use it.  
-I've got credit from Pokechu to make this fork.  
-![Permission](https://user-images.githubusercontent.com/33488576/227806844-d7843197-e7bc-4699-aba1-8bc62803da31.png)
+Since this mod is a fork, there are 2 licenses in this repo:
+- LICENSE is the original license and the one that's present in most files. **As the less permissive license, it's the one you have to respect if you want to redistribute this mod in its entirity**
+- LICENSE (Nixuge) is the license used for the files I added.
+
+You can find which license a file is under by looking at its header. If nothing specified, it's under LICENSE (Nixuge). Otherwise, it's under LICENSE.
+  
+I've got permission from Pokechu to make this fork
+![Permission-fork](https://user-images.githubusercontent.com/33488576/227806844-d7843197-e7bc-4699-aba1-8bc62803da31.png)
+
+And for the modrinth upload
+![Permission-modrinth](https://github.com/Nixuge/WorldDownloaderForge/assets/33488576/22911b83-63f1-4655-9711-5623d15f42e1)
 
 # Compiling
 (`./gradlew` -> `./gradlew.bat` on windows)
@@ -18,7 +24,9 @@ I've got credit from Pokechu to make this fork.
 - `./gradlew check`
 - `./gradlew build`
 
-Done, your mod should be in the `builds/libs/` folder
+
+Done, your mod should
+ be in the `builds/libs/` folder
 
 # Editing (tested on intellij & vscode)
 (`./gradlew` -> `./gradlew.bat` on windows)
